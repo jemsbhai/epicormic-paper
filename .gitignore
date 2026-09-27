@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+.hypothesis/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.benchmarks/
+.ipynb_checkpoints/
+
+# Secrets
+.env
+.env.local
+*.key
+*secrets*
+
+# Raw observation stores are never committed (rule 4 in README.md). Run
+# manifests, environment snapshots, seeds, and frozen protocol copies under
+# experiments/*/runs/ are committed; the stores next to them are not.
+experiments/*/runs/**/stores/
+experiments/*/runs/**/*.sqlite
+experiments/*/runs/**/*.sqlite-wal
+experiments/*/runs/**/*.sqlite-shm
+experiments/private/
+*.db
+*.db-wal
+*.db-shm
+
+# LaTeX build products
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.synctex.gz
+paper/sections/*.aux

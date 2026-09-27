@@ -1,0 +1,21 @@
+# Append-only registry of every experiment run. One mapping per run, newest
+# last. Fields:
+#
+#   run_id:           exp-<letter>-<profile>-<nnn>, for example exp-a-full-001
+#   experiment:       EXP-A .. EXP-E
+#   profile:          smoke (instrumentation check, never evidence) or full
+#   front_end:        script or notebook
+#   protocol:         path of the protocol file the run used
+#   protocol_digest:  SHA-256 of the canonical protocol JSON, from scripts/freeze_protocol.py
+#   commit:           full SHA of this repository at run start; the tree must be clean
+#   epicormic:        pinned version, from epicormic_lab.pins
+#   pollard:          pinned version, from epicormic_lab.pins
+#   environment:      path of the committed environment.json for the run
+#   store_digests:    SHA-256 digests of the archived raw stores (never committed)
+#   started:          ISO 8601 with timezone
+#   finished:         ISO 8601 with timezone, or null while running
+#   status:           planned | running | completed | failed | excluded
+#   outcome:          path under analysis/generated/ of the run's summary, or null
+#   logbook:          heading of the logbook entry for the run
+#
+runs: []

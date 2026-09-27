@@ -1,0 +1,77 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "epicormic-lab"
+version = "0.0.1"
+description = "Experiments, analysis, and manuscript tooling for the epicormic paper."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Muntaser Syed", email = "jemsbhai@gmail.com"}]
+classifiers = [
+  "Private :: Do Not Upload",
+  "Programming Language :: Python :: 3",
+  "Typing :: Typed",
+]
+# The software under study, pinned to the released artifacts whose digests
+# are recorded in src/epicormic_lab/pins.py. Never relax these pins.
+dependencies = ["epicormic==0.1.0", "pollard==1.6.0"]
+
+[project.urls]
+Homepage = "https://github.com/jemsbhai/epicormic-paper"
+Package = "https://github.com/jemsbhai/epicormic"
+
+[project.optional-dependencies]
+# Local control of decision D11: llama-server's OpenAI-compatible endpoint
+# through pollard's OpenAI chat adapter.
+control = ["openai>=1.66"]
+# EXP-D: the four hosted provider families of decision D16 and the cost meter
+# of decision D17. Exact SDK versions are pinned in the EXP-D pre-registration.
+hosted = ["epicormic[cost]==0.1.0", "pollard[openai,anthropic,bedrock,litellm]==1.6.0"]
+# EXP-E: NVML joules on the local GPU.
+energy = ["pollard[nvml]==1.6.0"]
+figures = ["matplotlib>=3.8"]
+notebooks = ["jupyter>=1.0", "matplotlib>=3.8"]
+dev = [
+  "pytest>=8",
+  "pytest-cov>=5",
+  "hypothesis>=6.100",
+  "ruff>=0.5",
+  "mypy>=1.10",
+  "scipy>=1.13",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/epicormic_lab"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.mypy]
+strict = true
+python_version = "3.10"
+
+[[tool.mypy.overrides]]
+module = ["scipy", "scipy.*", "matplotlib", "matplotlib.*"]
+ignore_missing_imports = true
+
+# Same workaround as in the epicormic repository: numpy stubs shipped for
+# newer interpreters use syntax outside the 3.10 grammar mypy checks with.
+[[tool.mypy.overrides]]
+module = ["numpy", "numpy.*"]
+follow_imports = "skip"
+follow_imports_for_stubs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.coverage.run]
+source = ["src/epicormic_lab"]
