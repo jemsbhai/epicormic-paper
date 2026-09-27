@@ -17,3 +17,9 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
   notebooks and TeX.
 - CI on Ubuntu and Windows with Python 3.10 and 3.12: ruff, mypy, the
   vocabulary scan, and tests with a 100 percent coverage gate.
+
+### Fixed
+
+- The vocabulary scan reports malformed Python on Python 3.10 and 3.11,
+  where the tokenizer emits error tokens instead of raising; before this
+  such a file passed the scan silently on those versions.

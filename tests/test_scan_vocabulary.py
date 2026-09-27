@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import sys
 from pathlib import Path
 from types import ModuleType
 
@@ -80,11 +81,24 @@ def test_python_identifiers_are_ignored_but_strings_and_comments_are_not(
 
 def test_python_tokenize_error_is_reported(scan: ModuleType, tmp_path: Path) -> None:
     path = tmp_path / "broken.py"
-    path.write_text('x = "unterminated\n', encoding="utf-8")
+    path.write_text('x = """never closed\n', encoding="utf-8")
     hits = scan.scan_python(path, scan.load_banned_words())
     assert len(hits) == 1
     assert hits[0][0] == 0
     assert hits[0][1].startswith("could not tokenize")
+
+
+def test_python_error_token_is_reported(scan: ModuleType, tmp_path: Path) -> None:
+    """An unterminated string raises on 3.12+ but only yields error tokens before."""
+    path = tmp_path / "broken.py"
+    path.write_text('x = "unterminated\n', encoding="utf-8")
+    hits = scan.scan_python(path, scan.load_banned_words())
+    if sys.version_info >= (3, 12):
+        assert len(hits) == 1
+        assert hits[0][0] == 0
+        assert hits[0][1].startswith("could not tokenize")
+    else:
+        assert hits == [(1, "could not tokenize: invalid token '\"'")]
 
 
 def test_notebook_markdown_and_code_cells_are_scanned(

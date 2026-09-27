@@ -83,11 +83,22 @@ def scan_markdown(path: Path, pattern: re.Pattern[str]) -> list[tuple[int, str]]
 
 
 def scan_python_source(source: str, pattern: re.Pattern[str]) -> list[tuple[int, str]]:
+    """Scan comments and string literals; report a malformed source as a hit.
+
+    Python 3.12 and later raise ``TokenError`` on malformed input; 3.10 and
+    3.11 emit ``ERRORTOKEN`` tokens instead and keep going, so both paths
+    are reported, and a whitespace error token (an artefact that precedes
+    the offending character on older interpreters) is skipped.
+    """
     hits: list[tuple[int, str]] = []
     try:
         tokens = tokenize.generate_tokens(io.StringIO(source).readline)
         for token in tokens:
-            if token.type in (tokenize.COMMENT, tokenize.STRING):
+            if token.type == tokenize.ERRORTOKEN:
+                if token.string.strip():
+                    reason = f"could not tokenize: invalid token {token.string!r}"
+                    hits.append((token.start[0], reason))
+            elif token.type in (tokenize.COMMENT, tokenize.STRING):
                 hits.extend(scan_text(token.string, pattern, first_line=token.start[0]))
     except tokenize.TokenError as error:
         hits.append((0, f"could not tokenize: {error}"))
