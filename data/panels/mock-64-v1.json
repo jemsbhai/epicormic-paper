@@ -1,0 +1,526 @@
+{
+  "format": "epicormic/panel/v1",
+  "min_samples": 5,
+  "name": "mock-64-v1",
+  "probes": [
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 0"
+      },
+      "probe_id": "q00",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 1"
+      },
+      "probe_id": "q01",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 2"
+      },
+      "probe_id": "q02",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 3"
+      },
+      "probe_id": "q03",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 4"
+      },
+      "probe_id": "q04",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 5"
+      },
+      "probe_id": "q05",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 6"
+      },
+      "probe_id": "q06",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 7"
+      },
+      "probe_id": "q07",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 8"
+      },
+      "probe_id": "q08",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 9"
+      },
+      "probe_id": "q09",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 10"
+      },
+      "probe_id": "q10",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 11"
+      },
+      "probe_id": "q11",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 12"
+      },
+      "probe_id": "q12",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 13"
+      },
+      "probe_id": "q13",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 14"
+      },
+      "probe_id": "q14",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 15"
+      },
+      "probe_id": "q15",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 16"
+      },
+      "probe_id": "q16",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 17"
+      },
+      "probe_id": "q17",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 18"
+      },
+      "probe_id": "q18",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 19"
+      },
+      "probe_id": "q19",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 20"
+      },
+      "probe_id": "q20",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 21"
+      },
+      "probe_id": "q21",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 22"
+      },
+      "probe_id": "q22",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 23"
+      },
+      "probe_id": "q23",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 24"
+      },
+      "probe_id": "q24",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 25"
+      },
+      "probe_id": "q25",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 26"
+      },
+      "probe_id": "q26",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 27"
+      },
+      "probe_id": "q27",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 28"
+      },
+      "probe_id": "q28",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 29"
+      },
+      "probe_id": "q29",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 30"
+      },
+      "probe_id": "q30",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 31"
+      },
+      "probe_id": "q31",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 32"
+      },
+      "probe_id": "q32",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 33"
+      },
+      "probe_id": "q33",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 34"
+      },
+      "probe_id": "q34",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 35"
+      },
+      "probe_id": "q35",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 36"
+      },
+      "probe_id": "q36",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 37"
+      },
+      "probe_id": "q37",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 38"
+      },
+      "probe_id": "q38",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 39"
+      },
+      "probe_id": "q39",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 40"
+      },
+      "probe_id": "q40",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 41"
+      },
+      "probe_id": "q41",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 42"
+      },
+      "probe_id": "q42",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 43"
+      },
+      "probe_id": "q43",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 44"
+      },
+      "probe_id": "q44",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 45"
+      },
+      "probe_id": "q45",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 46"
+      },
+      "probe_id": "q46",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 47"
+      },
+      "probe_id": "q47",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 48"
+      },
+      "probe_id": "q48",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 49"
+      },
+      "probe_id": "q49",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 50"
+      },
+      "probe_id": "q50",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 51"
+      },
+      "probe_id": "q51",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 52"
+      },
+      "probe_id": "q52",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 53"
+      },
+      "probe_id": "q53",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 54"
+      },
+      "probe_id": "q54",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 55"
+      },
+      "probe_id": "q55",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 56"
+      },
+      "probe_id": "q56",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 57"
+      },
+      "probe_id": "q57",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 58"
+      },
+      "probe_id": "q58",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 59"
+      },
+      "probe_id": "q59",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 60"
+      },
+      "probe_id": "q60",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 61"
+      },
+      "probe_id": "q61",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 62"
+      },
+      "probe_id": "q62",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 63"
+      },
+      "probe_id": "q63",
+      "tags": []
+    }
+  ],
+  "sampling": {
+    "max_output_tokens": "200",
+    "temperature": "0.7"
+  },
+  "seed_base": 0,
+  "seed_field": "seed",
+  "seed_from_attempt": true
+}
