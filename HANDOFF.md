@@ -407,7 +407,32 @@ in your issue. pollard's hybrid mode makes a window resumable: rerunning it
 serves what exists and dispatches only the missing samples, so a crash
 mid-window is recoverable without duplicate observations.
 
-### 6.4 EXP-E
+### 6.4 EXP-A mock arm: the smoke run
+
+The mock arm of EXP-A is pre-registered
+(`experiments/exp_a_calibration/PREREGISTRATION.md`, tag `exp-a-prereg`)
+and runnable. From a clean clone at the commit Muntaser names, with the
+environment of 4.1:
+
+```
+python scripts/run_exp_a.py --profile smoke --run-id exp-a-smoke-001 --digest dd7e4356a60b18a9b122a5def9617b761be313f9d7dfa97481e7601a0115210d --workers <cores>
+python scripts/analyze_exp_a.py experiments/exp_a_calibration/runs/exp-a-smoke-001
+```
+
+The first command refuses to start if the protocol file, the installed
+packages, or (for a full run) the working tree are not what the
+pre-registration pinned, and prints one timing line per cell when it
+finishes. The smoke profile is an instrumentation check, never evidence:
+what it produces is the per-cell seconds per observation and per verdict on
+your machine, which fix the wall-clock of the full profile (4,274,880
+observations and 8,020 verdicts, each verdict recomputed once). Open a pull
+request with the run directory (everything except `stores/`, which git
+ignores), the registry entry the runner appended, and the generated
+summary, and put the timing lines in the `EXP-A and the control` issue. The
+full run starts only when Muntaser says so, with `--profile full`, a new run
+id, and a clean tree at the commit he names.
+
+### 6.5 EXP-E
 
 EXP-E measures the cost of monitoring itself: tokens, USD, wall-clock, and
 NVML joules per window, against the power reached in EXP-B. It runs on the
@@ -550,6 +575,8 @@ Mike:
 - [ ] Report candidate second GGUF files for the silent-change arm (6.3) in
       an issue titled `EXP-D local`.
 - [ ] Decide and report how the daily local job will run for 28 days (6.3).
+- [ ] Run the EXP-A smoke profile (6.4), open the pull request with the run
+      directory, and post the timing lines.
 
 Muntaser:
 

@@ -109,7 +109,7 @@ runs which arm.
 
 | Id | Question | Providers | Status |
 | --- | --- | --- | --- |
-| EXP-A | Calibration: is the false-alarm rate of the pooled test within the binomial interval of alpha, and does the e-process alarm on at most alpha of A/A streams? | mock, local control | mock arm pre-registration written (`experiments/exp_a_calibration/`), frozen when tagged `exp-a-prereg`; control arm protocol follows the throughput report |
+| EXP-A | Calibration: is the false-alarm rate of the pooled test within the binomial interval of alpha, and does the e-process alarm on at most alpha of A/A streams? | mock, local control | mock arm pre-registered (`experiments/exp_a_calibration/`, tag `exp-a-prereg`) and runnable with `scripts/run_exp_a.py`; control arm protocol follows the throughput report |
 | EXP-B | Power: which (N, panel size) reaches 0.8 power per drift type and effect size? | mock, local control | not yet pre-registered |
 | EXP-C | Sequential detection delay against false-alarm rate for CUSUM, Page-Hinkley, and the e-process; calibration of the defaults | mock, local control | not yet pre-registered |
 | EXP-D | Longitudinal hosted canary: weekly windows on four provider families for at least twelve weeks under the 10 USD per month cap | hosted, local control | not yet pre-registered |
@@ -122,8 +122,10 @@ runs which arm.
    entry; commit `docs(logbook): EXP-X planned`; tag `exp-x-prereg`.
 2. Write the runner and analysis code with tests; run the `smoke` profile as
    an instrumentation check that produces no evidence; tag `exp-x-frozen`.
-3. Run the `full` profile from a clean tree: the script copies the frozen
-   protocol into the run directory, writes `environment.json` and
-   `seed.json`, checkpoints per cell, and appends the run to the registry.
+3. Run the `full` profile from a clean tree with the registered digest
+   (`python scripts/run_exp_a.py --profile full --run-id exp-a-full-001
+   --digest <hex> --workers N`): the script copies the frozen protocol into
+   the run directory, writes `environment.json` and `seed.json`, writes one
+   summary per cell as it completes, and appends the run to the registry.
 4. Append the result entry to the logbook, add the raw finding, regenerate
    `analysis/generated/` and the figures; commit; tag `exp-x-final`.

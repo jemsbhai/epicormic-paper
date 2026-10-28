@@ -25,6 +25,14 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
   with `PREREGISTRATION.md`, `protocol.json` (version 2026-10-28), the
   logbook plan entry, and the first panels under `data/panels/`
   (`canary-24-v1`, `mock-08-v1`, `mock-64-v1`) with digests and checksums.
+- EXP-A runner and analysis: `epicormic_lab.protocol` (frozen protocols,
+  canonical digests, cells, panel checks), `providers` (the mock null
+  provider and the per-window seed salt), `stats` (exact binomial tools in
+  pure Python), `environment` (snapshots), `registry` (append-only YAML
+  writer), `exp_a` (cells, run directories, manifests, the recompute check),
+  `analysis` (the committed summary), with `scripts/freeze_protocol.py`,
+  `snapshot_environment.py`, `run_exp_a.py`, `analyze_exp_a.py`, and tests at
+  100 percent line coverage.
 
 ### Fixed
 
