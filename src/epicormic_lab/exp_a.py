@@ -122,6 +122,8 @@ def verdict_record(
             "e_threshold": None if e is None else _number(e["threshold"]),
             "e_alarm_index": None if e is None else e["alarm_index"],
             "mu0": None if e is None else _number(e["mu0"]),
+            "e_lower": None if e is None else _number(e.get("lower")),
+            "e_upper": None if e is None else _number(e.get("upper")),
             "baseline_observations": None if e is None else e["baseline_observations"],
         }
     return {

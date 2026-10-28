@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+from epicormic_lab.pins import EPICORMIC, POLLARD
 from epicormic_lab.protocol import (
     PROTOCOL_FORMAT,
     Cell,
@@ -16,18 +17,29 @@ from epicormic_lab.protocol import (
     protocol_digest,
 )
 
-from .conftest import REAL_PROTOCOL, REPO
+from .conftest import FIRST_PROTOCOL, REAL_PROTOCOL, REPO
 
-FROZEN_DIGEST = "dd7e4356a60b18a9b122a5def9617b761be313f9d7dfa97481e7601a0115210d"
+FROZEN_DIGEST = "5934acb50e9d4f9403bb64cd038cf492bcd167d7464eef8a1fdd24da2e555de4"
+FIRST_DIGEST = "dd7e4356a60b18a9b122a5def9617b761be313f9d7dfa97481e7601a0115210d"
 
 
 def test_frozen_protocol_digest_is_unchanged() -> None:
     protocol = load_protocol(REAL_PROTOCOL)
     assert protocol.digest == FROZEN_DIGEST
     assert protocol.experiment == "EXP-A"
-    assert protocol.version == "2026-10-28"
+    assert protocol.version == "2026-10-28-r2"
     assert protocol.arm == "mock"
     protocol.require_digest(FROZEN_DIGEST)
+    first = load_protocol(FIRST_PROTOCOL)
+    assert first.digest == FIRST_DIGEST and first.version == "2026-10-28"
+    assert protocol.document["supersedes"]["digest"] == FIRST_DIGEST
+
+
+def test_protocol_software_matches_the_pins() -> None:
+    software = load_protocol(REAL_PROTOCOL).document["software"]
+    assert software == {"epicormic": EPICORMIC.version, "pollard": POLLARD.version}
+    # the superseded version names the release it was written against
+    assert load_protocol(FIRST_PROTOCOL).document["software"]["epicormic"] == "0.1.0"
 
 
 def test_canonical_json_is_sorted_and_compact() -> None:

@@ -88,5 +88,5 @@ def test_snapshot_writes_the_expected_fields(tmp_path: Path) -> None:
     loaded = json.loads((tmp_path / "out" / "environment.json").read_text(encoding="utf-8"))
     assert loaded == document
     assert set(document) >= {"timestamp", "git", "python_version", "cpu_count", "gpu", "pins"}
-    assert document["pins"]["epicormic"]["version"] == "0.1.0"
-    assert document["installed"]["epicormic"] == "0.1.0"
+    assert document["pins"]["epicormic"]["version"] == "0.2.0"
+    assert document["installed"]["epicormic"] == "0.2.0"

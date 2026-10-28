@@ -3,14 +3,39 @@
 | Field | Value |
 | --- | --- |
 | Experiment | EXP-A (section 16 of the epicormic `docs/PLAN.md`) |
-| Protocol | `protocol.json`, version 2026-10-28, mock arm |
-| Protocol digest | `dd7e4356a60b18a9b122a5def9617b761be313f9d7dfa97481e7601a0115210d` |
-| Software under study | epicormic 0.1.0 on pollard 1.6.0, pinned in `src/epicormic_lab/pins.py` |
+| Protocol | `protocol.2026-10-28-r2.json`, version 2026-10-28-r2, mock arm (supersedes `protocol.json`, version 2026-10-28, which stays in place) |
+| Protocol digest | `5934acb50e9d4f9403bb64cd038cf492bcd167d7464eef8a1fdd24da2e555de4` (version 2026-10-28: `dd7e4356a60b18a9b122a5def9617b761be313f9d7dfa97481e7601a0115210d`) |
+| Software under study | epicormic 0.2.0 on pollard 1.6.0, pinned in `src/epicormic_lab/pins.py` |
 | Panels | `canary-24-v1` `8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75`; `mock-08-v1` `fe9b9078262c469e0f936a21876309ed38a34d5c7f6466c08db5e32660a2c43c`; `mock-64-v1` `c9a567a90e381c57dd0502fa132c11af396d9ccf8ffb0ca696af8905da9946ab` |
 | Arms | Mock arm (this protocol); local control arm (`protocol.control.json`, frozen separately, section 9) |
-| Status | Frozen when the commit carrying this file and the logbook plan entry is tagged `exp-a-prereg`; until then a draft |
+| Status | Version 2026-10-28 frozen at tag `exp-a-prereg`; version 2026-10-28-r2 frozen at tag `exp-a-prereg-r2` |
 
-The protocol digest is SHA-256 over the canonical JSON of `protocol.json`:
+## 0. Version 2026-10-28-r2
+
+Version 2026-10-28 was frozen against epicormic 0.1.0. Before any registered
+run, the smoke profile of the runner showed a deterministic false alarm of
+0.1.0's e-process: a scorer whose baseline is constant (`refusal` and
+`truncated` on the mock, which never refuses or truncates) had its plug-in
+null rate clipped away from 0, and the downward bettor accumulated the gap
+until it crossed the threshold inside window 13 of the 28-window A2 chain,
+identically in every replication. epicormic 0.2.0 (decision D27 in its
+`docs/PLAN.md`) replaces the clipped point null with the baseline's exact
+binomial interval at confidence `1 - alpha/2` and alarms at `2/alpha`, so
+the false alarm probability is bounded by alpha with half the budget on the
+interval and half on the bet. The paper studies the corrected release.
+
+Version 2026-10-28-r2 therefore pins epicormic 0.2.0, restates H-A2 and its
+falsification condition against the threshold in force (40 at alpha 0.05),
+and records the interval behind the null in the reports. Nothing else in
+the protocol changes: the same panels, cells, replication counts, analysis
+configuration, seeds, and procedure. The config digest is unchanged, since
+the configuration document is unchanged; verdict identities differ because
+`epicormic_version` and the eprocess payload block differ. Version
+2026-10-28 stays in place as `protocol.json`, unrun; its logbook plan entry
+carries a dated addendum pointing here. Everything below reads for both
+versions except where the version is named.
+
+The protocol digest is SHA-256 over the canonical JSON of the protocol file:
 keys sorted, separators `,` and `:` with no whitespace, `ensure_ascii`
 false, UTF-8. `scripts/freeze_protocol.py` computes exactly this; the run
 manifest records it, and a run refuses to start when the file on disk no
@@ -63,14 +88,16 @@ Primary, confirmatory:
   a falsification; the Holm rule is.
 - H-A2 (anytime-valid detector). In the A2 cell (panel 24, N = 10, 28
   consecutive null windows against one baseline window, the EXP-D
-  geometry), the probability that the betting e-process reaches 1/alpha at
-  any observation within the 28 windows is at most alpha, for each scorer
-  and for the union over scorers. The union count of 200 is tested by the
-  exact one-sided binomial test at level 0.05: 16 or more falsifies. Per
-  Ville's inequality the bound is exact only when the plug-in baseline rate
-  equals the true rate; here the baseline is 10 samples per probe pooled
-  over 24 probes, so a falsification is a statement about that baseline
-  size, see section 7.
+  geometry), the probability that the betting e-process reaches its
+  threshold (2/alpha = 40 under epicormic 0.2.0; 1/alpha = 20 under 0.1.0
+  and version 2026-10-28) at any observation within the 28 windows is at
+  most alpha, for each scorer and for the union over scorers. The union
+  count of 200 is tested by the exact one-sided binomial test at level
+  0.05: 16 or more falsifies. Under 0.2.0 the null is the baseline's exact
+  binomial interval at confidence 1 - alpha/2 (D27), so the bound holds
+  whenever that interval covers the true rate; the baseline is 10 samples
+  per probe pooled over 24 probes, and a falsification is a statement about
+  that baseline size, see section 7.
 
 Secondary, reported and not tested:
 
@@ -277,11 +304,16 @@ reason S-A2 exists. A3 is expected to be 20 of 20 `unknown`.
   providers.
 - A pass of H-A1 is a bound, not an equality: a rate far below alpha is a
   loss of power that EXP-B will show, and it is reported as such.
-- The e-process guarantee in epicormic 0.1.0 uses a plug-in baseline rate.
-  H-A2 tests the detector as shipped at the EXP-D baseline size; a
-  falsification is a statement that this baseline size is too small for
-  the anytime-valid claim, and the paper then states the size that would be
-  needed, with the two-sample sequential test named as the v0.2 item.
+- The e-process guarantee in epicormic 0.2.0 rests on the baseline's
+  exact binomial interval (D27): half of alpha is spent on the interval
+  covering the true rate, half on the bet. H-A2 tests the detector as
+  shipped at the EXP-D baseline size; a falsification is a statement that
+  this baseline size is too small for the anytime-valid claim, and the
+  paper then states the size that would be needed, with the two-sample
+  sequential test named as the later item. The 0.1.0 plug-in, which
+  alarmed deterministically on a constant baseline, is described in
+  section 0 and in the logbook addendum; it is the reason version
+  2026-10-28 was never run.
 - The 28 verdicts of an A2 replication share one baseline window and are
   dependent; the e-process is one stream and Ville's inequality applies to
   it as a whole, and the CUSUM and Page-Hinkley rates are reported as
@@ -347,7 +379,7 @@ of `HANDOFF.md` section 6.2.
 ## 10. Roles
 
 Mock arm: run by Mike (HANDOFF section 1), on CPU, with the smoke profile
-first. Control arm: run by Mike on the control machine. Runner and analysis
+first, from `protocol.2026-10-28-r2.json` with its digest. Control arm: run by Mike on the control machine. Runner and analysis
 code, the freeze and snapshot scripts, the logbook entries and the tags:
 Muntaser. No run of either arm starts before the corresponding protocol is
 frozen and tagged.

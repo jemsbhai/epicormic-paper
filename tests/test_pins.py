@@ -22,7 +22,7 @@ def test_package_version_is_a_string() -> None:
 def test_pins_name_the_two_studied_distributions() -> None:
     assert PINS == (EPICORMIC, POLLARD)
     assert EPICORMIC.name == "epicormic"
-    assert EPICORMIC.version == "0.1.0"
+    assert EPICORMIC.version == "0.2.0"
     assert POLLARD.name == "pollard"
     assert POLLARD.version == "1.6.0"
 
@@ -55,7 +55,7 @@ def test_check_installed_reports_a_version_mismatch(monkeypatch: pytest.MonkeyPa
         return "9.9.9"
 
     monkeypatch.setattr(importlib.metadata, "version", fake_version)
-    assert check_installed((EPICORMIC,)) == ["epicormic 0.1.0 is pinned but 9.9.9 is installed"]
+    assert check_installed((EPICORMIC,)) == ["epicormic 0.2.0 is pinned but 9.9.9 is installed"]
 
 
 def test_check_installed_reports_a_missing_distribution(monkeypatch: pytest.MonkeyPatch) -> None:

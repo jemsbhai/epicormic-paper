@@ -32,7 +32,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--protocol",
         type=Path,
-        default=EXPERIMENT_DIR / "protocol.json",
+        default=EXPERIMENT_DIR / "protocol.2026-10-28-r2.json",
         help="protocol path relative to the repository root",
     )
     parser.add_argument("--workers", type=int, default=1)

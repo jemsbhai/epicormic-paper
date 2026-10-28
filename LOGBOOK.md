@@ -78,3 +78,42 @@ throughput measurement of `HANDOFF.md` section 6.2.
 
 Runs: none yet. Result entries will cite run ids `exp-a-smoke-001` and
 `exp-a-full-001`.
+
+## 2026-10-28 EXP-A plan addendum: protocol version 2026-10-28-r2
+
+Addendum to the entry "2026-10-28 EXP-A planned (mock arm)" above, which
+stays as written. No run of version 2026-10-28 was registered.
+
+Reason: a development smoke run of the runner (scratch copy, not
+registered, not evidence) on the real protocol showed a deterministic
+false alarm of epicormic 0.1.0's e-process. `refusal` and `truncated` are
+constant 0 on the mock; the plug-in null rate was clipped to 0.0021; the
+downward bettor accumulated that gap and crossed the threshold inside
+window 13 of the 28-window A2 chain, with an identical e-value trajectory
+in both smoke replications (0.62 after window 1, 10.5 at window 11, 20.6
+at window 13, 4750 at window 28). `output_chars` did the same through its
+sign stream. The same mechanism applies, more slowly, to any estimated
+rate. epicormic 0.2.0 (D27, released 2026-10-28, tag v0.2.0 at
+`40bd810881bc6b4a646b1c79f777b2a42a9fe190`) replaces the clipped point
+null with the baseline's exact binomial interval at confidence
+1 - alpha/2 and alarms at 2/alpha; its test suite reproduces the window 13
+alarm with the old null and its absence with the new one.
+
+Change: `experiments/exp_a_calibration/protocol.2026-10-28-r2.json`,
+digest `5934acb50e9d4f9403bb64cd038cf492bcd167d7464eef8a1fdd24da2e555de4`, pins
+epicormic 0.2.0, restates H-A2 and its falsification condition against the
+threshold in force, and adds the interval behind the null to the reports.
+Panels, cells, replication counts, analysis configuration, seeds, and
+procedure are unchanged; the config digest is unchanged. `protocol.json`
+(version 2026-10-28, digest `dd7e4356a60b18a9b122a5def9617b761be313f9d7dfa97481e7601a0115210d`)
+stays in place unrun. The repository pins move to epicormic 0.2.0
+(`src/epicormic_lab/pins.py`, wheel
+`15c0051d97275dc5434e2abf353cb8b9e25f249f284ba1c36355e39b00abd3a0`, sdist
+`1530fad6dfdad0545c15f3ad14cf0b27c7d0075bf9614b57bc2b189f67334ad5`).
+Frozen when this commit is tagged `exp-a-prereg-r2`.
+
+Pilot timing from the development smoke run, for sizing only: observations
+2.4 to 3.1 ms each; verdicts 0.7 s at panel 8 by N 5, 3.9 s at 24 by 10,
+14.7 s at 24 by 40, about 40 s at 64 by 40, each recomputed once;
+projected full profile about 23 CPU-hours on a slow two-core machine, the
+A2 cell about 10 hours of it.

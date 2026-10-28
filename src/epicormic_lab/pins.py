@@ -1,9 +1,11 @@
 """Pinned identities of the software under study.
 
-The experiments study epicormic 0.1.0 on pollard 1.6.0 exactly as released.
-Every value below was verified on 2026-09-27 by downloading the artifact
-from PyPI and hashing it with SHA-256, and by resolving the release tag on
-GitHub with `git ls-remote`. The test suite checks the installed versions
+The experiments study epicormic 0.2.0 on pollard 1.6.0 exactly as released.
+Every value below was verified by downloading the artifact from PyPI and
+hashing it with SHA-256, and by resolving the release tag on GitHub with
+`git ls-remote`: pollard on 2026-09-27, epicormic 0.2.0 on 2026-10-28 (it
+replaced 0.1.0 before any registered run, see the EXP-A plan addendum in
+LOGBOOK.md). The test suite checks the installed versions
 against these pins, and every run manifest records them, so a run can never
 start against a different release by accident.
 """
@@ -39,14 +41,14 @@ class Pin:
 
 EPICORMIC = Pin(
     name="epicormic",
-    version="0.1.0",
+    version="0.2.0",
     repository="https://github.com/jemsbhai/epicormic",
-    tag="v0.1.0",
-    commit="2451bed78d12f129fbda0e3e058e55e7e18abcce",
-    wheel="epicormic-0.1.0-py3-none-any.whl",
-    wheel_sha256="87f3eefcfed3deb97f8bc3654966e065e5f96fcd595d7b28f61db9effd7b5a50",
-    sdist="epicormic-0.1.0.tar.gz",
-    sdist_sha256="fbcd24527274879423a472639623911d52165cae40e301070a9607d2f123f0f6",
+    tag="v0.2.0",
+    commit="40bd810881bc6b4a646b1c79f777b2a42a9fe190",
+    wheel="epicormic-0.2.0-py3-none-any.whl",
+    wheel_sha256="15c0051d97275dc5434e2abf353cb8b9e25f249f284ba1c36355e39b00abd3a0",
+    sdist="epicormic-0.2.0.tar.gz",
+    sdist_sha256="1530fad6dfdad0545c15f3ad14cf0b27c7d0075bf9614b57bc2b189f67334ad5",
 )
 
 POLLARD = Pin(

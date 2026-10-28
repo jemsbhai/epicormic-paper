@@ -38,7 +38,7 @@ def test_snapshot_environment_prints_or_writes(
     assert json.loads(capsys.readouterr().out)["pins"]["pollard"]["version"] == "1.6.0"
     out = tmp_path / "environment.json"
     assert snapshot.main(["--out", str(out)]) == 0
-    assert json.loads(out.read_text(encoding="utf-8"))["installed"]["epicormic"] == "0.1.0"
+    assert json.loads(out.read_text(encoding="utf-8"))["installed"]["epicormic"] == "0.2.0"
 
 
 def test_run_and_analyze_scripts_parse_their_arguments() -> None:

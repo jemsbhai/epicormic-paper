@@ -11,7 +11,8 @@ import pytest
 from epicormic_lab.protocol import protocol_digest
 
 REPO = Path(__file__).resolve().parent.parent
-REAL_PROTOCOL = REPO / "experiments" / "exp_a_calibration" / "protocol.json"
+REAL_PROTOCOL = REPO / "experiments" / "exp_a_calibration" / "protocol.2026-10-28-r2.json"
+FIRST_PROTOCOL = REPO / "experiments" / "exp_a_calibration" / "protocol.json"
 
 TINY_PARTS = {
     "A1": {

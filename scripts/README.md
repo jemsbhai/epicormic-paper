@@ -14,7 +14,8 @@ Present:
   `nvidia-smi` answers, installed package versions, the release pins).
 - `run_exp_a.py --profile smoke|full --run-id ID --digest HEX [--workers N]
   [--resume] [--allow-dirty] [--cells ...]`: runs the EXP-A mock arm from the
-  frozen protocol. The run refuses to start when the protocol digest differs
+  frozen protocol (`--protocol` defaults to the current version,
+  `protocol.2026-10-28-r2.json`). The run refuses to start when the protocol digest differs
   from `--digest`, when a pinned package is not the installed one, or (full
   profile) when the tree is dirty; it writes the run directory
   (`protocol.frozen.json`, `environment.json`, `seed.json`, `manifest.json`,

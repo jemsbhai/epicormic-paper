@@ -8,8 +8,9 @@ exists in the repository today, what to do first, and how results come back.
 Read `README.md` first; its nine repository rules apply to everything below
 and are not repeated in full here.
 
-The software under study is epicormic 0.1.0 on pollard 1.6.0, exactly as
-released on PyPI (`src/epicormic_lab/pins.py`). epicormic detects provider
+The software under study is epicormic 0.2.0 on pollard 1.6.0, exactly as
+released on PyPI (`src/epicormic_lab/pins.py`); 0.2.0 corrects the
+e-process null (decision D27) and replaced 0.1.0 before any registered run. epicormic detects provider
 drift: a hosted model changing behind a fixed model name. It samples a pinned
 canary panel of probe requests N times per window, records every observation
 in a pollard execution tree, tests whether the current window differs from
@@ -89,7 +90,7 @@ can deliver.
 4. Secrets never enter the repository. Keys live in a local `.env` (ignored
    by git) or in your shell environment. Do not paste keys, account ids, or
    billing screenshots into issues, logbook entries, or commits.
-5. Never change the software under study. `epicormic==0.1.0` and
+5. Never change the software under study. `epicormic==0.2.0` and
    `pollard==1.6.0` are pinned; do not upgrade, patch, or vendor either. If a
    pinned release misbehaves, that is a finding about the release and goes in
    the logbook.
@@ -153,7 +154,7 @@ intended behaviour, fix the environment, not the test.
 
 epicormic ships a seeded mock provider, and its README locks the output of a
 fixed synthetic run across platforms: the panel digest is the same
-everywhere, and the verdict node ids are the same wherever epicormic 0.1.0
+everywhere, and the verdict node ids are the same wherever epicormic 0.2.0
 runs on pollard 1.6, because every record is content-addressed. Run this
 from the activated environment:
 
@@ -188,8 +189,8 @@ Expected output, byte for byte:
 
 ```
 panel 5cd5533a081de63dfa77c821f26b12ed56e8f842caed287304a6ad9718d3666c
-week-2 stable T -0.0375 p_holm 0.675662 node 4aac2d7f0eed1482
-week-3 drift T -0.5375 p_holm 0.0009995 node 291011f05749f1c3
+week-2 stable T -0.0375 p_holm 0.675662 node 768b55b700df96d2
+week-3 drift T -0.5375 p_holm 0.0009995 node dbf8530ab643c947
 ```
 
 Week 2 is a second provider instance with no injected change, and sampling
@@ -410,12 +411,12 @@ mid-window is recoverable without duplicate observations.
 ### 6.4 EXP-A mock arm: the smoke run
 
 The mock arm of EXP-A is pre-registered
-(`experiments/exp_a_calibration/PREREGISTRATION.md`, tag `exp-a-prereg`)
-and runnable. From a clean clone at the commit Muntaser names, with the
+(`experiments/exp_a_calibration/PREREGISTRATION.md`; version 2026-10-28-r2
+at tag `exp-a-prereg-r2`, against epicormic 0.2.0) and runnable. From a clean clone at the commit Muntaser names, with the
 environment of 4.1:
 
 ```
-python scripts/run_exp_a.py --profile smoke --run-id exp-a-smoke-001 --digest dd7e4356a60b18a9b122a5def9617b761be313f9d7dfa97481e7601a0115210d --workers <cores>
+python scripts/run_exp_a.py --profile smoke --run-id exp-a-smoke-001 --digest 5934acb50e9d4f9403bb64cd038cf492bcd167d7464eef8a1fdd24da2e555de4 --workers <cores>
 python scripts/analyze_exp_a.py experiments/exp_a_calibration/runs/exp-a-smoke-001
 ```
 
@@ -580,8 +581,6 @@ Mike:
 
 Muntaser:
 
-- [ ] Publish decisions D24 to D26 in the epicormic `docs/PLAN.md` so the
-      re-scoped EXP-D is on record.
 - [ ] Write the canary panels under `data/panels/` and record their digests.
 - [ ] Write the runner code and tests in `src/epicormic_lab` and the scripts.
 - [ ] Write and tag the pre-registrations, sized from the numbers reported
