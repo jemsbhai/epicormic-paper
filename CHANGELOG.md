@@ -17,6 +17,10 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
   notebooks and TeX.
 - CI on Ubuntu and Windows with Python 3.10 and 3.12: ruff, mypy, the
   vocabulary scan, and tests with a 100 percent coverage gate.
+- `HANDOFF.md`: the runner handoff for Katie and Mike: who runs which
+  experiment arm, what exists in the repository today, the locked mock
+  instrumentation check, the pinned local control from pollard EXP-001, the
+  hosted budget rules, and how results come back.
 
 ### Fixed
 
