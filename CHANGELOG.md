@@ -34,6 +34,17 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
   `snapshot_environment.py`, `run_exp_a.py`, `analyze_exp_a.py`, and tests at
   100 percent line coverage.
 
+### Changed
+
+- Pins move to epicormic 0.2.0 (tag `v0.2.0` at
+  `40bd810881bc6b4a646b1c79f777b2a42a9fe190`, PyPI wheel and sdist digests
+  in `pins.py`), which corrects the e-process null (D27) and replaced 0.1.0
+  before any registered run. EXP-A protocol version 2026-10-28-r2
+  (`protocol.2026-10-28-r2.json`) pins it and restates H-A2 against the
+  threshold in force; version 2026-10-28 stays in place unrun, with a dated
+  logbook addendum. `HANDOFF.md` carries the regenerated locked output and
+  the new digest; `scripts/run_exp_a.py` defaults to the current protocol.
+
 ### Fixed
 
 - The vocabulary scan reports malformed Python on Python 3.10 and 3.11,

@@ -51,6 +51,8 @@ def _payload(with_sequential: bool) -> dict[str, Any]:
                 "threshold": "20",
                 "observations": 40,
                 "mu0": "0.9",
+                "lower": "0.8",
+                "upper": "0.96",
                 "baseline_observations": 40,
                 "ties_excluded": 0,
                 "alarm": False,
@@ -90,8 +92,10 @@ def test_verdict_record_decodes_numbers_and_missing_detectors() -> None:
     seq = record["sequential"]["normalized_match"]
     assert seq["cusum_max"] == pytest.approx(0.1)
     assert seq["e_max"] == 2.0 and seq["e_alarm"] is False and seq["baseline_observations"] == 40
+    assert seq["e_lower"] == 0.8 and seq["e_upper"] == 0.96
     record = verdict_record(_payload(False), 1, None)
     assert record["sequential"]["normalized_match"]["e_max"] is None
+    assert record["sequential"]["normalized_match"]["e_lower"] is None
     assert record["node_id"] is None
     assert exp_a._number(None) is None
     assert exp_a._number(True) == 1.0

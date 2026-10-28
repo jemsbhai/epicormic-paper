@@ -17,7 +17,7 @@ classifiers = [
 ]
 # The software under study, pinned to the released artifacts whose digests
 # are recorded in src/epicormic_lab/pins.py. Never relax these pins.
-dependencies = ["epicormic==0.1.0", "pollard==1.6.0"]
+dependencies = ["epicormic==0.2.0", "pollard==1.6.0"]
 
 [project.urls]
 Homepage = "https://github.com/jemsbhai/epicormic-paper"
@@ -29,7 +29,7 @@ Package = "https://github.com/jemsbhai/epicormic"
 control = ["openai>=1.66"]
 # EXP-D: the four hosted provider families of decision D16 and the cost meter
 # of decision D17. Exact SDK versions are pinned in the EXP-D pre-registration.
-hosted = ["epicormic[cost]==0.1.0", "pollard[openai,anthropic,bedrock,litellm]==1.6.0"]
+hosted = ["epicormic[cost]==0.2.0", "pollard[openai,anthropic,bedrock,litellm]==1.6.0"]
 # EXP-E: NVML joules on the local GPU.
 energy = ["pollard[nvml]==1.6.0"]
 figures = ["matplotlib>=3.8"]

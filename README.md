@@ -3,7 +3,7 @@
 Experiments, analysis, and manuscript for the epicormic paper: pre-registered
 calibration, power, sequential-detection, longitudinal hosted-canary, and
 cost-and-energy studies of [epicormic](https://github.com/jemsbhai/epicormic)
-0.1.0, the provider drift detector and containment layer for
+0.2.0, the provider drift detector and containment layer for
 [pollard](https://github.com/jemsbhai/pollard)-governed AI systems. The
 package source stays in its own repository; this repository holds what is
 needed to plan, run, verify, and report the experiments and to build the
@@ -49,7 +49,7 @@ drafted to the standard of the top tier throughout.
 
 | Component | Version | Release identity |
 | --- | --- | --- |
-| epicormic | 0.1.0 | tag `v0.1.0` at commit `2451bed78d12f129fbda0e3e058e55e7e18abcce` |
+| epicormic | 0.2.0 | tag `v0.2.0` at commit `40bd810881bc6b4a646b1c79f777b2a42a9fe190` |
 | pollard | 1.6.0 | tag `v1.6.0` at commit `e9d02af06a2d41403222f81ba623397b8904fdd7` |
 
 The wheel and sdist SHA-256 digests of both releases are in
@@ -109,7 +109,7 @@ runs which arm.
 
 | Id | Question | Providers | Status |
 | --- | --- | --- | --- |
-| EXP-A | Calibration: is the false-alarm rate of the pooled test within the binomial interval of alpha, and does the e-process alarm on at most alpha of A/A streams? | mock, local control | mock arm pre-registered (`experiments/exp_a_calibration/`, tag `exp-a-prereg`) and runnable with `scripts/run_exp_a.py`; control arm protocol follows the throughput report |
+| EXP-A | Calibration: is the false-alarm rate of the pooled test within the binomial interval of alpha, and does the e-process alarm on at most alpha of A/A streams? | mock, local control | mock arm pre-registered (`experiments/exp_a_calibration/`, version 2026-10-28-r2 at tag `exp-a-prereg-r2`, against epicormic 0.2.0) and runnable with `scripts/run_exp_a.py`; control arm protocol follows the throughput report |
 | EXP-B | Power: which (N, panel size) reaches 0.8 power per drift type and effect size? | mock, local control | not yet pre-registered |
 | EXP-C | Sequential detection delay against false-alarm rate for CUSUM, Page-Hinkley, and the e-process; calibration of the defaults | mock, local control | not yet pre-registered |
 | EXP-D | Hosted canary: 28 daily windows on cheap-tier models from four provider families with a declared snapshot switch on day 15, beside the control and a local silent-change arm (GGUF swap under an unchanged name), under the 10 USD per month cap | hosted, local control | not yet pre-registered |
