@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "epicormic-lab"
-version = "0.0.1"
+version = "0.0.2"
 description = "Experiments, analysis, and manuscript tooling for the epicormic paper."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -17,7 +17,7 @@ classifiers = [
 ]
 # The software under study, pinned to the released artifacts whose digests
 # are recorded in src/epicormic_lab/pins.py. Never relax these pins.
-dependencies = ["epicormic==0.1.0", "pollard==1.6.0"]
+dependencies = ["epicormic==0.1.0", "pollard==1.6.0", "psutil>=5.9"]
 
 [project.urls]
 Homepage = "https://github.com/jemsbhai/epicormic-paper"
@@ -41,6 +41,7 @@ dev = [
   "ruff>=0.5",
   "mypy>=1.10",
   "scipy>=1.13",
+  "types-psutil>=5.9",
 ]
 
 [tool.hatch.build.targets.wheel]
