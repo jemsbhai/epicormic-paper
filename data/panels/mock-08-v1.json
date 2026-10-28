@@ -1,0 +1,78 @@
+{
+  "format": "epicormic/panel/v1",
+  "min_samples": 5,
+  "name": "mock-08-v1",
+  "probes": [
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 0"
+      },
+      "probe_id": "q00",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 1"
+      },
+      "probe_id": "q01",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 2"
+      },
+      "probe_id": "q02",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 3"
+      },
+      "probe_id": "q03",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 4"
+      },
+      "probe_id": "q04",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 5"
+      },
+      "probe_id": "q05",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 6"
+      },
+      "probe_id": "q06",
+      "tags": []
+    },
+    {
+      "family": "mock",
+      "payload": {
+        "input": "question 7"
+      },
+      "probe_id": "q07",
+      "tags": []
+    }
+  ],
+  "sampling": {
+    "max_output_tokens": "200",
+    "temperature": "0.7"
+  },
+  "seed_base": 0,
+  "seed_field": "seed",
+  "seed_from_attempt": true
+}

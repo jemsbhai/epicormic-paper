@@ -21,6 +21,10 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
   experiment arm, what exists in the repository today, the locked mock
   instrumentation check, the pinned local control from pollard EXP-001, the
   hosted budget rules, and how results come back.
+- EXP-A pre-registration (mock arm): `experiments/exp_a_calibration/`
+  with `PREREGISTRATION.md`, `protocol.json` (version 2026-10-28), the
+  logbook plan entry, and the first panels under `data/panels/`
+  (`canary-24-v1`, `mock-08-v1`, `mock-64-v1`) with digests and checksums.
 
 ### Fixed
 
