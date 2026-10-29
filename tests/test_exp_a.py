@@ -20,7 +20,7 @@ from epicormic_lab.exp_a import (
     verdict_record,
     window_id,
 )
-from epicormic_lab.protocol import Cell, ProtocolError, load_protocol
+from epicormic_lab.protocol import Cell, ProtocolError, load_protocol, protocol_digest
 
 PROTOCOL = Path("experiments") / "exp_a_calibration" / "protocol.json"
 
@@ -231,6 +231,13 @@ def test_run_experiment_refusals(
     common: dict[str, Any] = {"protocol_path": PROTOCOL, "profile": "smoke", "run_id": "r"}
     with pytest.raises(ProtocolError, match="registered under"):
         run_experiment(repo, expected_digest="0" * 64, **common)
+    original = (repo / PROTOCOL).read_text(encoding="utf-8")
+    document = json.loads(original)
+    document["software"]["epicormic"] = "0.1.0"
+    (repo / PROTOCOL).write_text(json.dumps(document), encoding="utf-8")
+    with pytest.raises(ProtocolError, match="repository pins"):
+        run_experiment(repo, expected_digest=protocol_digest(document), **common)
+    (repo / PROTOCOL).write_text(original, encoding="utf-8")
     monkeypatch.setattr(
         exp_a, "check_installed", lambda: ["epicormic 0.1.0 is pinned but 9 is installed"]
     )

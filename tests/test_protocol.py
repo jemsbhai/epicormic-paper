@@ -124,3 +124,15 @@ def test_load_protocol_rejects_bad_files(tmp_path: Path) -> None:
     bad.write_text(json.dumps({"format": PROTOCOL_FORMAT, "experiment": "x"}), encoding="utf-8")
     with pytest.raises(ProtocolError, match="lacks the 'version' key"):
         load_protocol(bad)
+
+
+def test_require_software_matches_the_pins(repo: Path) -> None:
+    path = repo / "experiments" / "exp_a_calibration" / "protocol.json"
+    load_protocol(path).require_software()
+    document = json.loads(path.read_text(encoding="utf-8"))
+    document["software"]["epicormic"] = "0.1.0"
+    path.write_text(json.dumps(document), encoding="utf-8")
+    with pytest.raises(ProtocolError, match="repository pins"):
+        load_protocol(path).require_software()
+    with pytest.raises(ProtocolError, match="repository pins"):
+        load_protocol(FIRST_PROTOCOL).require_software()

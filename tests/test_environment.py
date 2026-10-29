@@ -90,3 +90,40 @@ def test_snapshot_writes_the_expected_fields(tmp_path: Path) -> None:
     assert set(document) >= {"timestamp", "git", "python_version", "cpu_count", "gpu", "pins"}
     assert document["pins"]["epicormic"]["version"] == "0.2.0"
     assert document["installed"]["epicormic"] == "0.2.0"
+
+
+def test_total_memory_on_each_platform(monkeypatch: pytest.MonkeyPatch) -> None:
+    import os
+    import sys
+
+    # Linux path: sysconf
+    monkeypatch.setattr(sys, "platform", "linux")
+    monkeypatch.setattr(
+        os, "sysconf", lambda name: {"SC_PAGE_SIZE": 4096, "SC_PHYS_PAGES": 10}[name]
+    )
+    assert environment.total_memory_bytes() == 40960
+    monkeypatch.setattr(os, "sysconf", lambda name: (_ for _ in ()).throw(OSError("no")))
+    assert environment.total_memory_bytes() is None
+    # macOS path: sysctl
+    monkeypatch.setattr(sys, "platform", "darwin")
+    monkeypatch.setattr(environment, "_run", lambda command, cwd=None: "17179869184")
+    assert environment.total_memory_bytes() == 17179869184
+    # Windows path: powershell, including an unparsable answer and no answer
+    monkeypatch.delattr(os, "sysconf", raising=False)
+    monkeypatch.setattr(sys, "platform", "win32")
+    monkeypatch.setattr(environment, "_run", lambda command, cwd=None: "68719476736")
+    assert environment.total_memory_bytes() == 68719476736
+    monkeypatch.setattr(environment, "_run", lambda command, cwd=None: "not a number")
+    assert environment.total_memory_bytes() is None
+    monkeypatch.setattr(environment, "_run", lambda command, cwd=None: None)
+    assert environment.total_memory_bytes() is None
+
+
+def test_installed_distributions_and_pin_status(tmp_path: Path) -> None:
+    distributions = environment.installed_distributions()
+    assert distributions["epicormic"] == "0.2.0" and distributions["pollard"] == "1.6.0"
+    assert list(distributions) == sorted(distributions)
+    document = environment.snapshot(tmp_path)
+    assert document["pins_ok"] is True
+    assert document["distributions"]["epicormic"] == "0.2.0"
+    assert "memory_bytes" in document

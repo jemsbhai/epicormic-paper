@@ -36,6 +36,11 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
 
 ### Changed
 
+- Environment snapshots record physical memory, every installed distribution
+  and whether the pins are satisfied; `scripts/snapshot_environment.py
+  --require-pins` exits 1 otherwise; a run refuses a protocol whose software
+  block does not name the pinned releases (folded in from the local work of
+  2026-10-01).
 - Pins move to epicormic 0.2.0 (tag `v0.2.0` at
   `40bd810881bc6b4a646b1c79f777b2a42a9fe190`, PyPI wheel and sdist digests
   in `pins.py`), which corrects the e-process null (D27) and replaced 0.1.0

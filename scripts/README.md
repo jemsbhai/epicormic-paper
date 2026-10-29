@@ -9,9 +9,11 @@ Present:
   a protocol's canonical JSON (keys sorted, no insignificant whitespace,
   `ensure_ascii` false, UTF-8), for the logbook and the registry; with
   `--expect` it exits 1 when the file no longer matches.
-- `snapshot_environment.py [--out PATH]`: writes or prints `environment.json`
-  (git commit and dirty flag, Python and OS, CPU count, GPU and driver when
-  `nvidia-smi` answers, installed package versions, the release pins).
+- `snapshot_environment.py [--out PATH] [--require-pins]`: writes or prints
+  `environment.json` (git commit and dirty flag, Python and OS, CPU count and
+  memory, GPU and driver when `nvidia-smi` answers, installed package
+  versions and every installed distribution, the release pins and whether
+  they are satisfied); `--require-pins` exits 1 when they are not.
 - `run_exp_a.py --profile smoke|full --run-id ID --digest HEX [--workers N]
   [--resume] [--allow-dirty] [--cells ...]`: runs the EXP-A mock arm from the
   frozen protocol (`--protocol` defaults to the current version,

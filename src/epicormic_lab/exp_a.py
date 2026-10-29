@@ -310,6 +310,7 @@ def run_experiment(
 
     protocol = load_protocol(root / protocol_path)
     protocol.require_digest(expected_digest)
+    protocol.require_software()
     problems = check_installed()
     if problems:
         raise RunError("; ".join(problems))

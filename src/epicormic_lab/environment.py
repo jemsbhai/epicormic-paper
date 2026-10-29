@@ -1,9 +1,10 @@
 """Environment snapshots: what a run ran on, written to ``environment.json``.
 
 The snapshot records the repository commit and whether the tree was clean,
-the interpreter and platform, the CPU count, the GPU and driver when
-``nvidia-smi`` answers, the installed versions of the studied packages with
-their pinned release digests, and the time. Every field that comes from a
+the interpreter and platform, the CPU count and physical memory, the GPU and
+driver when ``nvidia-smi`` answers, the installed versions of the studied
+packages with their pinned release digests, every installed distribution,
+whether the pins are satisfied, and the time. Every field that comes from a
 subprocess is ``None`` when the tool is absent, never a guess.
 """
 
@@ -19,7 +20,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from epicormic_lab.pins import PINS
+from epicormic_lab.pins import PINS, check_installed
 
 TRACKED_DISTRIBUTIONS = ("epicormic", "pollard", "epicormic-lab")
 
@@ -79,6 +80,42 @@ def installed_versions() -> dict[str, str | None]:
     return versions
 
 
+def installed_distributions() -> dict[str, str]:
+    """Every installed distribution and its version, sorted by name."""
+
+    found: dict[str, str] = {}
+    for distribution in importlib.metadata.distributions():
+        name = distribution.metadata["Name"]
+        if name:
+            found[str(name)] = str(distribution.version)
+    return dict(sorted(found.items()))
+
+
+def total_memory_bytes() -> int | None:
+    """Physical memory of the host from the standard library and the platform's own tool."""
+
+    if hasattr(os, "sysconf") and sys.platform != "darwin":
+        try:
+            return int(os.sysconf("SC_PAGE_SIZE")) * int(os.sysconf("SC_PHYS_PAGES"))
+        except (ValueError, OSError):
+            return None
+    if sys.platform == "darwin":
+        output = _run(["sysctl", "-n", "hw.memsize"])
+    else:
+        output = _run(
+            [
+                "powershell",
+                "-NoProfile",
+                "-Command",
+                "(Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory",
+            ]
+        )
+    try:
+        return int(output) if output else None
+    except ValueError:
+        return None
+
+
 def snapshot(root: Path) -> dict[str, Any]:
     """Collect the environment snapshot for a run rooted at ``root``."""
 
@@ -92,8 +129,11 @@ def snapshot(root: Path) -> dict[str, Any]:
         "machine": platform.machine(),
         "processor": platform.processor() or None,
         "cpu_count": os.cpu_count(),
+        "memory_bytes": total_memory_bytes(),
         "gpu": gpu_state(),
         "installed": installed_versions(),
+        "distributions": installed_distributions(),
+        "pins_ok": check_installed() == [],
         "pins": {
             pin.name: {
                 "version": pin.version,
