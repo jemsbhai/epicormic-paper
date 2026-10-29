@@ -18,6 +18,8 @@ from typing import Any
 
 from epicormic import AnalysisConfig, Panel, load_panel
 
+from epicormic_lab.pins import PINS
+
 PROTOCOL_FORMAT = "epicormic-lab/protocol/v1"
 PROFILES = ("smoke", "full")
 
@@ -87,6 +89,17 @@ class Protocol:
             raise ProtocolError(
                 f"{self.path} has digest {self.digest}, but the run was registered under "
                 f"{expected}; a changed protocol is a new dated version, never an edit"
+            )
+
+    def require_software(self) -> None:
+        """Raise unless the protocol's software block names the pinned releases."""
+
+        expected = {pin.name: pin.version for pin in PINS}
+        found = dict(self.document.get("software", {}))
+        if found != expected:
+            raise ProtocolError(
+                f"{self.path} studies {found}, but the repository pins {expected}; a protocol "
+                "written against another release is run from the commit that pinned it"
             )
 
     def cells(self, profile: str) -> tuple[Cell, ...]:

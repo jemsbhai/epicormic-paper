@@ -31,14 +31,18 @@ def test_freeze_protocol_prints_and_checks_the_digest(capsys: pytest.CaptureFixt
 
 
 def test_snapshot_environment_prints_or_writes(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
 ) -> None:
     snapshot = _load("snapshot_environment")
     assert snapshot.main([]) == 0
     assert json.loads(capsys.readouterr().out)["pins"]["pollard"]["version"] == "1.6.0"
     out = tmp_path / "environment.json"
-    assert snapshot.main(["--out", str(out)]) == 0
+    assert snapshot.main(["--out", str(out), "--require-pins"]) == 0
     assert json.loads(out.read_text(encoding="utf-8"))["installed"]["epicormic"] == "0.2.0"
+    capsys.readouterr()
+    monkeypatch.setattr(snapshot, "snapshot", lambda root: {"pins_ok": False})
+    assert snapshot.main(["--require-pins"]) == 1
+    assert "not the installed ones" in capsys.readouterr().err
 
 
 def test_run_and_analyze_scripts_parse_their_arguments() -> None:
