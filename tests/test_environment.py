@@ -96,13 +96,18 @@ def test_total_memory_on_each_platform(monkeypatch: pytest.MonkeyPatch) -> None:
     import os
     import sys
 
-    # Linux path: sysconf
+    # Linux path: sysconf (absent on Windows, hence raising=False)
     monkeypatch.setattr(sys, "platform", "linux")
     monkeypatch.setattr(
-        os, "sysconf", lambda name: {"SC_PAGE_SIZE": 4096, "SC_PHYS_PAGES": 10}[name]
+        os,
+        "sysconf",
+        lambda name: {"SC_PAGE_SIZE": 4096, "SC_PHYS_PAGES": 10}[name],
+        raising=False,
     )
     assert environment.total_memory_bytes() == 40960
-    monkeypatch.setattr(os, "sysconf", lambda name: (_ for _ in ()).throw(OSError("no")))
+    monkeypatch.setattr(
+        os, "sysconf", lambda name: (_ for _ in ()).throw(OSError("no")), raising=False
+    )
     assert environment.total_memory_bytes() is None
     # macOS path: sysctl
     monkeypatch.setattr(sys, "platform", "darwin")
