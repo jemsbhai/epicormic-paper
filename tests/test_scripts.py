@@ -6,6 +6,7 @@ import importlib.util
 import json
 from pathlib import Path
 from types import ModuleType
+from typing import Any
 
 import pytest
 
@@ -49,3 +50,59 @@ def test_run_and_analyze_scripts_parse_their_arguments() -> None:
     analyze = _load("analyze_exp_a")
     with pytest.raises(SystemExit):
         analyze.main([])
+
+
+def test_pilot_exp_c_runs_a_tiny_setting_and_rejects_unknown_kinds(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    pilot = _load("pilot_exp_c")
+    out = tmp_path / "pilot.json"
+    assert pilot.main(["--out", str(out), "--kinds", "latency"]) == 1
+    assert "unknown drift kinds" in capsys.readouterr().err
+    argv = [
+        "--out",
+        str(out),
+        "--panel",
+        "data/panels/mock-08-v1.json",
+        "--samples",
+        "5",
+        "--windows",
+        "3",
+        "--change",
+        "2",
+        "--reps",
+        "1",
+        "--permutations",
+        "200",
+        "--kinds",
+        "refusal",
+        "--levels",
+        "1",
+    ]
+    assert pilot.main(argv) == 0
+    document = json.loads(out.read_text(encoding="utf-8"))
+    assert document["purpose"] == "sizing only, not evidence"
+    assert document["kinds"] == {"refusal": "refusal"} and len(document["chains"]) == 1
+    chain = document["chains"][0]
+    assert chain["kind"] == "refusal" and chain["level"] == "1" and chain["change_window"] == 2
+    assert chain["detectors"]["refusal"]["pooled"]["delay"] == 1
+    assert chain["effects"]["refusal"]["T_post_mean"] == pytest.approx(1.0)
+
+    class SerialPool:
+        """Stands in for the process pool: a module loaded from a path cannot be pickled."""
+
+        def __init__(self, max_workers: int) -> None:
+            self.max_workers = max_workers
+
+        def __enter__(self) -> SerialPool:
+            return self
+
+        def __exit__(self, *exc: object) -> None:
+            return None
+
+        def map(self, fn: Any, items: list[Any]) -> list[Any]:
+            return [fn(item) for item in items]
+
+    monkeypatch.setattr(pilot, "ProcessPoolExecutor", SerialPool)
+    assert pilot.main([*argv, "--workers", "2"]) == 0
+    assert len(json.loads(out.read_text(encoding="utf-8"))["chains"]) == 1

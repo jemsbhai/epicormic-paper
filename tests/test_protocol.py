@@ -16,11 +16,13 @@ from epicormic_lab.protocol import (
     load_protocol,
     protocol_digest,
 )
+from epicormic_lab.providers import DRIFT_KINDS
 
-from .conftest import FIRST_PROTOCOL, REAL_PROTOCOL, REPO
+from .conftest import EXP_C_PROTOCOL, FIRST_PROTOCOL, REAL_PROTOCOL, REPO
 
 FROZEN_DIGEST = "5934acb50e9d4f9403bb64cd038cf492bcd167d7464eef8a1fdd24da2e555de4"
 FIRST_DIGEST = "dd7e4356a60b18a9b122a5def9617b761be313f9d7dfa97481e7601a0115210d"
+EXP_C_DIGEST = "ef5062ae6a7da040e1b4194e79482de6d3d36e61923b12dcda0af7acd5f1124e"
 
 
 def test_frozen_protocol_digest_is_unchanged() -> None:
@@ -33,6 +35,42 @@ def test_frozen_protocol_digest_is_unchanged() -> None:
     first = load_protocol(FIRST_PROTOCOL)
     assert first.digest == FIRST_DIGEST and first.version == "2026-10-28"
     assert protocol.document["supersedes"]["digest"] == FIRST_DIGEST
+
+
+def test_exp_c_protocol_is_frozen_and_consistent() -> None:
+    protocol = load_protocol(EXP_C_PROTOCOL)
+    assert protocol.digest == EXP_C_DIGEST
+    assert protocol.experiment == "EXP-C" and protocol.version == "2026-10-29"
+    software = protocol.document["software"]
+    assert software == {"epicormic": EPICORMIC.version, "pollard": POLLARD.version}
+    assert protocol.verify_panels(REPO) == {
+        "data/panels/canary-24-v1.json": protocol.document["panels"]["24"]["digest"]
+    }
+    # the same analysis document as EXP-A r2, hence the same config digest
+    exp_a = load_protocol(REAL_PROTOCOL)
+    assert protocol.analysis_config().digest == exp_a.analysis_config().digest
+    kinds = protocol.document["drifts"]["kinds"]
+    assert {kind: spec["primary_scorer"] for kind, spec in kinds.items()} == DRIFT_KINDS
+    parts = protocol.document["parts"]
+    chains = sum(
+        len(part["kinds"])
+        * len(part["levels"])
+        * len(part["samples_per_probe"])
+        * len(part["pre_change_windows"])
+        * part["replications"]["full"]
+        for part in parts.values()
+    )
+    assert chains == 3000
+    verdicts = sum(
+        len(part["kinds"])
+        * len(part["levels"])
+        * len(part["samples_per_probe"])
+        * part["replications"]["full"]
+        * (quiet + part["post_change_windows"])
+        for part in parts.values()
+        for quiet in part["pre_change_windows"]
+    )
+    assert verdicts == 83_300
 
 
 def test_protocol_software_matches_the_pins() -> None:

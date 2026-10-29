@@ -33,6 +33,14 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
   `analysis` (the committed summary), with `scripts/freeze_protocol.py`,
   `snapshot_environment.py`, `run_exp_a.py`, `analyze_exp_a.py`, and tests at
   100 percent line coverage.
+- EXP-C pre-registration (mock arm): `experiments/exp_c_sequential/` with
+  `PREREGISTRATION.md`, `protocol.json` (version 2026-10-29), the logbook
+  plan entry, and the sizing pilot `pilot/pilot-seed7.json`. In support:
+  `epicormic_lab.providers` gains the five drift kinds
+  (`drifted_provider`) and the request-hash `mixture` that grades the tool
+  swap and the length padding; `epicormic_lab.chains` observes and analyses
+  change-point chains and reduces them to first alarms, delays and realised
+  effects; `scripts/pilot_exp_c.py` runs the pilot.
 
 ### Changed
 

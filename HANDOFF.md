@@ -517,15 +517,29 @@ pick two.
 
 Both run on the seeded mock provider only, cost nothing, and need no keys.
 EXP-B is a power surface over drift type, effect size, N, and panel size;
-EXP-C is detection delay against false alarm rate for the three sequential
-detectors on streams with a known change point. Each cell is cheap, but the
-grids are large (EXP-B alone is 300 cells before replication, with a
-2000-permutation pooled test in every analysis), so wall-clock is CPU-bound
-and parallel across cells. Once the runners exist, the `smoke` profile
-reports the per-cell time on your machine; report that number and the core
-count, and the full-profile replication count is pinned from it. The
-notebooks under `notebooks/` are Colab-compatible for these two experiments
-if your laptop is the bottleneck.
+EXP-C is detection delay against false alarm rate for the pooled test, the
+three sequential detectors and the state machine on chains with a change at
+a known window. Each cell is cheap, but the grids are large (EXP-B alone is
+300 cells before replication, with a 2000-permutation pooled test in every
+analysis), so wall-clock is CPU-bound and parallel across cells. Once the
+runners exist, the `smoke` profile reports the per-cell time on your
+machine; report that number and the core count, and the full-profile
+replication count is pinned from it. The notebooks under `notebooks/` are
+Colab-compatible for these two experiments if your laptop is the
+bottleneck.
+
+EXP-C comes first (execution order of decisions D24 to D26: its delays set
+the bound EXP-D pre-registers). Its pre-registration is
+`experiments/exp_c_sequential/PREREGISTRATION.md` with `protocol.json`
+(version 2026-10-29); read sections 3.5 and 4 for the size of the full
+profile (35 cells, 3000 chains, about 90 CPU-hours on a slow core, about
+40 GB of stores zipped cell by cell as they complete) and the 12-hour
+wall-clock rule that sets the replication counts from your smoke timing.
+The runner, `scripts/run_exp_c.py`, follows the pre-registration in its own
+pull request; until it is merged there is nothing to run. The sizing pilot
+behind the design, `scripts/pilot_exp_c.py`, runs anywhere in about half an
+hour on two cores and is a reasonable way to see what the experiment
+measures; its output is never evidence.
 
 ## 8. How results come back
 

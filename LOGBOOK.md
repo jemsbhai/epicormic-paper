@@ -117,3 +117,85 @@ Pilot timing from the development smoke run, for sizing only: observations
 14.7 s at 24 by 40, about 40 s at 64 by 40, each recomputed once;
 projected full profile about 23 CPU-hours on a slow two-core machine, the
 A2 cell about 10 hours of it.
+
+## 2026-10-29 EXP-C planned (mock arm)
+
+Researcher: Muntaser Syed. Type: computational. Status: planned; frozen
+when this commit is tagged `exp-c-prereg`.
+
+Question: when the provider changes at a known window, how many windows
+pass before each epicormic 0.2.0 detector alarms (the pooled test, CUSUM,
+Page-Hinkley, the e-process, and the state machine's first `drift`), by
+drift kind and level, by samples per probe, and by the number of quiet
+windows before the change; and how many alarms do the quiet windows
+produce?
+
+Hypotheses: H-C1, at panel 24 and N 10 with 14 quiet windows, for every
+drift kind at every level in {0.2, 0.3, 0.5} the state machine reports
+`drift` within 2 windows of the change in at least 90 percent of chains
+(exact one-sided binomial per cell against 0.90, Holm across the 15 cells;
+at the first step 80 or fewer detections of 100 falsify); H-C2, the
+e-process delay grows with the quiet length: for the match kind at levels
+0.3 and 0.5, the delay with 28 quiet windows is stochastically larger than
+with 0, by at least 3 windows at the median (one-sided Mann-Whitney U per
+level, Holm across the two). Secondary S-C1 to S-C6 (realised effect per
+scorer, delay of every detector and scorer, pre-change false alarms,
+window size, offline recalibration grid for CUSUM and Page-Hinkley, the
+e-value at the change) are reported with intervals and not tested. Full
+statements, falsification conditions, the export to EXP-D and the expected
+results written before the run:
+`experiments/exp_c_sequential/PREREGISTRATION.md`.
+
+Independent variables: drift kind in {match, refusal, truncation,
+tool_swap, length} and level in {0.05, 0.1, 0.2, 0.3, 0.5} (C1); N in {5,
+20} (C2); quiet windows in {0, 7, 28} with 14 from C1 (C3). Every chain has
+one baseline window and 14 post-change windows.
+
+Dependent variables: per verdict as in EXP-A; per chain the first alarm
+window, pre-change flag and delay of every detector and scorer, the first
+`drift` verdict and its rule, the realised effect per scorer, the e-value
+before the change (`epicormic_lab.chains.first_alarms`).
+
+Controls: `MockProvider(seed=20261029, match_rate=0.9)` as the null; the
+drifted mock keeps the seed (common random numbers); the window salt of
+EXP-A, which also makes every cell at one geometry share its quiet windows
+with every other at the same replication index; one analysis
+configuration, identical to EXP-A r2; pinned software. The mixture kinds
+route by a hash of the whole request, never by the seed alone, because the
+panel gives every probe the seed `seed_base + attempt`.
+
+Protocol: `experiments/exp_c_sequential/protocol.json`, version 2026-10-29,
+digest `ef5062ae6a7da040e1b4194e79482de6d3d36e61923b12dcda0af7acd5f1124e` (SHA-256 of the canonical JSON: sorted keys,
+separators `,` and `:`, `ensure_ascii` false, UTF-8). Panel `canary-24-v1`
+`8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75`. Full
+profile: 35 cells, 3000 chains, 83,300 verdicts, about 21.1 million
+observation nodes (about 40 GB of stores, zipped per cell as they
+complete); smoke profile 2 replications per cell.
+
+Environment: CPU only; recorded per run in `environment.json`. Intended
+runner: Katie's machine (HANDOFF 7.5); the smoke profile sets the full
+replication counts by the 12-hour wall-clock rule of the pre-registration.
+
+Seeds: master 20261029 (provider, null and drifted), analysis seed 0,
+window salt as in EXP-A, mixture tag `epicormic-lab/mixture/v1:`;
+`seed.json` per run.
+
+Pilot (sizing only, not evidence): `scripts/pilot_exp_c.py` at seed 7, 200
+permutations, ten chains per C1 cell, committed as
+`experiments/exp_c_sequential/pilot/pilot-seed7.json`
+(SHA-256 `619640385544f369e1b6a59c4996fbacde506054abb799986a85811c814cf074`).
+Realised effect on the primary scorer within 0.01 of the level for every
+kind and level; first `drift` in the first drifted window in 10 of 10
+chains at level 0.2 and above for every kind, from the pooled test every
+time; e-value of `normalized_match` about 3e-8 after 14 quiet windows and
+e-process median delays of 3.5, 6.5 and more than 14 windows at levels 0.5,
+0.3 and 0.2 for the match kind; no e-process stream on
+`tool_call_set_jaccard` and a degenerate one on `output_chars` (never
+alarms on the length kind); CUSUM and Page-Hinkley median delays 4 to 5
+windows at level 0.2; no pre-change alarm of any detector in the ten
+distinct quiet chains.
+Wall-clock of the pilot: about 160 s per ten chains of 29 windows on one
+slow core at 200 permutations, in-memory store, no recompute.
+
+Runs: none yet. Result entries will cite run ids `exp-c-smoke-001` and
+`exp-c-full-001`.
