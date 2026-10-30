@@ -3,18 +3,32 @@
 | Field | Value |
 | --- | --- |
 | Experiment | EXP-C (section 16 of the epicormic `docs/PLAN.md`) |
-| Protocol | `protocol.json`, version 2026-10-29, mock arm |
-| Protocol digest | `ef5062ae6a7da040e1b4194e79482de6d3d36e61923b12dcda0af7acd5f1124e` |
+| Protocol | `protocol.json`, version 2026-10-30-r2, mock arm |
+| Protocol digest | `d176f31ebc77cc9f28e5dcbefcca77e88f31fbea16c300cb9ebd2c1aac2eda4f` |
 | Software under study | epicormic 0.2.0 on pollard 1.6.0, pinned in `src/epicormic_lab/pins.py` |
 | Panel | `canary-24-v1` `8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75` |
 | Pilot | `pilot/pilot-seed7.json` (seed 7, 200 permutations, sizing only, section 3.7) |
-| Status | Frozen when this commit is tagged `exp-c-prereg` |
+| Status | Revised before freeze; tag `exp-c-prereg` only after review and checks |
 
 The protocol digest is SHA-256 over the canonical JSON of the protocol file:
 keys sorted, separators `,` and `:` with no whitespace, `ensure_ascii`
 false, UTF-8. `scripts/freeze_protocol.py` computes exactly this; the run
 manifest records it, and a run refuses to start when the file on disk no
 longer matches.
+
+## 0. Revision before freeze (2026-10-30)
+
+Version 2026-10-30-r2 corrects the paired-sampling issue raised in
+[PR #8, review r4415181305](https://github.com/jemsbhai/epicormic-paper/pull/8#discussion_r4415181305).
+The original unrun protocol is retained as `protocol.2026-10-29.json`,
+digest `ef5062ae6a7da040e1b4194e79482de6d3d36e61923b12dcda0af7acd5f1124e`.
+The seed scheme, cells, replication counts, detectors and observation
+horizon are unchanged. H-C2 now has a paired, finite-horizon estimand and
+an exact test of its three-window threshold, with explicit rules for
+censoring, pre-change alarms, ties and missing pairs. This narrows the
+original stochastic-dominance language to a claim the test can establish.
+No confirmatory data were used to choose this correction. The seed-7
+pilot remains exploratory design input and is not reclassified as evidence.
 
 ## 1. Question
 
@@ -74,15 +88,22 @@ Primary, confirmatory:
   climb back from wherever it fell before it can reach the threshold. The
   construction therefore predicts a delay that grows with the number of
   quiet windows before the change, roughly linearly, at a rate set by the
-  slowest-decaying fraction of the betting grid on the side of the change. In C3 (match kind, panel 24, N = 10), at each of levels 0.3 and 0.5,
-  the delay of the e-process on `normalized_match` with 28 quiet windows is
-  stochastically larger than with 0 quiet windows, by at least 3 windows at
-  the median. Per level, the 50 delays at 28 quiet windows are tested
-  against the 50 at 0 by a one-sided Mann-Whitney U test at level 0.05,
-  delays censored at 14 entered as 15 (a tie at the top), Holm across the
-  two levels; the median difference is reported with its Hodges-Lehmann
-  estimate. A level at which the test does not reject, or at which the
-  median difference is below 3 windows, falsifies the claim for that level.
+  slowest-decaying fraction of the betting grid on the side of the change.
+  In C3 (match kind, panel 24, N = 10), at each level 0.3 and 0.5,
+  more than half of eligible replication pairs have a restricted delay
+  penalty of at least 3 windows for 28 quiet windows versus 0. Here Y is
+  the observed delay in 1..14, or the terminal category 15 for no alarm
+  within the complete 14-window horizon; a pair is eligible only if neither
+  chain's `normalized_match` e-process alarmed before its change. For each
+  pair r, D_r = Y_28,r - Y_0,r. Test H0: P(D_r >= 3 | eligible) <= 0.5
+  against > 0.5 by the exact binomial upper tail, with Holm across the two
+  levels at family alpha 0.05. Both adjusted p-values must be at most 0.05
+  to support H-C2. The sample median of the within-pair restricted
+  differences is descriptive; it is not a difference of marginal medians
+  or a Hodges-Lehmann estimate. Section 5 fixes every inclusion rule.
+  Failure to reject means the claim is not supported, not that there is
+  no penalty. This test establishes neither stochastic dominance nor an
+  uncensored median shift or linear growth across quiet lengths.
 
 Secondary, reported with intervals and not tested:
 
@@ -194,6 +215,18 @@ change window on. This is deliberate. It pairs the comparison of detectors
 across kinds and levels by replication, and it means the pre-change false
 alarm rates of S-C3 have one denominator per geometry, the distinct quiet
 chains, not one per cell (3.5).
+
+In particular, C3 at 0 and 28 quiet windows has the same baseline at each
+replication. Preserve this pairing: it controls baseline variation in the
+quiet-length contrast. Independent baseline seeds would permit unpaired
+inference but would discard this control and change the joint simulation
+design without answering the quiet-history question more directly.
+Post-change streams are not identical at equal time since change: their
+absolute window salts are 1..14 and 29..42. The short arm's post-change
+requests also share salts with part of the long arm's quiet period. All
+such within-replication dependence is kept inside the pair. Distinct
+replications use disjoint seed ranges. No inference treats cells as
+independent samples, and no observations are reseeded to obtain significance.
 
 ### 3.3 Variables
 
@@ -412,8 +445,9 @@ What the pilot settled.
    the cell summaries; the logbook result entry and the raw finding cite the
    run id; the paper reads only the generated summary.
 
-Cells are independent and run in parallel processes; the order within a
-process is C3, C1 by kind then increasing level, C2. A crash resumes at the
+Cells can execute in separate parallel processes, but are statistically
+paired; the order within a process is C3, C1 by kind then increasing level,
+C2. A crash resumes at the
 cell boundary; a partially written cell is rerun from its first
 replication, for the reason given in EXP-A section 4.
 
@@ -427,17 +461,68 @@ chains alarmed within 14 windows, and "above 14" otherwise; the first-alarm
 window histogram. Per cell: the same for the first `drift` verdict and for
 the first `warning` or `drift`, with the `rule_fired` breakdown at the
 first `drift`. H-C1: the per-cell exact one-sided binomial p-value and its
-Holm adjustment across the 15 cells. H-C2: per level, the Mann-Whitney U
-statistic and one-sided p-value for 28 against 0 quiet windows, the
-Hodges-Lehmann median difference, and Holm across the two levels; the
-median delay at each of the four quiet lengths and the least-squares slope
-of the median on the quiet length. S-C1 to S-C6 as stated in section 2.
-Every rate carries its interval and its denominator.
+Holm adjustment across the 15 cells. For delay quantiles use the inverse
+empirical detection CDF: the smallest integer d in 1..14 whose detected
+fraction is at least 0.5 or 0.9; if none, report "above 14". With no eligible
+chains report "not estimable". Do not calculate quantiles only among alarms.
 
-Holm is applied across the 15 cells of H-C1 because fifteen cell-level
-tests at 0.05 of a true floor would falsify it somewhere about half the
-time. H-C2 is two tests. The secondary quantities are estimates with
-intervals, not tests.
+### 5.1 Paired H-C2 inference
+
+The analysis is implemented in `epicormic_lab.exp_c_analysis.summarize_h_c2`.
+For each level, join the 0-quiet and 28-quiet cells by replication id,
+never by row order. Require exactly the planned ids 0..R-1 in both cells
+(R = 50 in the full protocol) and a complete 14-window post-change record
+for each chain. Missing partners, duplicates or truncated runs are data
+errors that stop analysis; they are not right censoring and are not
+silently dropped. Every summary records `replication`, `kind`, `level`,
+`change_window`, `windows`, and the `first_alarms` detector fields.
+
+1. Exclude the entire pair if either `normalized_match` e-process alarmed
+   before its own change. Report both arms' pre-change alarm counts and
+   every excluded id. Such an alarm is a false alarm, never a no-alarm
+   censor. The estimand is explicitly conditional on both chains being
+   pre-alarm-free; it is not an unconditional performance claim. Keep S-C3
+   alongside it, since exclusions could change the population being compared.
+2. In each remaining pair, set Y to the first post-change delay if an alarm
+   occurs in windows 1..14, and to 15 otherwise. Keep the raw null delay and
+   a censoring flag. The value 15 means T > 14, not an observed fifteenth
+   window. It defines a bounded endpoint, min(T, 15), which is fully known
+   after the fixed horizon, without extrapolating a survival tail.
+3. Form D = Y28 - Y0 and count k pairs with D >= 3 among all n eligible
+   pairs. Exactly 3 is a success. Zero, negative and other differences below
+   3 are failures; do not delete ties. Two censored chains have D = 0 and
+   supply no evidence of a three-window penalty. For example, delays 12
+   and no alarm give D = 3; 14 and no alarm give D = 1.
+4. Compute p = sum from j=k to n of choose(n,j) * 0.5^n, the exact
+   one-sided test of P(D >= 3 | eligible) <= 0.5. Each independent
+   replication contributes one Bernoulli outcome. This threshold sign test
+   needs neither symmetric differences (as a signed-rank analysis would)
+   nor exchangeable quiet-length labels (as a label-swap test would).
+   If n = 0, set p = 1 and the effect estimate and interval to null.
+5. Holm-adjust both p-values, including any p = 1, at family alpha 0.05.
+   Shared random numbers across levels are allowed by Holm; pairing makes
+   each input p-value valid first. Support requires rejection at both
+   levels. Otherwise report H-C2 as not supported, with the measured
+   effects and uncertainty; non-rejection does not establish equality.
+
+Report planned and eligible pairs, exclusions, each restricted pair with
+its censoring flags, k/n with its pointwise 95 percent Clopper-Pearson
+interval, the sample median of D, raw p and adjusted p. The interval is
+pointwise descriptive, not a simultaneous confidence statement. H-C2 is a
+claim about this paired restricted distribution, not all uncensored delays;
+no method can recover the latter from the censored tail without assumptions.
+For quiet lengths 0, 7, 14 (C1) and 28 also report the marginal detection
+fractions, censor counts, identifiable delay quantiles and pre-change
+wealth. The least-squares slope of median delay on quiet length is
+exploratory and is computed only if all four medians are observed within
+14 windows; otherwise report it as not estimable, never substitute 15.
+
+H-C1 retains its fifteen-test Holm family. H-C2 is a separate two-test
+family; there is no combined 0.05 guarantee across the two hypotheses.
+Secondary quantities S-C1 to S-C6 are estimates, not tests. Every rate
+carries its interval and denominator. The future full-run analysis must
+verify the frozen protocol digest and run provenance and use this helper;
+pilot, smoke and synthetic test summaries cannot supply confirmatory results.
 
 ## 6. Expected results, stated before the run
 
@@ -455,7 +540,8 @@ and are the reason S-C3 and S-C5 exist. The e-process at 14 quiet windows
 will trail the pooled test by several windows at level 0.3 and 0.5, miss
 level 0.2 in part of the chains and level 0.1 in almost all; with 0 quiet
 windows it will alarm in the first drifted window at level 0.2 and above;
-the delay will grow about linearly in the quiet length (H-C2). The
+the delay is expected to grow with quiet length; linearity is exploratory,
+while H-C2 tests only the paired 28-versus-0 threshold. The
 e-process will never alarm on `tool_call_set_jaccard` (no stream) or on
 `output_chars` and `output_tokens` (degenerate sign stream), so for the
 tool swap and length kinds its only route is `normalized_match`, and for

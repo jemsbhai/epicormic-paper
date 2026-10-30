@@ -199,3 +199,69 @@ slow core at 200 permutations, in-memory store, no recompute.
 
 Runs: none yet. Result entries will cite run ids `exp-c-smoke-001` and
 `exp-c-full-001`.
+
+## 2026-10-30 EXP-C plan addendum: paired finite-horizon inference
+
+Correction to the 2026-10-29 EXP-C plan entry, before freeze or a registered
+confirmatory run. Review: PR #8, discussion r4415181305. The PR head inspected
+was `27a9f64f4e5e6533ddf618e0f9a3bb8deea8c247`; the finding was unresolved,
+there were no later PR commits or replies, and no `exp-c-prereg` tag.
+Main had advanced through PR #7 to
+`d2e4cf71f9773d7826adabb94599d96c16720586` (environment snapshots and protocol
+software checks); these changes were inspected and tested in combination
+with this correction in a separate local integration tree.
+
+`observe_chain` salts the baseline by replication and absolute window index
+0, regardless of quiet length. C3's 0-quiet and 28-quiet observations share
+the baseline; the former's post-change requests also share salts with part
+of the latter's quiet period. The post-change streams at equal time since
+change are different (absolute indices 1..14 versus 29..42). These are
+replication pairs. Preserve this control of baseline variation rather than
+introducing independent baseline seeds merely to fit an unpaired test.
+
+H-C2 now tests, separately at levels 0.3 and 0.5, whether more than half of
+eligible pairs have Y28 - Y0 >= 3, where Y is the observed delay in 1..14,
+or 15 for no alarm within that complete horizon. The value 15 is a bounded
+terminal category, not an observed detection or an estimate beyond the
+horizon. Exclude a whole pair if either primary e-process alarm preceded
+its change and report excluded ids and both arms' counts. This conditional
+estimand must be read alongside S-C3. All other pairs, including tied and
+censored pairs, remain in the denominator. Missing partners, duplicate
+ids, inconsistent outcomes or incomplete horizons stop analysis.
+
+The test is an exact binomial upper tail for k = count(Y28 - Y0 >= 3),
+null probability 0.5, alternative greater, with Holm across both levels.
+Exactly 3 is a success; differences below 3 are failures. With no eligible
+pairs, p = 1 and the estimate and interval are null. Both adjusted p-values
+must be at most 0.05. Non-rejection means not supported, not evidence of no
+penalty. The sample median of within-pair restricted differences replaces
+the former Hodges-Lehmann language; stochastic dominance, an uncensored
+median shift, and linear growth are not claimed by this test. Delay
+quantiles beyond the observation horizon stay "above 14"; a median slope
+is not computed if any required median is censored.
+
+Current protocol: `experiments/exp_c_sequential/protocol.json`, version
+2026-10-30-r2, canonical digest
+`d176f31ebc77cc9f28e5dcbefcca77e88f31fbea16c300cb9ebd2c1aac2eda4f`.
+Original version retained verbatim as `protocol.2026-10-29.json`, digest
+`ef5062ae6a7da040e1b4194e79482de6d3d36e61923b12dcda0af7acd5f1124e`.
+The cells, seeds, replication counts, detector configuration and pinned
+releases have not changed. The seed-7 pilot and its committed artifact are
+unchanged exploratory design input; no confirmatory observations were
+collected or analysed for this correction.
+
+Implementation: `epicormic_lab.exp_c_analysis.summarize_h_c2`, for the future
+EXP-C runner and full-run analysis. Regression tests capture actual salted
+requests and mock responses through `observe_chain`; check matching by id,
+pre-change alarms, censoring, ties, empty eligibility and missing partners;
+check every success count at n = 1, 7, 30 and 50 against SciPy's exact
+binomial test; and require the protocol to match the executable analysis.
+
+Validation on Linux, Python 3.12.14, epicormic 0.2.0 and pollard 1.6.0:
+84 tests pass with 100 percent line coverage on the PR branch; 87 tests
+pass with 100 percent coverage when combined with current main. Ruff,
+strict mypy and the vocabulary scan pass on both trees. The canonical
+protocol digest check passes. These are software checks, not EXP-C results;
+no full experiment was run. Resolve the review finding after this correction
+is committed; freeze only the reviewed, checked version with `exp-c-prereg`
+on the merge commit. The experiment runner still follows separately.

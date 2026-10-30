@@ -2,7 +2,7 @@
   "format": "epicormic-lab/protocol/v1",
   "experiment": "EXP-C",
   "title": "Sequential detection delay of the epicormic 0.2.0 detectors after a provider change at a known window",
-  "version": "2026-10-29",
+  "version": "2026-10-30-r2",
   "arm": "mock",
   "software": {
     "epicormic": "0.2.0",
@@ -190,10 +190,10 @@
     "cell": "one cell per (part, panel size, N, kind, level, pre-change windows), named '<part>-p<panel>-n<N>-<kind>-l<level in thousandths, three digits>-q<pre-change windows, two digits>', for example C1-p24-n10-match-l200-q14",
     "store": "one SQLite pollard store per cell under runs/<run_id>/stores/<cell>.sqlite; one window per replication and window index, window_id '<part>-r<replication>-w<window_index>'",
     "monitor": "one monitor per replication, monitor_id '<cell>-r<replication>', baseline window index 0, current windows analysed in index order; the chain is epicormic_lab.chains",
-    "common_random_numbers": "the window salt depends on the replication and the window index only, so every cell with the same panel size and N shares its baseline window and its pre-change windows with every other such cell at the same replication index; pre-change false alarm rates are therefore reported over the distinct pre-change chains, 100 at panel 24 by N 10 with 14 quiet windows, and detector comparisons across kinds and levels are paired by replication",
+    "common_random_numbers": "the window salt depends on the replication and the window index only, so every cell with the same panel size and N shares its baseline window and its pre-change windows with every other such cell at the same replication index; pre-change false alarm rates are therefore reported over the distinct pre-change chains, 100 at panel 24 by N 10 with 14 quiet windows, and detector comparisons across kinds and levels are paired by replication; H-C2 pairs quiet lengths 0 and 28 by replication within each level; post-change salts use absolute window indices (1..14 versus 29..42), not matched time since change; different replication seed ranges are disjoint",
     "recompute": "every verdict is recomputed with analyze over the stored observations before the summary is written; a mismatch fails the run",
     "archive": "after the recompute check each cell's store is zipped as runs/<run_id>/stores/<cell>.zip, its SHA-256 recorded in the cell summary and the registry, and the uncompressed store removed; a C1 cell is about 1.3 GB uncompressed and the full profile about 40 GB",
-    "cell_order": "C3, C1 by kind in protocol order then increasing level, C2; cells are independent and may run in parallel processes",
+    "cell_order": "C3, C1 by kind in protocol order then increasing level, C2; cell execution is separate and may run in parallel processes",
     "sizing": "the smoke profile reports seconds per verdict per cell on the runner's machine; if the projected full-profile wall-clock at the runner's worker count exceeds 12 hours, a new dated version lowers C1 to 60 and C2 and C3 to 30 replications before the full run; nothing changes after it starts"
   },
   "outcomes": {
@@ -201,7 +201,9 @@
       "delay": "for a detector and scorer, the index of the first window with an alarm minus the change window plus one, so 1 is the first drifted window; a chain whose sticky detector (e-process, CUSUM, Page-Hinkley) alarmed before the change has no delay and is counted as a pre-change false alarm; the pooled test is window by window, so its delay is the first rejection at or after the change and any rejection before the change counts as a pre-change false alarm",
       "state_delay": "the same for the first verdict with state drift, whatever rule fired",
       "detection_within": "the fraction of chains without a pre-change alarm for that detector whose delay is at most d windows, with d in {1, 2, 7, 14}, two-sided 95 percent Clopper-Pearson interval, denominator reported",
-      "D90": "the 90th percentile of the state delay over the chains of a cell, reported as 'above 14' when fewer than 90 percent of the chains reach drift within the post-change windows"
+      "D90": "the 90th percentile of the state delay over the chains of a cell, reported as 'above 14' when fewer than 90 percent of the chains reach drift within the post-change windows",
+      "restricted_delay": "H-C2 only: Y = delay when observed in 1..14; Y = 15 for a complete chain with no post-change alarm and no pre-change alarm. A pre-change alarm is ineligible, never a censored delay. Inference concerns Y28 - Y0, not unobserved delays beyond 14.",
+      "delay_quantiles": "Among chains without a pre-change alarm, use the inverse empirical detection CDF: smallest integer d in 1..14 with fraction detected by d >= 0.5 (median) or >= 0.9 (90th percentile); otherwise report above 14, or not estimable if denominator zero. Do not replace a censored quantile by 15 in a slope."
     },
     "primary": [
       {
@@ -212,9 +214,40 @@
       },
       {
         "id": "H-C2",
-        "statement": "The e-process delay grows with the number of quiet windows before the change: in C3 (match kind), at each of levels 0.3 and 0.5, the delay of the e-process on normalized_match with 28 quiet windows is stochastically larger than with 0 quiet windows, by at least 3 windows at the median",
-        "test": "per level, a one-sided Mann-Whitney U test of the 50 delays at 28 quiet windows against the 50 at 0 quiet windows, delays censored at 14 entered as 15 (a tie at the top), at level 0.05 with Holm across the two levels; the median difference is reported with its Hodges-Lehmann estimate; a level at which the test does not reject, or at which the median difference is below 3 windows, falsifies the claim for that level",
-        "report": "per level and quiet length (0, 7, 14 from C1, 28): detection within 14, median and 90th percentile delay, the e-value before the change (median and range), and the least-squares slope of the median delay on the quiet length"
+        "statement": "In C3 (match, panel 24, N 10), at each level 0.3 and 0.5, more than half of replication pairs with neither normalized_match e-process alarm before the change have a restricted delay penalty Y28 - Y0 of at least 3 windows, where Yq is the delay if detected within 14 windows and 15 otherwise. This is a finite-horizon paired claim, not stochastic dominance or a claim about the uncensored median.",
+        "test": "Per level, exact one-sided paired threshold test: k = count(Y28 - Y0 >= 3), n = eligible replication pairs; p = P[Binomial(n, 0.5) >= k], testing probability <= 0.5 versus > 0.5. Holm across the two levels at family alpha 0.05. All eligible pairs remain in n, including ties and censoring; exactly 3 is a success, differences below 3 are failures. Both levels must have adjusted p <= 0.05. Failure to reject means not supported, not proof of no penalty.",
+        "report": "Per level: planned and eligible pairs, excluded replication ids and pre-change alarm counts, paired restricted outcomes with censoring flags, k/n with a pointwise 95 percent Clopper-Pearson interval, median within-pair restricted difference, raw exact p and Holm p. Also by quiet length 0, 7, 14 from C1, 28: detection within 14, censor counts, identifiable median and 90th percentile delays, e-value before change; a descriptive median slope only when all four medians are observed within the horizon.",
+        "paired_analysis": {
+          "implementation": "epicormic_lab.exp_c_analysis.summarize_h_c2",
+          "test": "exact_paired_threshold_binomial",
+          "pair_key": [
+            "level",
+            "replication"
+          ],
+          "quiet_windows": [
+            0,
+            28
+          ],
+          "levels": [
+            "0.3",
+            "0.5"
+          ],
+          "horizon_windows": 14,
+          "restricted_no_alarm_value": 15,
+          "minimum_penalty_windows": 3,
+          "success_comparison": ">=",
+          "null_probability": "0.5",
+          "alternative": "greater",
+          "family_alpha": "0.05",
+          "multiplicity": "Holm across both levels, even if one has no eligible pairs",
+          "pre_change": "exclude the entire pair if either normalized_match e-process alarm precedes its change; report excluded ids and counts separately; inference is conditional on both chains being pre-alarm-free",
+          "censoring": "keep every no-alarm chain after a complete 14-window horizon; 15 is the terminal category for T > 14, not an observed alarm at 15 or an estimate of the unbounded delay",
+          "ties": "all eligible pairs count; exactly 3 succeeds; zero and negative differences fail; two no-alarm chains have difference 0",
+          "incomplete_data": "require both cells to contain every planned replication id 0..R-1 and all 14 post-change windows; duplicate ids, missing partners and short horizons fail analysis rather than being silently dropped or censored",
+          "no_eligible_pairs": "raw p = 1, effect and interval null, criterion not met; retain level in Holm family",
+          "decision": "criterion met only if both Holm-adjusted p-values <= 0.05; otherwise H-C2 is not supported",
+          "assumptions": "replication pairs are independent under the disjoint seeded mock streams; arbitrary dependence within each pair and across levels is retained; no symmetry or quiet-label exchangeability assumption"
+        }
       }
     ],
     "secondary": [
@@ -256,7 +289,7 @@
   },
   "falsification": {
     "H-C1": "a Holm-adjusted one-sided p-value at or below 0.05 in any of the 15 cells: the state machine misses or is late on that kind at that level at the EXP-D operating point; the EXP-D bound is then taken from the cells that pass and the paper restricts the detection claim accordingly",
-    "H-C2": "no significant increase, or a median difference below 3 windows, at either level: the quiet-period penalty of the plain mixture e-process is smaller than its construction predicts, and the paper reports the measured delays without the mechanism claim"
+    "H-C2": "Not supported if either level has no eligible pairs or Holm-adjusted p > 0.05. This is not evidence of equality or of absence of a quiet-period penalty; report estimates, censoring, exclusions and uncertainty. No claim of stochastic dominance, uncensored median shift or linearity follows from this test."
   },
   "artifacts": {
     "manifest": "runs/<run_id>/manifest.json",
@@ -266,5 +299,11 @@
     "per_cell_summary": "runs/<run_id>/cells/<cell>.json",
     "summary": "analysis/generated/exp_c_<run_id>.json",
     "pilot": "experiments/exp_c_sequential/pilot/pilot-seed7.json, written by scripts/pilot_exp_c.py at seed 7 with 200 permutations; sizing only, never evidence"
+  },
+  "supersedes": {
+    "version": "2026-10-29",
+    "path": "experiments/exp_c_sequential/protocol.2026-10-29.json",
+    "digest": "ef5062ae6a7da040e1b4194e79482de6d3d36e61923b12dcda0af7acd5f1124e",
+    "reason": "PR #8 review r4415181305: shared baselines require paired inference; define the finite-horizon estimand and pre-change-alarm handling before freezing. No confirmatory EXP-C run has begun."
   }
 }

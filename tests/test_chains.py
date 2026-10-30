@@ -33,6 +33,45 @@ def test_chain_window_ids() -> None:
     assert chain_window_ids("C1-r003", 2) == ["C1-r003-w00", "C1-r003-w01", "C1-r003-w02"]
 
 
+def test_c3_shares_baselines_by_replication_but_uses_absolute_post_change_salts() -> None:
+    # Record actual salted requests and mock outputs through observe_chain,
+    # rather than restating the salt formula in a unit test.
+    panel = _panel()
+
+    def capture(quiet: int, rep: int) -> list[list[tuple[dict[str, Any], dict[str, Any]]]]:
+        windows: list[list[tuple[dict[str, Any], dict[str, Any]]]] = []
+        providers = []
+        for index in range(quiet + 15):
+            records: list[tuple[dict[str, Any], dict[str, Any]]] = []
+            windows.append(records)
+            provider = (
+                mock_provider(SPEC) if index <= quiet else drifted_provider(SPEC, "match", "0.3")
+            )
+
+            def step(request: dict[str, Any], fn=provider, seen=records) -> dict[str, Any]:
+                response = fn(request)
+                seen.append((dict(request), response))
+                return response
+
+            providers.append(step)
+        observe_chain(
+            MemoryStore(), panel, samples=2, window_ids=chain_window_ids(f"q{quiet}", quiet + 14),
+            providers=providers, replication=rep,
+        )
+        return windows
+
+    q0, q7, q28, next_rep = capture(0, 0), capture(7, 0), capture(28, 0), capture(0, 1)
+    assert q0[0] == q7[0] == q28[0]
+    assert q7[:8] == q28[:8]
+    assert q0[0] != next_rep[0]
+    # Equal absolute index means equal requests, even if the providers differ.
+    assert [r for r, _ in q0[1]] == [r for r, _ in q28[1]]
+    # Equal post-change offset is NOT a matched post-change stream.
+    assert [r for r, _ in q0[1]] != [r for r, _ in q28[29]]
+    seeds = {r["seed"] for window in q28 for r, _ in window}
+    assert seeds.isdisjoint({r["seed"] for window in next_rep for r, _ in window})
+
+
 def test_observe_and_analyze_a_chain_with_a_change_at_window_two() -> None:
     panel = _panel()
     config = AnalysisConfig(scorers=SCORERS, permutations=200)

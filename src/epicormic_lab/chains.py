@@ -55,6 +55,11 @@ def observe_chain(
     ``providers[index]`` answers window ``window_ids[index]``; index 0 is the
     baseline window. Returns the number of observations recorded and raises
     ``ChainError`` when a window is short or any request was refused.
+
+    Quiet length is deliberately absent from the salt. Chains at the same
+    replication share their baseline even when their change windows differ;
+    EXP-C H-C2 must therefore pair them by replication, not treat the cells
+    as independent samples. Post-change windows retain absolute window salts.
     """
 
     if len(providers) != len(window_ids):

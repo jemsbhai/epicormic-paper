@@ -55,6 +55,13 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
 
 ### Fixed
 
+- EXP-C protocol 2026-10-30-r2 preserves shared baseline seeds and tests
+  H-C2 by an exact paired three-window threshold test, with Holm across
+  levels. It defines the restricted-delay endpoint, whole-pair exclusions
+  for pre-change alarms, censoring, ties and incomplete-data checks. The
+  original protocol is retained unrun; the logbook has a dated addendum.
+  `epicormic_lab.exp_c_analysis` implements the test for the future runner.
+
 - The vocabulary scan reports malformed Python on Python 3.10 and 3.11,
   where the tokenizer emits error tokens instead of raising; before this
   such a file passed the scan silently on those versions.
