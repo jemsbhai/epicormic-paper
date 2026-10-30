@@ -1,0 +1,270 @@
+{
+  "format": "epicormic-lab/protocol/v1",
+  "experiment": "EXP-C",
+  "title": "Sequential detection delay of the epicormic 0.2.0 detectors after a provider change at a known window",
+  "version": "2026-10-29",
+  "arm": "mock",
+  "software": {
+    "epicormic": "0.2.0",
+    "pollard": "1.6.0"
+  },
+  "panels": {
+    "24": {
+      "path": "data/panels/canary-24-v1.json",
+      "digest": "8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75"
+    }
+  },
+  "provider": {
+    "kind": "epicormic.mock.MockProvider",
+    "seed": 20261029,
+    "match_rate": "0.9",
+    "drift": null,
+    "window_salt": "request['seed'] + 100000 * replication + 1000 * window_index, applied inside the step callable; window_index 0 is the baseline window, 1..K are the current windows",
+    "change": "the null provider answers the baseline window and the pre-change windows; the drifted provider of the cell's kind and level answers the change window and every window after it; the change window is pre_change_windows + 1"
+  },
+  "drifts": {
+    "construction": "epicormic_lab.providers.drifted_provider(provider, kind, level); the drifted mock keeps the null seed, so a request that receives a variant answer under the null receives one under the drift (common random numbers); the mixture routes a request to the drifted mock when the first 8 bytes of SHA-256('epicormic-lab/mixture/v1:' + canonical JSON of the whole request) fall below the level",
+    "kinds": {
+      "match": {
+        "drift": "Drift(match_rate = 0.9 - level)",
+        "primary_scorer": "normalized_match",
+        "stream": "indicator",
+        "eprocess": "indicator stream on normalized_match with the baseline rate 0.9 strictly inside its interval: both bettors decay through the quiet windows (pilot: e about 3e-8 after 14)"
+      },
+      "refusal": {
+        "drift": "Drift(refusal_rate = level)",
+        "primary_scorer": "refusal",
+        "stream": "indicator",
+        "eprocess": "constant-zero baseline: the downward bettor is frozen at 1 and the upward bettor decays, so the e-value sits at 0.5 under the null and the upward side must recover after the change"
+      },
+      "truncation": {
+        "drift": "Drift(truncation_rate = level)",
+        "primary_scorer": "truncated",
+        "stream": "indicator",
+        "eprocess": "as refusal"
+      },
+      "tool_swap": {
+        "drift": "mixture(null, Drift(swap_tool = 'search'), fraction = level)",
+        "primary_scorer": "tool_call_set_jaccard",
+        "stream": "sign",
+        "eprocess": "no e-process stream on tool_call_set_jaccard: the baseline is constant 1 and every value ties the median; the swap reaches the e-process through normalized_match only"
+      },
+      "length": {
+        "drift": "mixture(null, Drift(length_delta = 20), fraction = level)",
+        "primary_scorer": "output_chars",
+        "stream": "sign",
+        "eprocess": "degenerate sign stream on output_chars: every non-tie baseline value lies above the per-probe median, the null rate is 1, and padded answers keep every sign at 1, so the e-process never alarms on this kind; the pooled test and the heuristics see it"
+      }
+    },
+    "excluded": "latency_s: no sleep is injected on the mock and the scorer is outside the configured set (EXP-A section 3.4, epicormic decision D22)",
+    "realised_effect": "the mean pooled Cliff's delta over the post-change windows, per scorer, reported per cell (S-C1); the pilot of 2026-10-29 at seed 7 found it within 0.01 of the level on the primary scorer for every kind and level"
+  },
+  "analysis": {
+    "format": "epicormic/config/v1",
+    "scorers": [
+      "normalized_match",
+      "exact_match",
+      "tool_call_set_jaccard",
+      "refusal",
+      "truncated",
+      "output_chars",
+      "output_tokens"
+    ],
+    "alpha": "0.05",
+    "q": "0.05",
+    "permutations": 2000,
+    "seed": 0,
+    "n_min": 5,
+    "effect_min": "0.2",
+    "unknown_fraction": "0.5",
+    "top_k": 50,
+    "sequential": {
+      "cusum": {
+        "k": "0.1",
+        "h": "0.4"
+      },
+      "page_hinkley": {
+        "delta": "0.05",
+        "lambda": "0.5"
+      },
+      "eprocess": {
+        "alpha": "0.05",
+        "grid": [
+          "0.1",
+          "0.25",
+          "0.5",
+          "0.75"
+        ]
+      }
+    }
+  },
+  "parts": {
+    "C1": {
+      "question": "detection delay and pre-change false alarms of every detector at the EXP-D operating point, by drift kind and level",
+      "panel_sizes": [
+        24
+      ],
+      "samples_per_probe": [
+        10
+      ],
+      "baseline_windows": 1,
+      "pre_change_windows": [
+        14
+      ],
+      "post_change_windows": 14,
+      "kinds": [
+        "match",
+        "refusal",
+        "truncation",
+        "tool_swap",
+        "length"
+      ],
+      "levels": [
+        "0.05",
+        "0.1",
+        "0.2",
+        "0.3",
+        "0.5"
+      ],
+      "replications": {
+        "smoke": 2,
+        "full": 100
+      }
+    },
+    "C2": {
+      "question": "how the delays move with the samples per probe, at the two levels where they are not trivial",
+      "panel_sizes": [
+        24
+      ],
+      "samples_per_probe": [
+        5,
+        20
+      ],
+      "baseline_windows": 1,
+      "pre_change_windows": [
+        14
+      ],
+      "post_change_windows": 14,
+      "kinds": [
+        "match"
+      ],
+      "levels": [
+        "0.1",
+        "0.2"
+      ],
+      "replications": {
+        "smoke": 2,
+        "full": 50
+      }
+    },
+    "C3": {
+      "question": "how the e-process delay grows with the number of quiet windows before the change",
+      "panel_sizes": [
+        24
+      ],
+      "samples_per_probe": [
+        10
+      ],
+      "baseline_windows": 1,
+      "pre_change_windows": [
+        0,
+        7,
+        28
+      ],
+      "post_change_windows": 14,
+      "kinds": [
+        "match"
+      ],
+      "levels": [
+        "0.3",
+        "0.5"
+      ],
+      "replications": {
+        "smoke": 2,
+        "full": 50
+      },
+      "note": "the point with 14 quiet windows is the C1 cell of the same kind and level; its first 50 replications are the C3 sample at that length"
+    }
+  },
+  "run": {
+    "cell": "one cell per (part, panel size, N, kind, level, pre-change windows), named '<part>-p<panel>-n<N>-<kind>-l<level in thousandths, three digits>-q<pre-change windows, two digits>', for example C1-p24-n10-match-l200-q14",
+    "store": "one SQLite pollard store per cell under runs/<run_id>/stores/<cell>.sqlite; one window per replication and window index, window_id '<part>-r<replication>-w<window_index>'",
+    "monitor": "one monitor per replication, monitor_id '<cell>-r<replication>', baseline window index 0, current windows analysed in index order; the chain is epicormic_lab.chains",
+    "common_random_numbers": "the window salt depends on the replication and the window index only, so every cell with the same panel size and N shares its baseline window and its pre-change windows with every other such cell at the same replication index; pre-change false alarm rates are therefore reported over the distinct pre-change chains, 100 at panel 24 by N 10 with 14 quiet windows, and detector comparisons across kinds and levels are paired by replication",
+    "recompute": "every verdict is recomputed with analyze over the stored observations before the summary is written; a mismatch fails the run",
+    "archive": "after the recompute check each cell's store is zipped as runs/<run_id>/stores/<cell>.zip, its SHA-256 recorded in the cell summary and the registry, and the uncompressed store removed; a C1 cell is about 1.3 GB uncompressed and the full profile about 40 GB",
+    "cell_order": "C3, C1 by kind in protocol order then increasing level, C2; cells are independent and may run in parallel processes",
+    "sizing": "the smoke profile reports seconds per verdict per cell on the runner's machine; if the projected full-profile wall-clock at the runner's worker count exceeds 12 hours, a new dated version lowers C1 to 60 and C2 and C3 to 30 replications before the full run; nothing changes after it starts"
+  },
+  "outcomes": {
+    "definitions": {
+      "delay": "for a detector and scorer, the index of the first window with an alarm minus the change window plus one, so 1 is the first drifted window; a chain whose sticky detector (e-process, CUSUM, Page-Hinkley) alarmed before the change has no delay and is counted as a pre-change false alarm; the pooled test is window by window, so its delay is the first rejection at or after the change and any rejection before the change counts as a pre-change false alarm",
+      "state_delay": "the same for the first verdict with state drift, whatever rule fired",
+      "detection_within": "the fraction of chains without a pre-change alarm for that detector whose delay is at most d windows, with d in {1, 2, 7, 14}, two-sided 95 percent Clopper-Pearson interval, denominator reported",
+      "D90": "the 90th percentile of the state delay over the chains of a cell, reported as 'above 14' when fewer than 90 percent of the chains reach drift within the post-change windows"
+    },
+    "primary": [
+      {
+        "id": "H-C1",
+        "statement": "At panel 24 and N 10 with 14 quiet windows, for every drift kind at every level in {0.2, 0.3, 0.5}, the state machine reports drift within 2 windows of the change in at least 90 percent of chains",
+        "test": "per cell (15 cells), the exact one-sided binomial p-value of the count of chains with state delay at most 2, out of 100, against p0 = 0.90 (alternative: below); Holm across the 15 cells at family level 0.05; a cell whose Holm-adjusted p-value is at most 0.05 falsifies the claim for that cell (at the first Holm step this is 80 or fewer of 100); the unadjusted flag of 84 or fewer of 100 is reported as descriptive; power at the first step is 0.54 against a true rate of 0.80 and 0.90 against 0.75",
+        "report": "per cell the counts within 1, 2, 7, 14 windows with intervals, the first-drift rule breakdown, raw and Holm-adjusted p-values; the level 0.2 row is the headline"
+      },
+      {
+        "id": "H-C2",
+        "statement": "The e-process delay grows with the number of quiet windows before the change: in C3 (match kind), at each of levels 0.3 and 0.5, the delay of the e-process on normalized_match with 28 quiet windows is stochastically larger than with 0 quiet windows, by at least 3 windows at the median",
+        "test": "per level, a one-sided Mann-Whitney U test of the 50 delays at 28 quiet windows against the 50 at 0 quiet windows, delays censored at 14 entered as 15 (a tie at the top), at level 0.05 with Holm across the two levels; the median difference is reported with its Hodges-Lehmann estimate; a level at which the test does not reject, or at which the median difference is below 3 windows, falsifies the claim for that level",
+        "report": "per level and quiet length (0, 7, 14 from C1, 28): detection within 14, median and 90th percentile delay, the e-value before the change (median and range), and the least-squares slope of the median delay on the quiet length"
+      }
+    ],
+    "secondary": [
+      {
+        "id": "S-C1",
+        "statement": "Realised effect per scorer",
+        "report": "per cell and scorer the mean pooled T over the post-change windows with its standard deviation across chains, and over the pre-change windows; the mapping from level to Cliff's delta on the primary scorer"
+      },
+      {
+        "id": "S-C2",
+        "statement": "Delay of every detector and scorer",
+        "report": "per cell, detector and scorer: detection within 1, 2, 7, 14 windows with intervals, median and 90th percentile delay, and the first-alarm window histogram; the e-process half-threshold (warning) crossing likewise"
+      },
+      {
+        "id": "S-C3",
+        "statement": "Pre-change false alarms over the distinct quiet chains",
+        "report": "per detector and scorer, and for the union over scorers, the fraction of distinct pre-change chains with an alarm before the change, with intervals: 100 chains of 14 quiet windows at panel 24 by N 10 (C1), 50 of 28 quiet windows (C3), 50 of 14 at N 5 and at N 20 (C2); the per-window pooled test's rate is the per-window false alarm rate compounded over the quiet windows and is compared with EXP-A A1 and A2; the e-process rate is compared with H-A2"
+      },
+      {
+        "id": "S-C4",
+        "statement": "Window size",
+        "report": "C2 against the C1 cells at N 10: detection within 1 and 2 windows and the median delay of every detector at N 5, 10, 20 for the match kind at levels 0.1 and 0.2"
+      },
+      {
+        "id": "S-C5",
+        "statement": "Offline recalibration of CUSUM and Page-Hinkley (exploratory)",
+        "report": "from the recorded per-window pooled T series of every chain, the alarms of CUSUM over k in {0.05, 0.1, 0.15, 0.2} by h in {0.2, 0.3, 0.4, 0.6, 0.8, 1.0} and of Page-Hinkley over delta in {0.025, 0.05, 0.1} by lambda in {0.25, 0.5, 0.75, 1.0}: the false alarm rate over 28 null windows on the EXP-A A2 chains and the C3 quiet chains, and the mean delay per kind at level 0.2 on the C1 chains; per detector, among the pairs whose A2 false alarm rate has a 95 percent Clopper-Pearson upper bound at or below 0.10, the pair with the smallest mean delay at level 0.2 averaged over kinds is recorded as the recommended default for the next epicormic release; no hypothesis is tested"
+      },
+      {
+        "id": "S-C6",
+        "statement": "The e-value at the change",
+        "report": "per cell the median and range of the e-value of the primary scorer in the last pre-change verdict, which measures the wealth lost during the quiet windows"
+      }
+    ],
+    "export": {
+      "to": "EXP-D",
+      "quantity": "D90 of the state delay per kind at level 0.2 in C1; the EXP-D detection-delay bound is the largest of the five, in days, and applies to a declared switch whose realised effect on at least one configured scorer is 0.2 or more in absolute value; a switch below that is outside the bound's domain and EXP-D reports it against the C1 rows at levels 0.05 and 0.1"
+    }
+  },
+  "falsification": {
+    "H-C1": "a Holm-adjusted one-sided p-value at or below 0.05 in any of the 15 cells: the state machine misses or is late on that kind at that level at the EXP-D operating point; the EXP-D bound is then taken from the cells that pass and the paper restricts the detection claim accordingly",
+    "H-C2": "no significant increase, or a median difference below 3 windows, at either level: the quiet-period penalty of the plain mixture e-process is smaller than its construction predicts, and the paper reports the measured delays without the mechanism claim"
+  },
+  "artifacts": {
+    "manifest": "runs/<run_id>/manifest.json",
+    "environment": "runs/<run_id>/environment.json",
+    "seeds": "runs/<run_id>/seed.json",
+    "frozen_protocol": "runs/<run_id>/protocol.frozen.json",
+    "per_cell_summary": "runs/<run_id>/cells/<cell>.json",
+    "summary": "analysis/generated/exp_c_<run_id>.json",
+    "pilot": "experiments/exp_c_sequential/pilot/pilot-seed7.json, written by scripts/pilot_exp_c.py at seed 7 with 200 permutations; sizing only, never evidence"
+  }
+}

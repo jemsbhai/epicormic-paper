@@ -26,11 +26,20 @@ Present:
   the rest from their first replication.
 - `analyze_exp_a.py RUN_DIR`: writes `analysis/generated/exp_a_<run_id>.json`
   from the cell summaries of a run directory.
+- `pilot_exp_c.py --out PATH [--seed 7] [--reps 10] [--permutations 200]
+  [--kinds ...] [--levels ...] [--workers N]`: the EXP-C sizing pilot, one
+  JSON document of first-alarm summaries per chain over the drift kinds and
+  levels; sizing only, never evidence, and run on its own provider seed.
 
 Planned:
 
-- `run_exp_b.py` .. `run_exp_e.py`, `run_exp_a_control.py` for the control
-  arm once `protocol.control.json` is frozen.
+- `run_exp_c.py` and `analyze_exp_c.py` next, from the EXP-C
+  pre-registration; its paired H-C2 calculation is already implemented in
+  `epicormic_lab.exp_c_analysis.summarize_h_c2`. The runner must preserve
+  replication ids and call this calculation after verifying full-run
+  provenance and the frozen protocol. `run_exp_b.py`, `run_exp_d.py`, `run_exp_e.py`, and
+  `run_exp_a_control.py` for the control arm once `protocol.control.json`
+  is frozen.
 - `make_figures.py`: every figure from `analysis/generated/` only.
 - `check_manuscript.py`: the vocabulary scan plus citation-key checks against
   `paper/references/verified_sources.json`, run before every commit that
