@@ -1,4 +1,4 @@
-"""The seed salt and the mock provider specification."""
+"""The seed salt, the mock provider specification, the drift kinds and the mixture."""
 
 from __future__ import annotations
 
@@ -7,9 +7,15 @@ from epicormic import AnalysisConfig, Monitor, Panel, Probe, analyze, observe
 from pollard import MemoryStore
 
 from epicormic_lab.providers import (
+    DRIFT_KINDS,
+    LENGTH_DELTA,
     REPLICATION_STRIDE,
+    SWAPPED_TOOL,
     WINDOW_STRIDE,
     ProviderError,
+    drift_level,
+    drifted_provider,
+    mixture,
     mock_provider,
     salted,
     window_salt,
@@ -84,3 +90,78 @@ def test_unsalted_windows_are_identical_and_salted_windows_are_not() -> None:
     observe(panel, window_id="w0", samples=5, fn=salted(provider, 0, 0), store=store)
     observe(panel, window_id="w1", samples=5, fn=salted(provider, 0, 1), store=store)
     assert set(_pooled_t(store, panel, config).values()) != {"0"}
+
+
+def _requests(probes: int = 8, attempts: int = 5) -> list[dict[str, object]]:
+    """Requests as a panel with ``seed_from_attempt`` issues them: one seed per attempt."""
+
+    return [
+        {"input": f"question {probe}", "seed": attempt}
+        for attempt in range(attempts)
+        for probe in range(probes)
+    ]
+
+
+def test_mixture_routes_by_the_whole_request_and_validates_the_fraction() -> None:
+    def base(request: dict[str, object]) -> dict[str, object]:
+        return {"text": "base"}
+
+    def drifted(request: dict[str, object]) -> dict[str, object]:
+        return {"text": "drifted"}
+
+    assert all(mixture(base, drifted, 0.0)(r)["text"] == "base" for r in _requests())
+    assert all(mixture(base, drifted, 1.0)(r)["text"] == "drifted" for r in _requests())
+    half = mixture(base, drifted, 0.5)
+    routed = [half(r)["text"] for r in _requests()]
+    assert routed == [half(r)["text"] for r in _requests()]
+    assert 0 < routed.count("drifted") < len(routed)
+    # the probes of one attempt share a seed and still part ways
+    by_attempt = [set(routed[a * 8 : (a + 1) * 8]) for a in range(5)]
+    assert any(len(parts) == 2 for parts in by_attempt)
+    with pytest.raises(ProviderError, match="fraction"):
+        mixture(base, drifted, 1.5)
+
+
+def test_drift_level_parses_decimal_strings_in_the_unit_interval() -> None:
+    assert drift_level("0.2") == 0.2
+    assert drift_level(1) == 1.0
+    for bad in ("0", "1.5", "-0.1", "abc"):
+        with pytest.raises(ProviderError, match="drift level"):
+            drift_level(bad)
+
+
+def test_drifted_provider_realises_each_kind_at_its_extreme() -> None:
+    requests = _requests()
+    null = mock_provider(SPEC)
+    everything_variant = drifted_provider(SPEC, "match", "0.9")
+    assert all("variant" in everything_variant(r)["text"] for r in requests)
+    refused = drifted_provider(SPEC, "refusal", "1")
+    assert all(refused(r)["finish_reason"] == "content_filter" for r in requests)
+    truncated = drifted_provider(SPEC, "truncation", "1")
+    assert all(truncated(r)["finish_reason"] == "length" for r in requests)
+    swapped = drifted_provider(SPEC, "tool_swap", "1")
+    assert all(swapped(r)["tool_calls"][0]["name"] == SWAPPED_TOOL for r in requests)
+    padded = drifted_provider(SPEC, "length", "1")
+    assert all(padded(r)["text"].endswith("x" * LENGTH_DELTA) for r in requests)
+    # a partial mixture leaves the rest of the requests exactly as the null answers them
+    some = drifted_provider(SPEC, "tool_swap", "0.3")
+    outputs = [some(r) for r in requests]
+    kept = [o for o in outputs if o["tool_calls"][0]["name"] != SWAPPED_TOOL]
+    pairs = zip(outputs, requests, strict=True)
+    assert kept and all(o["text"] == null(r)["text"] for o, r in pairs)
+    assert set(DRIFT_KINDS) == {"match", "refusal", "truncation", "tool_swap", "length"}
+
+
+def test_drifted_provider_keeps_the_null_seed_and_rejects_bad_arguments() -> None:
+    requests = _requests(probes=40, attempts=5)
+    null = mock_provider(SPEC)
+    lowered = drifted_provider(SPEC, "match", "0.3")
+    null_variants = {i for i, r in enumerate(requests) if "variant" in null(r)["text"]}
+    drift_variants = {i for i, r in enumerate(requests) if "variant" in lowered(r)["text"]}
+    assert null_variants and null_variants <= drift_variants and drift_variants > null_variants
+    with pytest.raises(ProviderError, match="exceeds the null match rate"):
+        drifted_provider(SPEC, "match", "0.95")
+    with pytest.raises(ProviderError, match="drift kind"):
+        drifted_provider(SPEC, "latency", "0.5")
+    with pytest.raises(ProviderError, match="drift level"):
+        drifted_provider(SPEC, "match", "0")

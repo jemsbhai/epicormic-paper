@@ -111,7 +111,7 @@ runs which arm.
 | --- | --- | --- | --- |
 | EXP-A | Calibration: is the false-alarm rate of the pooled test within the binomial interval of alpha, and does the e-process alarm on at most alpha of A/A streams? | mock, local control | mock arm pre-registered (`experiments/exp_a_calibration/`, version 2026-10-28-r2 at tag `exp-a-prereg-r2`, against epicormic 0.2.0) and runnable with `scripts/run_exp_a.py`; control arm protocol follows the throughput report |
 | EXP-B | Power: which (N, panel size) reaches 0.8 power per drift type and effect size? | mock, local control | not yet pre-registered |
-| EXP-C | Sequential detection delay against false-alarm rate for CUSUM, Page-Hinkley, and the e-process; calibration of the defaults | mock, local control | not yet pre-registered |
+| EXP-C | Sequential detection delay against false-alarm rate for the pooled test, CUSUM, Page-Hinkley, the e-process and the state machine after a change at a known window; calibration of the defaults | mock, local control | mock arm revised before freeze (`experiments/exp_c_sequential/`, version 2026-10-30-r2; tag `exp-c-prereg` after review and checks); runner follows |
 | EXP-D | Hosted canary: 28 daily windows on cheap-tier models from four provider families with a declared snapshot switch on day 15, beside the control and a local silent-change arm (GGUF swap under an unchanged name), under the 10 USD per month cap | hosted, local control | not yet pre-registered |
 | EXP-E | Cost and energy of monitoring: tokens, USD, wall-clock, and NVML joules per window against the power reached in EXP-B | mock, local control | not yet pre-registered |
 

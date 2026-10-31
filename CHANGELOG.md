@@ -33,6 +33,14 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
   `analysis` (the committed summary), with `scripts/freeze_protocol.py`,
   `snapshot_environment.py`, `run_exp_a.py`, `analyze_exp_a.py`, and tests at
   100 percent line coverage.
+- EXP-C pre-registration (mock arm): `experiments/exp_c_sequential/` with
+  `PREREGISTRATION.md`, `protocol.json` (version 2026-10-29), the logbook
+  plan entry, and the sizing pilot `pilot/pilot-seed7.json`. In support:
+  `epicormic_lab.providers` gains the five drift kinds
+  (`drifted_provider`) and the request-hash `mixture` that grades the tool
+  swap and the length padding; `epicormic_lab.chains` observes and analyses
+  change-point chains and reduces them to first alarms, delays and realised
+  effects; `scripts/pilot_exp_c.py` runs the pilot.
 
 ### Changed
 
@@ -51,6 +59,13 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
   the new digest; `scripts/run_exp_a.py` defaults to the current protocol.
 
 ### Fixed
+
+- EXP-C protocol 2026-10-30-r2 preserves shared baseline seeds and tests
+  H-C2 by an exact paired three-window threshold test, with Holm across
+  levels. It defines the restricted-delay endpoint, whole-pair exclusions
+  for pre-change alarms, censoring, ties and incomplete-data checks. The
+  original protocol is retained unrun; the logbook has a dated addendum.
+  `epicormic_lab.exp_c_analysis` implements the test for the future runner.
 
 - The vocabulary scan reports malformed Python on Python 3.10 and 3.11,
   where the tokenizer emits error tokens instead of raising; before this
