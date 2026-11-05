@@ -51,9 +51,65 @@ def tiny_document() -> dict[str, object]:
     return document
 
 
+# A tiny EXP-C grid on the 8-probe mock panel: two kinds at one level, a second
+# sample count, and quiet lengths 0, 2 and 4, so that every path of the runner
+# and the summary (shared quiet windows, eligibility, the horizon) is exercised
+# in seconds. The H-C2 cells (28 quiet windows, a 14-window horizon) are too
+# long for a unit test and are covered with synthetic summaries instead.
+TINY_C_PARTS = {
+    "C1": {
+        "question": "tiny",
+        "panel_sizes": [8],
+        "samples_per_probe": [5],
+        "baseline_windows": 1,
+        "pre_change_windows": [2],
+        "post_change_windows": 3,
+        "kinds": ["match", "refusal"],
+        "levels": ["0.5"],
+        "replications": {"smoke": 2, "full": 3},
+    },
+    "C2": {
+        "question": "tiny",
+        "panel_sizes": [8],
+        "samples_per_probe": [10],
+        "baseline_windows": 1,
+        "pre_change_windows": [2],
+        "post_change_windows": 3,
+        "kinds": ["match"],
+        "levels": ["0.5"],
+        "replications": {"smoke": 2, "full": 2},
+    },
+    "C3": {
+        "question": "tiny",
+        "panel_sizes": [8],
+        "samples_per_probe": [5],
+        "baseline_windows": 1,
+        "pre_change_windows": [0, 4],
+        "post_change_windows": 3,
+        "kinds": ["match"],
+        "levels": ["0.5"],
+        "replications": {"smoke": 2, "full": 2},
+    },
+}
+
+
+def tiny_c_document() -> dict[str, object]:
+    document = json.loads(EXP_C_PROTOCOL.read_text(encoding="utf-8"))
+    document["parts"] = TINY_C_PARTS
+    document["panels"] = {
+        "8": {
+            "path": "data/panels/mock-08-v1.json",
+            "digest": "fe9b9078262c469e0f936a21876309ed38a34d5c7f6466c08db5e32660a2c43c",
+        }
+    }
+    document["analysis"]["permutations"] = 200
+    document["version"] = "tiny"
+    return document
+
+
 @pytest.fixture
 def repo(tmp_path: Path) -> Path:
-    """A repository copy with the real panels, a tiny protocol, and an empty registry."""
+    """A repository copy with the real panels, tiny protocols, and an empty registry."""
 
     root = tmp_path / "repo"
     (root / "data").mkdir(parents=True)
@@ -63,6 +119,11 @@ def repo(tmp_path: Path) -> Path:
     (experiment / "protocol.json").write_text(
         json.dumps(tiny_document(), indent=2) + "\n", encoding="utf-8"
     )
+    experiment_c = root / "experiments" / "exp_c_sequential"
+    experiment_c.mkdir(parents=True)
+    (experiment_c / "protocol.json").write_text(
+        json.dumps(tiny_c_document(), indent=2) + "\n", encoding="utf-8"
+    )
     registry = root / "experiments" / "run_registry.yaml"
     registry.write_text("# registry\nruns: []\n", encoding="utf-8")
     return root
@@ -71,3 +132,8 @@ def repo(tmp_path: Path) -> Path:
 @pytest.fixture
 def tiny_digest() -> str:
     return protocol_digest(tiny_document())
+
+
+@pytest.fixture
+def tiny_c_digest() -> str:
+    return protocol_digest(tiny_c_document())

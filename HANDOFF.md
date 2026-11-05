@@ -542,11 +542,33 @@ chains remain in the paired analysis, and pre-change alarms are reported
 separately. The state machine's delay is the first `drift` at or after the
 change, and a chain counts for it only when no sticky detector alarmed
 before the change (section 2 and 5).
-The runner, `scripts/run_exp_c.py`, follows the pre-registration in its own
-pull request; until it is merged there is nothing to run. The sizing pilot
-behind the design, `scripts/pilot_exp_c.py`, runs anywhere in about half an
-hour on two cores and is a reasonable way to see what the experiment
-measures; its output is never evidence.
+The runner is `scripts/run_exp_c.py`. From a clean clone at the commit
+Muntaser names, with the environment of 4.1, the registered smoke run is:
+
+```
+python scripts/run_exp_c.py --profile smoke --run-id exp-c-smoke-001 --digest ed87bebb3c1bc9aa200c5196a231ed03c7dd34e9fe79739efac3b73d90725ea5 --workers <cores>
+python scripts/analyze_exp_c.py experiments/exp_c_sequential/runs/exp-c-smoke-001
+```
+
+The first command runs every cell at two replications (35 cells, 70
+chains, 1,932 verdicts, each recomputed once), prints one timing line per
+cell and then the projected wall-clock of the full profile at your worker
+count; the smoke profile is an instrumentation check, never evidence. Post
+the timing lines and the projection in the `EXP-B and EXP-C` issue with
+your core count and the free disk you can give the run: a full C1 cell is
+about 1.3 GB of store before it is zipped, and with W workers up to W
+uncompressed stores exist at once beside the finished zips. Open a pull
+request with the run directory (everything except `stores/`, which git
+ignores; the gzip-compressed `cells/*.json.gz` are committed) and the
+registry entry the runner appended, and keep the `stores/*.zip` archives
+with their digests for Muntaser (section 8). If the projection exceeds 12
+hours, Muntaser writes the dated protocol version that lowers the
+replication counts before the full run; the full run starts only when he
+says so, with `--profile full`, a new run id, and a clean tree at the commit
+he names. `--resume` continues a crashed run at the cell boundary. The sizing
+pilot behind the design, `scripts/pilot_exp_c.py`, runs anywhere in about
+half an hour on two cores and is a reasonable way to see what the
+experiment measures; its output is never evidence.
 
 ## 8. How results come back
 
@@ -582,6 +604,8 @@ Katie:
 - [ ] Decide and report where the daily job will run for 28 days (7.4).
 - [ ] Open a second issue, `EXP-B and EXP-C`, for the mock experiments; the
       per-cell smoke timing goes there once the runners exist.
+- [ ] Run the EXP-C smoke profile (7.5), open the pull request with the run
+      directory, and post the timing lines and the projection.
 
 Mike:
 
