@@ -531,14 +531,17 @@ bottleneck.
 EXP-C comes first (execution order of decisions D24 to D26: its delays set
 the bound EXP-D pre-registers). Its pre-registration is
 `experiments/exp_c_sequential/PREREGISTRATION.md` with `protocol.json`
-(version 2026-10-30-r2); read sections 3.5 and 4 for the size of the full
-profile (35 cells, 3000 chains, about 90 CPU-hours on a slow core, about
-40 GB of stores zipped cell by cell as they complete) and the 12-hour
-wall-clock rule that sets the replication counts from your smoke timing.
-H-C2 uses replication pairs and the restricted-delay test in section 5.1;
-no-alarm chains remain in the paired analysis, and pre-change alarms are
-reported separately. The protocol is not frozen until review and checks
-complete and `exp-c-prereg` is tagged.
+(version 2026-11-05-r3, frozen at tag `exp-c-prereg-r3`; the superseded
+versions stay next to it unrun); read sections 3.5 and 4 for the size of
+the full profile (35 cells, 3000 chains, about 90 CPU-hours on a slow core,
+about 40 GB of stores zipped cell by cell as they complete, about 280 MB of
+verdict records committed gzip-compressed) and the 12-hour wall-clock rule
+that sets the replication counts from your smoke timing. H-C2 uses
+replication pairs and the restricted-delay test in section 5.1; no-alarm
+chains remain in the paired analysis, and pre-change alarms are reported
+separately. The state machine's delay is the first `drift` at or after the
+change, and a chain counts for it only when no sticky detector alarmed
+before the change (section 2 and 5).
 The runner, `scripts/run_exp_c.py`, follows the pre-registration in its own
 pull request; until it is merged there is nothing to run. The sizing pilot
 behind the design, `scripts/pilot_exp_c.py`, runs anywhere in about half an

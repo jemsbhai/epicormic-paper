@@ -265,3 +265,76 @@ protocol digest check passes. These are software checks, not EXP-C results;
 no full experiment was run. Resolve the review finding after this correction
 is committed; freeze only the reviewed, checked version with `exp-c-prereg`
 on the merge commit. The experiment runner still follows separately.
+
+## 2026-11-05 EXP-C plan addendum: state-machine delay, eligibility, summaries
+
+Correction to the 2026-10-29 EXP-C plan entry and its 2026-10-30 addendum,
+before any run. Version 2026-10-30-r2 was frozen at tag `exp-c-prereg`
+(merge commit `89bef42a23978df46230bbec647f7edebd0d8da0`, 2026-10-31) and
+stays in place unrun; no smoke or full run exists, and no observations were
+collected for this correction. The runner was being written against r2 when
+the gap below was found.
+
+Gap: r2 left the state machine's delay to the sticky convention of
+`epicormic_lab.chains.first_alarms`, under which any `drift` verdict before
+the change removes the chain's state delay, and H-C1 counted chains with a
+state delay of at most 2 "out of 100". A pre-change rejection of the pooled
+test is a transient per-window false alarm: the state returns to stable or
+warning in the next window and the change is still detected at the change
+window. The pooled test after Holm across the seven scorers is expected to
+reject a quiet window at a rate near alpha (EXP-A H-A1 measures it), and
+over 14 quiet windows that compounds to a fraction of chains that the ten
+pilot chains cannot bound; by the window salt those chains are the same set
+in every C1 cell. Under the literal reading H-C1 would have been decided by
+pre-change false alarms rather than by delays, and the EXP-D export (D90
+over all chains) would have been "above 14" for the same reason. Only the
+sticky detectors (e-process, CUSUM, Page-Hinkley) keep the state at
+`drift` from a pre-change alarm onward.
+
+Change: `experiments/exp_c_sequential/protocol.json`, version
+2026-11-05-r3, canonical digest
+`ed87bebb3c1bc9aa200c5196a231ed03c7dd34e9fe79739efac3b73d90725ea5`. The
+superseded r2 is retained verbatim as `protocol.2026-10-30-r2.json`, digest
+`d176f31ebc77cc9f28e5dcbefcca77e88f31fbea16c300cb9ebd2c1aac2eda4f`, and
+the original 2026-10-29 as before. r3 defines: the state delay as the first
+`drift` verdict at or after the change (the pooled-test convention; the
+first `warning` or `drift` likewise); eligibility for a state delay as the
+absence of a sticky pre-change alarm on any configured scorer, with the
+ineligible replication ids reported per cell; the state machine's own row
+in S-C3 (a `drift` verdict before the change with the rule of the first
+one, and the sticky pre-change rate, which is the ineligibility rate); the
+e-process warning crossing as the first window whose running maximum
+e-value reached half the threshold; the sizing projection as the makespan
+of the full cells dispatched in execution order to the runner's worker
+count; the shared-window check (the pre-change verdict records of every
+cell at one geometry must agree replication by replication over the quiet
+windows they have in common, and S-C3 counts distinct chains once); the
+S-C5 rounding check (the rerun at the shipped defaults over the recorded
+six-significant-digit T series must reproduce the recorded alarms, and the
+A2 recommendation is withheld without the EXP-A run); and the per-cell
+summaries as gzip-compressed JSON, `cells/<cell>.json.gz`, because the
+full profile's 83,300 verdict records are about 280 MB uncompressed. H-C1
+now tests the count of eligible chains with a state delay of at most 2
+against p0 = 0.90 over the n eligible chains of the cell (planned 100, n
+reported), same exact binomial, same Holm family of 15, same first-step
+critical count of 80 and powers 0.54 and 0.90 at n = 100, with the critical
+count and power at the realised n reported, and the unconditional count out
+of all chains reported descriptively. The EXP-D bound becomes conditional
+on the monitor carrying no sticky alarm into the switch, with the S-C3
+sticky rate exported beside it. Cells, panel, seeds, replication counts,
+detector configuration, H-C2 and the pinned releases are unchanged; the
+analysis config digest is unchanged.
+
+Implementation: `first_alarms` gains the fields `pre_change_drift_windows`,
+`pre_change_sticky`, `eligible`, `first_drift_at_or_after_change`,
+`first_warning_at_or_after_change` and `state_delay` in its state block and
+`warning_first` per e-process entry, without changing the meaning of any
+existing field, so the committed pilot artifact keeps its meaning. Tests
+cover the transient pooled false alarm, the sticky pre-change alarm, the
+chain without quiet windows, and the warning crossing.
+
+Validation: the four checks pass on the branch (Linux, Python 3.13.18,
+epicormic 0.2.0 and pollard 1.6.0; CI on Ubuntu and Windows with 3.10 and
+3.12). Frozen when the merge commit of this change is tagged
+`exp-c-prereg-r3`. The runner and the analysis follow in their own pull
+request and read r3.

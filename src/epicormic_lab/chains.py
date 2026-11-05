@@ -6,10 +6,12 @@ order, and reduce the per-window verdict records to the quantities the
 experiment reports: for each detector and scorer the first window at which
 it alarmed, whether that was before the change, and the delay after it; for
 the state machine the first ``drift`` and the first ``warning`` or
-``drift``; and the realised effect per scorer, the mean pooled statistic
-over the windows after the change. The EXP-C pilot and the EXP-C runner
-share this module, so the provider switch the pre-registration describes is
-the one the experiment runs.
+``drift``, and (protocol version 2026-11-05-r3) the first ``drift`` at or
+after the change with the chain's eligibility for a state delay; and the
+realised effect per scorer, the mean pooled statistic over the windows
+after the change. The EXP-C pilot and the EXP-C runner share this module,
+so the provider switch the pre-registration describes is the one the
+experiment runs.
 """
 
 from __future__ import annotations
@@ -128,6 +130,29 @@ def _mean(values: Sequence[float | None]) -> float | None:
     return statistics.fmean(present) if present else None
 
 
+def _warning_flags(records: Sequence[dict[str, Any]], scorer: str) -> list[bool]:
+    """Whether the running maximum e-value had reached half the threshold by each window."""
+
+    flags: list[bool] = []
+    for record in records:
+        block = record["sequential"][scorer]
+        e_max, threshold = block["e_max"], block["e_threshold"]
+        flags.append(e_max is not None and threshold is not None and e_max >= threshold / 2)
+    return flags
+
+
+def _sticky_reduction(flags: Sequence[bool], change_window: int) -> dict[str, Any]:
+    """First alarm, pre-change flag and delay of a sticky detector."""
+
+    first = _first(flags)
+    before = first is not None and first < change_window
+    return {
+        "first": first,
+        "pre_change": before,
+        "delay": None if first is None or before else first - change_window + 1,
+    }
+
+
 def first_alarms(
     records: Sequence[dict[str, Any]], change_window: int, scorers: Sequence[str]
 ) -> dict[str, Any]:
@@ -143,13 +168,29 @@ def first_alarms(
     detectors are sticky and the alarm cannot be attributed to the change.
     The pooled test is not sticky; its ``first`` is the first window whose
     pooled test rejected at or after the change, and ``pre_change`` counts
-    any rejection before it.
+    any rejection before it. The e-process entry also carries the warning
+    crossing (``warning_first``, ``warning_pre_change``, ``warning_delay``):
+    the first window whose running maximum e-value reached half the
+    threshold, with the sticky conventions.
+
+    The state block keeps the fields of the EXP-C pilot (``first_drift``,
+    ``drift_delay`` and the rest: the first ``drift`` verdict anywhere in
+    the chain, with no delay when it precedes the change) and adds the
+    conventions of protocol version 2026-11-05-r3: the state machine is a
+    per-window verdict, so ``first_drift_at_or_after_change`` and
+    ``state_delay`` follow the pooled-test convention; a chain is
+    ``eligible`` for a state delay only when no sticky detector alarmed
+    before the change on any scorer (``pre_change_sticky``), because after
+    a sticky alarm every later verdict is ``drift`` by construction;
+    ``pre_change_drift_windows`` lists the pre-change ``drift`` verdicts,
+    the state machine's own false alarms, whatever their rule.
     """
 
     if not 1 <= change_window <= len(records):
         raise ChainError(f"change_window {change_window} is outside 1..{len(records)}")
     detectors: dict[str, dict[str, dict[str, Any]]] = {}
     effects: dict[str, dict[str, float | None]] = {}
+    pre_change_sticky = False
     for scorer in scorers:
         detectors[scorer] = {}
         for detector in DETECTORS:
@@ -164,13 +205,14 @@ def first_alarms(
                     "delay": after,
                 }
             else:
-                first = _first(flags)
-                before = first is not None and first < change_window
-                detectors[scorer][detector] = {
-                    "first": first,
-                    "pre_change": before,
-                    "delay": None if first is None or before else first - change_window + 1,
-                }
+                entry = _sticky_reduction(flags, change_window)
+                pre_change_sticky = pre_change_sticky or bool(entry["pre_change"])
+                if detector == "eprocess":
+                    warning = _sticky_reduction(_warning_flags(records, scorer), change_window)
+                    entry["warning_first"] = warning["first"]
+                    entry["warning_pre_change"] = warning["pre_change"]
+                    entry["warning_delay"] = warning["delay"]
+                detectors[scorer][detector] = entry
         series = [record["pooled"][scorer]["T"] for record in records]
         e_series = [record["sequential"][scorer]["e"] for record in records]
         effects[scorer] = {
@@ -180,10 +222,20 @@ def first_alarms(
             "e_last": e_series[-1],
         }
     states = [str(record["state"]) for record in records]
-    first_drift = _first([state == "drift" for state in states])
-    first_warning = _first([state in ("warning", "drift") for state in states])
-    pre_change_drift = _first([state == "drift" for state in states[: change_window - 1]])
+    drift_flags = [state == "drift" for state in states]
+    warning_flags = [state in ("warning", "drift") for state in states]
+    first_drift = _first(drift_flags)
+    first_warning = _first(warning_flags)
+    pre_change_drift = _first(drift_flags[: change_window - 1])
     first_rule = None if first_drift is None else records[first_drift - 1]["rule_fired"]
+    drift_after = _first(drift_flags[change_window - 1 :])
+    first_drift_after = None if drift_after is None else drift_after + change_window - 1
+    warning_after = _first(warning_flags[change_window - 1 :])
+    first_warning_after = None if warning_after is None else warning_after + change_window - 1
+    eligible = not pre_change_sticky
+    pre_change_windows = [
+        index for index, flag in enumerate(drift_flags[: change_window - 1], start=1) if flag
+    ]
     return {
         "change_window": change_window,
         "windows": len(records),
@@ -197,6 +249,16 @@ def first_alarms(
             "drift_delay": None
             if first_drift is None or first_drift < change_window
             else first_drift - change_window + 1,
+            "pre_change_drift_windows": pre_change_windows,
+            "pre_change_sticky": pre_change_sticky,
+            "eligible": eligible,
+            "first_drift_at_or_after_change": first_drift_after,
+            "first_drift_at_or_after_change_rule": None
+            if first_drift_after is None
+            else records[first_drift_after - 1]["rule_fired"],
+            "first_warning_at_or_after_change": first_warning_after,
+            "state_delay": drift_after if eligible else None,
+            "warning_delay": warning_after if eligible else None,
             "states": states,
         },
     }

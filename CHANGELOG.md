@@ -60,6 +60,17 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
 
 ### Fixed
 
+- EXP-C protocol 2026-11-05-r3 defines the state machine's delay as the
+  first `drift` verdict at or after the change (the pooled-test convention)
+  and a chain's eligibility for it as the absence of a sticky pre-change
+  alarm, so that transient pooled false alarms in the quiet windows no
+  longer remove a detected chain from H-C1 and the EXP-D export; it adds
+  the state machine's own pre-change false alarm row, the e-process warning
+  crossing, the sizing projection, the shared-window check, the S-C5
+  rounding check and gzip-compressed per-cell summaries. r2 is retained
+  unrun as `protocol.2026-10-30-r2.json`; the logbook has a dated addendum.
+  `epicormic_lab.chains.first_alarms` gains the matching fields without
+  changing the meaning of the existing ones.
 - EXP-C protocol 2026-10-30-r2 preserves shared baseline seeds and tests
   H-C2 by an exact paired three-window threshold test, with Holm across
   levels. It defines the restricted-delay endpoint, whole-pair exclusions
