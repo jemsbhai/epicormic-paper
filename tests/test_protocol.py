@@ -22,7 +22,9 @@ from .conftest import EXP_C_PROTOCOL, FIRST_PROTOCOL, REAL_PROTOCOL, REPO
 
 FROZEN_DIGEST = "5934acb50e9d4f9403bb64cd038cf492bcd167d7464eef8a1fdd24da2e555de4"
 FIRST_DIGEST = "dd7e4356a60b18a9b122a5def9617b761be313f9d7dfa97481e7601a0115210d"
-EXP_C_DIGEST = "d176f31ebc77cc9f28e5dcbefcca77e88f31fbea16c300cb9ebd2c1aac2eda4f"
+EXP_C_DIGEST = "ed87bebb3c1bc9aa200c5196a231ed03c7dd34e9fe79739efac3b73d90725ea5"
+EXP_C_R2_DIGEST = "d176f31ebc77cc9f28e5dcbefcca77e88f31fbea16c300cb9ebd2c1aac2eda4f"
+EXP_C_FIRST_DIGEST = "ef5062ae6a7da040e1b4194e79482de6d3d36e61923b12dcda0af7acd5f1124e"
 
 
 def test_frozen_protocol_digest_is_unchanged() -> None:
@@ -40,9 +42,23 @@ def test_frozen_protocol_digest_is_unchanged() -> None:
 def test_exp_c_protocol_revision_is_consistent() -> None:
     protocol = load_protocol(EXP_C_PROTOCOL)
     assert protocol.digest == EXP_C_DIGEST
-    assert protocol.experiment == "EXP-C" and protocol.version == "2026-10-30-r2"
+    assert protocol.experiment == "EXP-C" and protocol.version == "2026-11-05-r3"
     software = protocol.document["software"]
     assert software == {"epicormic": EPICORMIC.version, "pollard": POLLARD.version}
+    # the superseded versions stay in place verbatim, each with its digest
+    r2 = load_protocol(EXP_C_PROTOCOL.with_name("protocol.2026-10-30-r2.json"))
+    assert r2.digest == EXP_C_R2_DIGEST and r2.version == "2026-10-30-r2"
+    assert protocol.document["supersedes"]["digest"] == EXP_C_R2_DIGEST
+    assert r2.document["supersedes"]["digest"] == EXP_C_FIRST_DIGEST
+    assert protocol.document["supersedes"]["earlier"][0]["digest"] == EXP_C_FIRST_DIGEST
+    for key in ("provider", "analysis", "parts", "panels", "software", "drifts"):
+        assert r2.document[key] == protocol.document[key]
+    definitions = protocol.document["outcomes"]["definitions"]
+    assert "eligible" in definitions["state_delay"]
+    assert "sticky" in definitions["state_eligibility"]
+    assert protocol.document["artifacts"]["per_cell_summary"].startswith(
+        "runs/<run_id>/cells/<cell>.json.gz"
+    )
     assert protocol.verify_panels(REPO) == {
         "data/panels/canary-24-v1.json": protocol.document["panels"]["24"]["digest"]
     }

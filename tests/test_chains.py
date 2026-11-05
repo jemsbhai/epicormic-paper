@@ -103,6 +103,9 @@ def test_observe_and_analyze_a_chain_with_a_change_at_window_two() -> None:
     assert summary["effects"]["refusal"]["e_before_change"] is not None
     assert summary["state"]["first_drift"] == 2 and summary["state"]["drift_delay"] == 1
     assert summary["state"]["pre_change_drift"] is False
+    assert summary["state"]["eligible"] is True and summary["state"]["state_delay"] == 1
+    assert summary["state"]["first_drift_at_or_after_change"] == 2
+    assert summary["state"]["pre_change_drift_windows"] == []
     assert str(summary["state"]["first_drift_rule"]).startswith("pooled test rejected for")
     assert summary["state"]["states"][0] in ("stable", "warning")
     assert set(summary["detectors"]["normalized_match"]) == set(DETECTORS)
@@ -158,6 +161,8 @@ def _record(index: int, state: str, **flags: Any) -> dict[str, Any]:
                 "cusum_alarm": flags.get("cusum", False),
                 "ph_alarm": flags.get("ph"),
                 "e": flags.get("e_value", 1.0),
+                "e_max": flags.get("e_max", 1.0),
+                "e_threshold": flags.get("e_threshold", 40.0),
             }
         },
     }
@@ -166,14 +171,21 @@ def _record(index: int, state: str, **flags: Any) -> dict[str, Any]:
 def test_first_alarms_handles_pre_change_alarms_and_censoring() -> None:
     records = [
         _record(1, "stable", rejected=True, T=None),
-        _record(2, "drift", e=True),
-        _record(3, "stable"),
-        _record(4, "stable", rejected=True, cusum=True, T=0.3),
+        _record(2, "drift", e=True, e_max=40.0),
+        _record(3, "stable", e_max=40.0),
+        _record(4, "stable", rejected=True, cusum=True, T=0.3, e_max=40.0),
     ]
     summary = first_alarms(records, change_window=3, scorers=("s",))
     s = summary["detectors"]["s"]
     # a sticky detector that alarmed before the change has no delay
-    assert s["eprocess"] == {"first": 2, "pre_change": True, "delay": None}
+    assert s["eprocess"] == {
+        "first": 2,
+        "pre_change": True,
+        "delay": None,
+        "warning_first": 2,
+        "warning_pre_change": True,
+        "warning_delay": None,
+    }
     # the pooled test is window by window: a rejection before the change is
     # a pre-change false alarm and the first rejection after it is the delay
     assert s["pooled"] == {"first": 4, "pre_change": True, "delay": 2}
@@ -186,6 +198,14 @@ def test_first_alarms_handles_pre_change_alarms_and_censoring() -> None:
     assert state["first_drift"] == 2 and state["pre_change_drift"] is True
     assert state["drift_delay"] is None and state["first_drift_rule"] == "rule at 2"
     assert state["first_warning_or_drift"] == 2
+    # r3: the sticky pre-change e-process alarm makes the chain ineligible for
+    # a state delay, although the state was drift again at window 2 only
+    assert state["pre_change_drift_windows"] == [2]
+    assert state["pre_change_sticky"] is True and state["eligible"] is False
+    assert state["first_drift_at_or_after_change"] is None
+    assert state["first_drift_at_or_after_change_rule"] is None
+    assert state["first_warning_at_or_after_change"] is None
+    assert state["state_delay"] is None and state["warning_delay"] is None
     quiet = first_alarms([_record(1, "stable", T=None)], change_window=1, scorers=("s",))
     assert quiet["effects"]["s"] == {
         "T_pre_mean": None,
@@ -194,5 +214,51 @@ def test_first_alarms_handles_pre_change_alarms_and_censoring() -> None:
         "e_last": 1.0,
     }
     assert quiet["state"]["first_drift"] is None and quiet["state"]["first_drift_rule"] is None
+    assert quiet["state"]["eligible"] is True and quiet["state"]["state_delay"] is None
+    assert quiet["state"]["pre_change_drift_windows"] == []
     with pytest.raises(ChainError, match="outside"):
         first_alarms(records, change_window=5, scorers=("s",))
+
+
+def test_first_alarms_state_delay_follows_the_pooled_convention() -> None:
+    # A transient pooled rejection before the change is the state machine's
+    # own false alarm; the chain stays eligible and its state delay is the
+    # first drift verdict at or after the change (protocol 2026-11-05-r3).
+    records = [
+        _record(1, "stable"),
+        _record(2, "drift", rejected=True),
+        _record(3, "stable"),
+        _record(4, "warning", e_max=20.0),
+        _record(5, "drift", rejected=True, e_max=20.0),
+        _record(6, "drift", rejected=True, e_max=20.0),
+    ]
+    summary = first_alarms(records, change_window=4, scorers=("s",))
+    state = summary["state"]
+    assert state["first_drift"] == 2 and state["drift_delay"] is None
+    assert state["pre_change_drift"] is True and state["pre_change_drift_windows"] == [2]
+    assert state["pre_change_sticky"] is False and state["eligible"] is True
+    assert state["first_drift_at_or_after_change"] == 5
+    assert state["first_drift_at_or_after_change_rule"] == "rule at 5"
+    assert state["first_warning_at_or_after_change"] == 4
+    assert state["state_delay"] == 2 and state["warning_delay"] == 1
+    # the warning crossing of the e-process: running maximum at half threshold
+    assert summary["detectors"]["s"]["eprocess"]["warning_first"] == 4
+    assert summary["detectors"]["s"]["eprocess"]["warning_pre_change"] is False
+    assert summary["detectors"]["s"]["eprocess"]["warning_delay"] == 1
+    assert summary["detectors"]["s"]["pooled"] == {"first": 5, "pre_change": True, "delay": 2}
+    # with no quiet windows every chain is eligible and a miss is censored
+    none = first_alarms([_record(1, "stable"), _record(2, "warning")], 1, ("s",))
+    assert none["state"]["eligible"] is True and none["state"]["state_delay"] is None
+    assert none["state"]["first_warning_at_or_after_change"] == 2
+    assert none["state"]["warning_delay"] == 2
+    # a sticky CUSUM alarm before the change on any scorer is enough to exclude
+    sticky = first_alarms(
+        [_record(1, "drift", cusum=True), _record(2, "drift", cusum=True)], 2, ("s",)
+    )
+    assert sticky["state"]["pre_change_sticky"] is True and sticky["state"]["eligible"] is False
+    assert sticky["state"]["first_drift_at_or_after_change"] == 2
+    assert sticky["state"]["state_delay"] is None
+    # no e-process stream: no warning crossing either
+    silent = [_record(1, "stable", e_max=None, e_threshold=None)]
+    entry = first_alarms(silent, 1, ("s",))["detectors"]["s"]["eprocess"]
+    assert entry["warning_first"] is None and entry["warning_delay"] is None

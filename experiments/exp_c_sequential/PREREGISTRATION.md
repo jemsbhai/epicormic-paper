@@ -3,12 +3,12 @@
 | Field | Value |
 | --- | --- |
 | Experiment | EXP-C (section 16 of the epicormic `docs/PLAN.md`) |
-| Protocol | `protocol.json`, version 2026-10-30-r2, mock arm |
-| Protocol digest | `d176f31ebc77cc9f28e5dcbefcca77e88f31fbea16c300cb9ebd2c1aac2eda4f` |
+| Protocol | `protocol.json`, version 2026-11-05-r3, mock arm |
+| Protocol digest | `ed87bebb3c1bc9aa200c5196a231ed03c7dd34e9fe79739efac3b73d90725ea5` |
 | Software under study | epicormic 0.2.0 on pollard 1.6.0, pinned in `src/epicormic_lab/pins.py` |
 | Panel | `canary-24-v1` `8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75` |
 | Pilot | `pilot/pilot-seed7.json` (seed 7, 200 permutations, sizing only, section 3.7) |
-| Status | Revised before freeze; tag `exp-c-prereg` only after review and checks |
+| Status | Revised before freeze; r2 frozen at tag `exp-c-prereg`, r3 frozen at tag `exp-c-prereg-r3` after review and checks |
 
 The protocol digest is SHA-256 over the canonical JSON of the protocol file:
 keys sorted, separators `,` and `:` with no whitespace, `ensure_ascii`
@@ -29,6 +29,30 @@ censoring, pre-change alarms, ties and missing pairs. This narrows the
 original stochastic-dominance language to a claim the test can establish.
 No confirmatory data were used to choose this correction. The seed-7
 pilot remains exploratory design input and is not reclassified as evidence.
+
+### 0.1 Revision r3 (2026-11-05), before any run
+
+Version 2026-11-05-r3 fixes the delay convention of the state machine,
+which r2 left to the sticky convention of `first_alarms`: under it, any
+`drift` verdict before the change removed the chain's state delay, although
+a pre-change rejection of the pooled test is a transient per-window false
+alarm after which the state returns to stable or warning and the change is
+still detected. Over 14 quiet windows the pooled test's rejections compound
+to a fraction of chains that the ten pilot chains cannot bound and that is
+the same set of chains in every C1 cell, so H-C1 would have been decided by
+false alarms rather than by delays, and the EXP-D export would have been
+vacuous. r3 defines the state delay as the first `drift` verdict at or
+after the change (the pooled-test convention), makes a chain ineligible only
+when a sticky detector alarmed before the change (section 2 and 5), gives
+the state machine its own row in S-C3, defines the e-process warning
+crossing, the sizing projection and the shared-window check, adds a
+rounding check to S-C5, and stores the per-cell summaries compressed
+(section 3.5). The superseded r2 is retained verbatim as
+`protocol.2026-10-30-r2.json`, digest
+`d176f31ebc77cc9f28e5dcbefcca77e88f31fbea16c300cb9ebd2c1aac2eda4f`, and
+is frozen at tag `exp-c-prereg`, unrun. Cells, seeds, replication counts,
+detectors, H-C2 and the pinned releases are unchanged, and no confirmatory
+observations exist.
 
 ## 1. Question
 
@@ -63,6 +87,19 @@ A sticky detector (the e-process, CUSUM, Page-Hinkley) that alarmed before
 the change has no delay and is a pre-change false alarm; the pooled test is
 window by window, so its delay is its first rejection at or after the
 change and any rejection before the change is a pre-change false alarm.
+The state machine is a per-window verdict and follows the pooled-test
+convention: its delay is the first `drift` verdict at or after the change,
+whatever rule fired, and a `drift` verdict before the change is its
+pre-change false alarm. A chain is eligible for a state delay only when no
+sticky detector on any configured scorer alarmed before the change: after
+a sticky alarm every later verdict is `drift` by construction, so a
+post-change `drift` in such a chain cannot be attributed to the change. A
+pooled rejection before the change does not make a chain ineligible,
+because the state returns to stable or warning in the next window. Every
+chain of a cell without pre-change windows is eligible. The first
+`warning` or `drift` at or after the change, and the e-process warning
+crossing (the first window whose running maximum e-value reached half the
+threshold), are treated the same way.
 
 Primary, confirmatory:
 
@@ -70,15 +107,23 @@ Primary, confirmatory:
   and N = 10 with 14 quiet windows, for every drift kind (match, refusal,
   truncation, tool swap, length) at every level in {0.2, 0.3, 0.5}, the
   state machine reports `drift` within 2 windows of the change in at least
-  90 percent of chains. Per cell, the count of chains with a state delay of
-  at most 2, out of 100, is tested against p0 = 0.90 by the exact one-sided
-  binomial test (alternative: below); the fifteen p-values are
-  Holm-adjusted at family level 0.05. A cell whose adjusted p-value is at
-  or below 0.05 falsifies H-C1 for that cell; at the first Holm step that
-  is 80 or fewer detections of 100. The unadjusted flag, 84 or fewer, is
-  reported as descriptive. The power of the first-step test is 0.54 against
-  a true rate of 0.80 and 0.90 against 0.75; the claim is a floor of 0.90,
-  and the estimates with their intervals are what the paper reports.
+  90 percent of the eligible chains. Per cell, the count of eligible chains
+  with a state delay of at most 2, out of the n eligible chains of the cell
+  (planned 100; n reported with the ineligible replication ids), is tested
+  against p0 = 0.90 by the exact one-sided binomial test (alternative:
+  below); the fifteen p-values are Holm-adjusted at family level 0.05. A
+  cell whose adjusted p-value is at or below 0.05 falsifies H-C1 for that
+  cell; with n = 100 that is 80 or fewer detections at the first Holm step.
+  The unadjusted flag (unadjusted p at or below 0.05; 84 or fewer of 100)
+  is reported as descriptive, and so is the unconditional count within 2
+  windows out of all chains of the cell, with the ineligible chains counted
+  as not detected. With n = 100 the power of the first-step test is 0.54
+  against a true rate of 0.80 and 0.90 against 0.75; the critical count and
+  the power at the realised n are reported with the result. The claim is a
+  floor of 0.90 conditional on the monitor carrying no sticky alarm into
+  the change, and the estimates with their intervals are what the paper
+  reports; the sticky pre-change rate of S-C3 says how often that condition
+  fails.
 - H-C2 (quiet-period penalty of the e-process). The e-process is a test of
   the null "the rate has stayed inside the baseline interval since the
   baseline": each bettor's wealth is a nonnegative supermartingale under
@@ -114,11 +159,18 @@ Secondary, reported with intervals and not tested:
   EXP-B uses.
 - S-C2. The delay of every detector and scorer: detection within 1, 2, 7 and
   14 windows with Clopper-Pearson intervals (denominators are the chains
-  without a pre-change alarm for that detector), the median and 90th
-  percentile delay, the first-alarm window histogram, and the e-process
-  half-threshold (`warning`) crossing treated the same way.
+  without a pre-change alarm for that detector; for the state machine, the
+  eligible chains), the median and 90th percentile delay by the inverse
+  empirical detection CDF rule of section 5, the first-alarm window
+  histogram, and the e-process warning crossing treated the same way; for
+  the state machine the same for the first `drift` and the first `warning`
+  or `drift` at or after the change, with the rule breakdown at the first
+  `drift`.
 - S-C3. Pre-change false alarms over the distinct quiet chains (section
-  3.5): per detector and scorer and for the union over scorers, the fraction
+  3.5): per detector and scorer, for the union over scorers, and for the
+  state machine (a `drift` verdict before the change, with the rule of the
+  first such verdict; and separately a sticky pre-change alarm on any
+  scorer, which is the ineligibility rate of the state delay), the fraction
   of chains with an alarm before the change. The pooled test's figure is its
   per-window false alarm rate compounded over the quiet windows and is read
   against EXP-A A1 and A2; the e-process figure is read against H-A2.
@@ -131,11 +183,18 @@ Secondary, reported with intervals and not tested:
   0.4, 0.6, 0.8, 1.0}, Page-Hinkley over delta in {0.025, 0.05, 0.1} by
   lambda in {0.25, 0.5, 0.75, 1.0}. For each pair: the false alarm rate over
   28 null windows on the EXP-A A2 chains (200) and the C3 quiet chains (50),
-  and the mean delay per kind at level 0.2 on the C1 chains. Per detector,
+  and the mean delay per kind at level 0.2 on the C1 chains, with the
+  chains that never alarm within the horizon reported as a miss count
+  beside the mean over the alarms. Per detector,
   among the pairs whose A2 false alarm rate has a 95 percent Clopper-Pearson
   upper bound at or below 0.10, the pair with the smallest mean delay at
   level 0.2 averaged over the five kinds is recorded as the recommended
-  default for the next epicormic release. This is the calibration section
+  default for the next epicormic release. The recorded T is the verdict's
+  decimal encoding at six significant digits, so the rerun at the shipped
+  defaults is first checked against the recorded alarm windows of every
+  chain; a chain where they disagree is reported and left out of the grid.
+  Without the EXP-A A2 run the C3 rates and the delays are reported and the
+  recommendation is withheld. This is the calibration section
   16 of the plan asks EXP-C for; it tests nothing, and the chosen values are
   a recommendation, not a finding about 0.2.0.
 - S-C6. The e-value at the change: per cell, the median and range of the
@@ -303,7 +362,11 @@ at the EXP-A development rate of about 1.9 KB per node, and the full
 profile about 40 GB uncompressed. The runner therefore compresses each
 cell's store into a zip after the recompute check and removes the
 uncompressed store, so that at most a few cells' worth of stores exist at
-once; the zip's SHA-256 is in the cell summary and the registry.
+once; the zip's SHA-256 is in the cell summary and the registry. The
+per-cell summaries, which carry the per-window verdict records of every
+chain as EXP-A writes them (about 3.4 KB per verdict, about 280 MB for the
+full profile), are written gzip-compressed as `cells/<cell>.json.gz` and
+are committed with the run directory; the analysis reads them directly.
 
 ### 3.6 Seeds
 
@@ -423,7 +486,11 @@ What the pilot settled.
    12 hours at the runner's worker count, a new dated protocol version
    lowers C1 to 60 and C2 and C3 to 30 replications before the full run,
    never after it; the logbook records the reason and the old version stays
-   in place. For orientation, one verdict at panel 24 by N 10 with 2000
+   in place. The projection is the makespan of the full cells dispatched in
+   execution order to the runner's worker count: each cell's smoke seconds
+   per chain times its full replication count, assigned to the next free
+   worker, as the runner's process pool does; the runner prints it after a
+   smoke run. For orientation, one verdict at panel 24 by N 10 with 2000
    permutations and the recompute check took about 3.9 s on a slow
    two-core machine in the EXP-A development smoke run, which projects
    about 90 CPU-hours for the full profile there.
@@ -435,11 +502,12 @@ What the pilot settled.
 4. Every verdict is recomputed from the stored observations with `analyze`
    before the cell summary is written; a mismatch fails the run.
 5. The run directory holds `protocol.frozen.json`, `manifest.json`,
-   `environment.json`, `seed.json`, and one summary per cell with the
-   per-window verdict records of every chain (the pooled statistic per
-   scorer per window is what S-C5 reads); each cell's store is zipped after
-   its recompute check, its SHA-256 recorded in the summary and the
-   registry, the uncompressed store removed, and no store is ever
+   `environment.json`, `seed.json`, and one gzip-compressed summary per
+   cell (`cells/<cell>.json.gz`) with the per-window verdict records of
+   every chain (the pooled statistic per scorer per window is what S-C5
+   reads) and the first-alarm reduction of each chain; each cell's store is
+   zipped after its recompute check, its SHA-256 recorded in the summary
+   and the registry, the uncompressed store removed, and no store is ever
    committed.
 6. The analysis module writes `analysis/generated/exp_c_<run_id>.json` from
    the cell summaries; the logbook result entry and the raw finding cite the
@@ -458,13 +526,32 @@ alarm; among the rest, the counts with delay at most 1, 2, 7, 14 and their
 two-sided 95 percent Clopper-Pearson intervals; the median and 90th
 percentile delay when at least half, respectively 90 percent, of those
 chains alarmed within 14 windows, and "above 14" otherwise; the first-alarm
-window histogram. Per cell: the same for the first `drift` verdict and for
-the first `warning` or `drift`, with the `rule_fired` breakdown at the
-first `drift`. H-C1: the per-cell exact one-sided binomial p-value and its
-Holm adjustment across the 15 cells. For delay quantiles use the inverse
+window histogram. Per cell, for the state machine: the number of
+ineligible chains (a sticky pre-change alarm on any scorer) and their
+replication ids, the number of chains with a `drift` verdict before the
+change and the rule of the first one, and, among the eligible chains, the
+same counts, intervals, quantiles and histogram for the first `drift` and
+for the first `warning` or `drift` at or after the change, with the
+`rule_fired` breakdown at the first `drift`. H-C1: the per-cell exact
+one-sided binomial p-value over the eligible chains and its Holm adjustment
+across the 15 cells, with the critical count and the power at the realised
+n beside the planned figures, and the unconditional count within 2 windows
+out of all chains as a descriptive figure. For delay quantiles use the inverse
 empirical detection CDF: the smallest integer d in 1..14 whose detected
 fraction is at least 0.5 or 0.9; if none, report "above 14". With no eligible
 chains report "not estimable". Do not calculate quantiles only among alarms.
+
+Before any of this, the analysis checks the common random numbers that
+section 3.2 relies on: for every geometry (panel size, N) the pre-change
+verdict records of every cell at that geometry must agree replication by
+replication, window by window over the quiet windows the cells have in
+common (pooled statistics, p-values, alarm flags, e-values and states). A
+difference is a data error that stops the analysis. The distinct quiet
+chains of S-C3 are then taken from one cell per geometry and quiet length.
+For S-C5, the rerun of CUSUM and Page-Hinkley at the shipped defaults over
+the recorded T series (six significant digits) must reproduce the recorded
+alarm windows of every chain; a chain where it does not is reported and
+left out of the grid.
 
 ### 5.1 Paired H-C2 inference
 
@@ -558,11 +645,15 @@ late or not at all and level 0.05 not at all, and Page-Hinkley at delta =
   covers hosted providers, where the realised effect of a snapshot switch is
   unknown in advance and is the quantity that places EXP-D's observation on
   the C1 grid.
-- H-C1 is a floor at the EXP-D operating point, and the export to EXP-D
-  is the D90 of the state delay per kind at level 0.2 (section 8). A pass
+- H-C1 is a floor at the EXP-D operating point, conditional on the monitor
+  carrying no sticky alarm into the change, and the export to EXP-D is the
+  D90 of the state delay over the eligible chains per kind at level 0.2
+  (section 8), with the sticky pre-change rate of S-C3 beside it. A pass
   does not say the detector is fast on small effects; the level 0.05 and 0.1
   rows say how slow, and EXP-D reports a switch whose realised effect is
-  below 0.2 against those rows rather than against the bound.
+  below 0.2 against those rows rather than against the bound. The pooled
+  test's pre-change rejections do not enter H-C1; they are the state
+  machine's row of S-C3 and the reason for EXP-D's reproduction rule.
 - H-C2 is a statement about the e-process as a test of the global null,
   which is what its guarantee covers: the false alarm probability over the
   whole monitoring horizon is bounded by alpha, and the price is a delay
@@ -595,14 +686,18 @@ late or not at all and level 0.05 not at all, and Page-Hinkley at delta =
 ## 8. Export to EXP-D
 
 EXP-D pre-registers a detection-delay bound for the declared switch on day
-15. The bound is the largest D90 of the state delay over the five C1 cells
-at level 0.2, in days, read from the EXP-C result entry in the logbook. It
-applies to a switch whose realised effect on at least one configured
-scorer is 0.2 or more in absolute value, measured on EXP-D's own windows;
-a switch below that is outside the bound's domain, and EXP-D reports its
-delay against the C1 rows at levels 0.05 and 0.1 instead of against the
-bound. If H-C1 is falsified in some cell, the bound is taken over the cells
-that pass and the kinds that fail are named in EXP-D's pre-registration.
+15. The bound is the largest D90 of the state delay over the eligible
+chains of the five C1 cells at level 0.2, in days, read from the EXP-C
+result entry in the logbook. It applies to a switch whose realised effect
+on at least one configured scorer is 0.2 or more in absolute value,
+measured on EXP-D's own windows, and whose monitor carries no sticky alarm
+from before the switch; a switch below that effect is outside the bound's
+domain, and EXP-D reports its delay against the C1 rows at levels 0.05 and
+0.1 instead of against the bound. The sticky pre-change rate of S-C3 over
+14 quiet windows is exported beside the bound as the probability that the
+condition fails. If H-C1 is falsified in some cell, the bound is taken over
+the cells that pass and the kinds that fail are named in EXP-D's
+pre-registration.
 
 ## 9. Deviations
 
