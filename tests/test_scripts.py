@@ -56,6 +56,36 @@ def test_run_and_analyze_scripts_parse_their_arguments() -> None:
         analyze.main([])
 
 
+def test_exp_c_scripts_refuse_and_run(
+    repo: Path,
+    tiny_c_digest: str,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    run = _load("run_exp_c")
+    assert run.main(["--profile", "smoke", "--run-id", "x", "--digest", "0" * 64]) == 1
+    assert "registered under" in capsys.readouterr().err
+    analyze = _load("analyze_exp_c")
+    with pytest.raises(SystemExit):
+        analyze.main([])
+    # against the tiny repository copy: a smoke run with its projection, then the summary
+    monkeypatch.setattr(run, "ROOT", repo)
+    monkeypatch.setattr(analyze, "ROOT", repo)
+    argv = ["--profile", "smoke", "--run-id", "exp-c-smoke-007", "--digest", tiny_c_digest]
+    assert run.main([*argv, "--allow-dirty", "--cells", "C3-p08-n05-match-l500-q00"]) == 0
+    out = capsys.readouterr().out
+    assert "C3-p08-n05-match-l500-q00: 2 chains, 6 verdicts" in out
+    assert "projected full profile at 1 workers" in out and "cells not timed" in out
+    assert "exp-c-smoke-007 completed" in out
+    run_dir = Path("experiments") / "exp_c_sequential" / "runs" / "exp-c-smoke-007"
+    assert run.main([*argv, "--allow-dirty", "--resume"]) == 0
+    assert "projected full profile at 1 workers" in capsys.readouterr().out
+    assert analyze.main([str(run_dir)]) == 0
+    assert capsys.readouterr().out.strip().endswith("exp_c_exp-c-smoke-007.json")
+    assert analyze.main([str(run_dir), "--exp-a-run", "nowhere"]) == 1
+    assert "analysis refused" in capsys.readouterr().err
+
+
 def test_pilot_exp_c_runs_a_tiny_setting_and_rejects_unknown_kinds(
     tmp_path: Path, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
 ) -> None:

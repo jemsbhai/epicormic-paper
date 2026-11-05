@@ -8,7 +8,9 @@ exp_a_calibration/
                        falsification conditions, exact commands; prose for a reader
   protocol.json        the same design, machine-readable; frozen by its SHA-256 digest
   runs/<run_id>/       one directory per run: protocol.frozen.json, manifest.json, environment.json,
-                       seed.json (committed) and stores/ with the raw pollard stores (ignored)
+                       seed.json and the per-cell summaries under cells/ (committed; EXP-C writes
+                       them gzip-compressed) and stores/ with the raw pollard stores and their
+                       zipped archives (ignored)
 ```
 
 The protocol digest is computed by `scripts/freeze_protocol.py` over the

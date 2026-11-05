@@ -33,6 +33,19 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
   `analysis` (the committed summary), with `scripts/freeze_protocol.py`,
   `snapshot_environment.py`, `run_exp_a.py`, `analyze_exp_a.py`, and tests at
   100 percent line coverage.
+- EXP-C runner and analysis: `epicormic_lab.exp_c` (cells over kind, level
+  and quiet length in the protocol's execution order, chains through
+  `epicormic_lab.chains`, the recompute check, per-cell zipped stores with
+  their digests in the summary, manifest and registry, gzip-compressed cell
+  summaries, resume at the cell boundary, the full-profile wall-clock
+  projection of the sizing rule) and `epicormic_lab.exp_c_summary` (the
+  shared-window check, every detector and the state machine per cell,
+  H-C1 over the eligible chains with Holm, H-C2 through
+  `exp_c_analysis.summarize_h_c2` with the quiet-length table, S-C1 to
+  S-C6 including the offline CUSUM and Page-Hinkley grid with its rounding
+  check, the EXP-D export and a provenance block), with
+  `scripts/run_exp_c.py`, `scripts/analyze_exp_c.py` and tests at 100
+  percent line coverage.
 - EXP-C pre-registration (mock arm): `experiments/exp_c_sequential/` with
   `PREREGISTRATION.md`, `protocol.json` (version 2026-10-29), the logbook
   plan entry, and the sizing pilot `pilot/pilot-seed7.json`. In support:
