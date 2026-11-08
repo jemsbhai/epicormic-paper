@@ -68,5 +68,5 @@ runs:
     started: "2026-11-08T00:22:06.171956+00:00"
     finished: "2026-11-08T00:43:58.594804+00:00"
     status: "completed"
-    outcome: null
-    logbook: "2026-10-29 EXP-C planned (mock arm)"
+    outcome: "analysis/generated/exp_c_exp-c-smoke-001.json"
+    logbook: "2026-11-08 EXP-C smoke run exp-c-smoke-001 completed"
