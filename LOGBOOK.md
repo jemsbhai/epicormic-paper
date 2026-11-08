@@ -338,3 +338,24 @@ epicormic 0.2.0 and pollard 1.6.0; CI on Ubuntu and Windows with 3.10 and
 3.12). Frozen when the merge commit of this change is tagged
 `exp-c-prereg-r3`. The runner and the analysis follow in their own pull
 request and read r3.
+
+## 2026-11-08 EXP-C smoke run exp-c-smoke-001 completed
+
+Researcher: Katherine Burge. Type: computational. Status: completed;
+smoke profile, an instrumentation check and not evidence.
+
+Run: `exp-c-smoke-001` at commit `d009c53`, protocol version 2026-11-05-r3
+(digest `ed87bebb...ea5`), epicormic 0.2.0 and pollard 1.6.0, started
+2026-11-08T00:22Z and finished 00:44Z. Machine: Apple M1 Pro, 8 cores,
+16 GB RAM, macOS 27.0.1, Python 3.14.7, `--workers 8`.
+
+Result: all 35 cells completed at two replications each (70 chains, 1,932
+verdicts). The runner's projection for the full profile at 8 workers is
+14.2 h wall-clock (makespan), 105.1 CPU-hours, longest cell 3.8 h; within
+12 hours: no. Per the 12-hour rule in the pre-registration, the
+replication counts are for Muntaser to set in a new protocol version. The
+35 timing lines are posted in the `EXP-B and EXP-C` issue.
+
+Stores: 35 zip archives, one per cell, with SHA-256 digests recorded by
+the runner in `store_digests`; kept outside git. Free disk on this machine
+is 16 GB, below the about 50 GB the full profile needs at 8 workers.
