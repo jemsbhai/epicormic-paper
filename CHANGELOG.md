@@ -8,6 +8,17 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
 
 ### Added
 
+- `data/panels/canary-24-v2.json`, the hosted panel variant for EXP-D:
+  the 24 probes, seed settings and 200-token output cap of `canary-24-v1`
+  with the `temperature` key removed from the sampling block (digest
+  `aaba1761326e89fe3f6b27521a55d4b56fb2fee87d05400cdeab88ea0bc18fac`),
+  because the current cheap tiers disagree about the parameter: Anthropic
+  models released after Claude Opus 4.6 reject any value other than 1.0 and
+  OpenAI's `gpt-5-nano-2025-08-07` rejects it outright, so a declared
+  snapshot switch cannot hold a 0.7 request fixed. `DATA_README.md`
+  records the provenance; `checksums.sha256` gains the file; tests pin the
+  digest, that v2 differs from v1 only in `name` and `sampling`, and that
+  the checksum file matches every panel file.
 - Repository scaffold: rules, layout, and run lifecycle in `README.md`;
   `LOGBOOK.md` and `findings.md` headers; the run registry schema.
 - `epicormic_lab.pins`: verified release identities of epicormic 0.1.0 and
