@@ -52,13 +52,18 @@ def test_real_grid_enumerates_the_registered_workload_in_protocol_order() -> Non
     protocol = load_protocol(EXP_C_PROTOCOL)
     cells = chain_cells(protocol, "full")
     assert len(cells) == 35
-    assert sum(cell.replications for cell in cells) == 3000
-    assert sum(cell.replications * cell.current_windows for cell in cells) == 83_300
+    assert sum(cell.replications for cell in cells) == 1800
+    assert sum(cell.replications * cell.current_windows for cell in cells) == 49_980
     nodes = sum(
         cell.replications * cell.windows_per_replication * cell.panel_size * cell.samples
         for cell in cells
     )
-    assert nodes == 21_060_000  # about 21.1 million in the pre-registration
+    assert nodes == 12_636_000  # about 12.6 million in the pre-registration (r4)
+    # the superseded r3 carried the counts the sizing rule lowered
+    r3 = load_protocol(EXP_C_PROTOCOL.with_name("protocol.2026-11-05-r3.json"))
+    r3_cells = chain_cells(r3, "full")
+    assert sum(cell.replications for cell in r3_cells) == 3000
+    assert sum(cell.replications * cell.current_windows for cell in r3_cells) == 83_300
     assert cells[0].name == "C1-p24-n10-match-l050-q14"
     assert all(cell.replications == 2 for cell in chain_cells(protocol, "smoke"))
     order = execution_order(cells, protocol)
@@ -120,7 +125,7 @@ def test_seed_document_records_every_source_of_randomness() -> None:
     assert document["mixture"]["tag"] == "epicormic-lab/mixture/v1:"
     c3 = document["cells"]["C3-p24-n10-match-l300-q28"]
     assert c3["change_window"] == 29 and c3["windows_per_replication"] == 43
-    assert c3["last_salt"] == 49 * 100_000 + 42 * 1_000
+    assert c3["last_salt"] == 29 * 100_000 + 42 * 1_000  # 30 replications in r4 (50 in r3)
     assert document["cells"]["C2-p24-n20-match-l200-q14"]["seeds_per_window"] == 20
 
 

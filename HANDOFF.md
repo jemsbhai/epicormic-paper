@@ -531,41 +531,50 @@ bottleneck.
 EXP-C comes first (execution order of decisions D24 to D26: its delays set
 the bound EXP-D pre-registers). Its pre-registration is
 `experiments/exp_c_sequential/PREREGISTRATION.md` with `protocol.json`
-(version 2026-11-05-r3, frozen at tag `exp-c-prereg-r3`; the superseded
-versions stay next to it unrun); read sections 3.5 and 4 for the size of
-the full profile (35 cells, 3000 chains, about 90 CPU-hours on a slow core,
-about 40 GB of stores zipped cell by cell as they complete, about 280 MB of
-verdict records committed gzip-compressed) and the 12-hour wall-clock rule
-that sets the replication counts from your smoke timing. H-C2 uses
+(version 2026-11-09-r4, frozen at tag `exp-c-prereg-r4`; r3 at tag
+`exp-c-prereg-r3` was run in the smoke profile only, and the earlier
+versions stay next to it unrun); read sections 0.2, 3.5 and 4 for the size
+of the full profile (35 cells, 1800 chains, about 63 CPU-hours at the
+smoke run's measured rate, about 4.6 GB of stores zipped cell by cell as
+they complete from about 20 GB uncompressed, about 170 MB of verdict
+records committed gzip-compressed) and the 12-hour wall-clock rule that
+set those replication counts from the smoke timing. H-C2 uses
 replication pairs and the restricted-delay test in section 5.1; no-alarm
 chains remain in the paired analysis, and pre-change alarms are reported
 separately. The state machine's delay is the first `drift` at or after the
 change, and a chain counts for it only when no sticky detector alarmed
 before the change (section 2 and 5).
-The runner is `scripts/run_exp_c.py`. From a clean clone at the commit
-Muntaser names, with the environment of 4.1, the registered smoke run is:
+The runner is `scripts/run_exp_c.py`. The registered smoke run,
+`exp-c-smoke-001`, was made on 2026-11-08 from a clean clone at `d009c53`
+under protocol r3 (digest `ed87bebb...ea5`), merged as PR #11, with its
+timing lines and projection posted in the `EXP-B and EXP-C` issue and its
+35 store archives delivered and verified (section 8); the smoke profile
+runs every cell at two replications (35 cells, 70 chains, 1,932 verdicts,
+each recomputed once), prints one timing line per cell and then the
+projected wall-clock of the full profile at the worker count, and is an
+instrumentation check, never evidence. Its projection exceeded 12 hours,
+so protocol r4 lowered the replication counts as the pre-registered rule
+says. The full run starts only when Muntaser says so, from a clean clone
+at the commit he names (the tagged r4 merge commit), with the environment
+of 4.1, a new run id and the r4 digest:
 
 ```
-python scripts/run_exp_c.py --profile smoke --run-id exp-c-smoke-001 --digest ed87bebb3c1bc9aa200c5196a231ed03c7dd34e9fe79739efac3b73d90725ea5 --workers <cores>
-python scripts/analyze_exp_c.py experiments/exp_c_sequential/runs/exp-c-smoke-001
+python scripts/run_exp_c.py --profile full --run-id <run id Muntaser names> --digest aeb4cc1e53ea0cd543ea049d70dbb890fbe537aa148410f94e99511dee8027c0 --workers <cores>
+python scripts/analyze_exp_c.py experiments/exp_c_sequential/runs/<run id>
 ```
 
-The first command runs every cell at two replications (35 cells, 70
-chains, 1,932 verdicts, each recomputed once), prints one timing line per
-cell and then the projected wall-clock of the full profile at your worker
-count; the smoke profile is an instrumentation check, never evidence. Post
-the timing lines and the projection in the `EXP-B and EXP-C` issue with
-your core count and the free disk you can give the run: a full C1 cell is
-about 1.3 GB of store before it is zipped, and with W workers up to W
-uncompressed stores exist at once beside the finished zips. Open a pull
-request with the run directory (everything except `stores/`, which git
-ignores; the gzip-compressed `cells/*.json.gz` are committed) and the
-registry entry the runner appended, and keep the `stores/*.zip` archives
-with their digests for Muntaser (section 8). If the projection exceeds 12
-hours, Muntaser writes the dated protocol version that lowers the
-replication counts before the full run; the full run starts only when he
-says so, with `--profile full`, a new run id, and a clean tree at the commit
-he names. `--resume` continues a crashed run at the cell boundary. The sizing
+At 8 workers the projection from the smoke timings is about 8.5 hours
+wall-clock and 63 CPU-hours, with a longest cell of about 2.3 hours. Disk:
+a full C1 cell at 60 replications is about 0.7 GB of store before it is
+zipped and about 0.16 GB after, with W workers up to W uncompressed stores
+exist at once beside the finished zips, and the whole run peaks at about
+8.5 GB at 8 workers; 16 GB free is enough. When the run completes, open a
+pull request with the run directory (everything except `stores/`, which
+git ignores; the gzip-compressed `cells/*.json.gz` are committed) and the
+registry entry the runner appended, and deliver the `stores/*.zip`
+archives with their digests outside git (section 8). `--resume` continues
+a crashed run at the cell boundary; a partially written cell is rerun from
+its first replication. The sizing
 pilot behind the design, `scripts/pilot_exp_c.py`, runs anywhere in about
 half an hour on two cores and is a reasonable way to see what the
 experiment measures; its output is never evidence.
@@ -604,8 +613,12 @@ Katie:
 - [ ] Decide and report where the daily job will run for 28 days (7.4).
 - [ ] Open a second issue, `EXP-B and EXP-C`, for the mock experiments; the
       per-cell smoke timing goes there once the runners exist.
-- [ ] Run the EXP-C smoke profile (7.5), open the pull request with the run
-      directory, and post the timing lines and the projection.
+- [x] Run the EXP-C smoke profile (7.5), open the pull request with the run
+      directory, and post the timing lines and the projection
+      (`exp-c-smoke-001`, PR #11, 2026-11-08).
+- [ ] Run the EXP-C full profile (7.5) from the tagged r4 commit with the
+      r4 digest when Muntaser gives the go-ahead, open the pull request with
+      the run directory, and deliver the store archives (section 8).
 
 Mike:
 

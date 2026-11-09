@@ -168,11 +168,19 @@ def test_protocol_matches_executable_analysis_and_keeps_original_version() -> No
     assert float(spec["family_alpha"]) == H_C2_ALPHA
     assert "Mann-Whitney" not in h_c2["test"]
     old = load_protocol(EXP_C_PROTOCOL.with_name("protocol.2026-10-29.json"))
-    assert old.digest == protocol.document["supersedes"]["earlier"][0]["digest"]
+    assert old.digest == protocol.document["supersedes"]["earlier"][-1]["digest"]
     assert old.version == "2026-10-29"
-    for key in ("provider", "analysis", "parts", "panels", "software"):
+    for key in ("provider", "analysis", "panels", "software"):
         assert old.document[key] == protocol.document[key]
-    # H-C2 itself is unchanged between r2 and r3
-    r2 = load_protocol(EXP_C_PROTOCOL.with_name("protocol.2026-10-30-r2.json"))
-    r2_h_c2 = next(h for h in r2.document["outcomes"]["primary"] if h["id"] == "H-C2")
-    assert r2_h_c2 == h_c2
+    # r4 changed only the full replication counts of the parts (the sizing rule)
+    for part, spec in old.document["parts"].items():
+        current = protocol.document["parts"][part]
+        assert {k: v for k, v in spec.items() if k not in ("replications", "note")} == {
+            k: v for k, v in current.items() if k not in ("replications", "note")
+        }
+        assert spec["replications"]["smoke"] == current["replications"]["smoke"]
+    # H-C2 itself is unchanged from r2 through r4
+    for name in ("protocol.2026-10-30-r2.json", "protocol.2026-11-05-r3.json"):
+        earlier = load_protocol(EXP_C_PROTOCOL.with_name(name))
+        earlier_h_c2 = next(h for h in earlier.document["outcomes"]["primary"] if h["id"] == "H-C2")
+        assert earlier_h_c2 == h_c2
