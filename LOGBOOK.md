@@ -359,3 +359,77 @@ replication counts are for Muntaser to set in a new protocol version. The
 Stores: 35 zip archives, one per cell, with SHA-256 digests recorded by
 the runner in `store_digests`; kept outside git. Free disk on this machine
 is 16 GB, below the about 50 GB the full profile needs at 8 workers.
+
+## 2026-11-09 EXP-C plan addendum: replication counts by the sizing rule
+
+Protocol version 2026-11-09-r4, written after the registered smoke run
+`exp-c-smoke-001` and before any full run. Version 2026-11-05-r3 was frozen
+at tag `exp-c-prereg-r3` (commit `739b5961d7085fae909521a903f624c38bc70e1c`)
+and was run in the smoke profile only; it stays in place verbatim as
+`protocol.2026-11-05-r3.json`, digest
+`ed87bebb3c1bc9aa200c5196a231ed03c7dd34e9fe79739efac3b73d90725ea5`, and
+versions r2 and r1 stay as before, unrun.
+
+Reason: the sizing rule of section 4, item 2 of the pre-registration (in
+`run.sizing` of every version since r1): if the smoke timing projects a
+full-profile wall-clock above 12 hours at the runner's worker count, a new
+dated version lowers C1 to 60 and C2 and C3 to 30 replications before the
+full run, never after it. The smoke run on Katie's Apple M1 Pro (8 cores,
+`--workers 8`) measured 3.6 to 6.0 s per verdict (about 4.1 s in the C1
+cells) and the runner projected the full profile at the r3 counts of 100,
+50 and 50 replications at 14.2 h wall-clock (makespan), 105.1 CPU-hours
+and a longest cell of 3.8 h (`within_12_hours: no`). The rule fires, and
+r4 is its application; no judgement about the counts was exercised after
+seeing the timing. The decision of the 2026-11-08 result entry, that the
+counts are for Muntaser to set, is resolved by the rule, which names them.
+
+Change: `experiments/exp_c_sequential/protocol.json`, version
+2026-11-09-r4, canonical digest
+`aeb4cc1e53ea0cd543ea049d70dbb890fbe537aa148410f94e99511dee8027c0`. Full
+replications 60 (C1), 30 (C2), 30 (C3); the C3 point at 14 quiet windows
+is the first 30 replications of the C1 cell of the same kind and level; the
+smoke profile stays at two replications per cell, so `exp-c-smoke-001`
+remains the instrumentation check for the full run. Restated for the new
+counts: H-C1 tests the count of eligible chains with a state delay of at
+most 2 against p0 = 0.90 over the n eligible chains (planned 60, n
+reported); the same exact binomial, the same Holm family of 15 at 0.05;
+first-step critical count 46 or fewer of 60 (was 80 of 100), unadjusted
+flag 49 or fewer of 60 (was 84 of 100); power at the first step 0.31
+against a true rate of 0.80, 0.67 against 0.75 and 0.90 against 0.70 (was
+0.54 against 0.80 and 0.90 against 0.75), with the critical count and
+power at the realised n still reported with the result. The S-C3
+denominators become 60 distinct chains of 14 quiet windows at panel 24 by
+N 10, 30 of 28 quiet windows, 30 of 14 at N 5 and 30 at N 20; H-C2 keeps
+its exact paired threshold test with R = 30 planned pairs per level (first
+Holm step rejects at 21 or more of 30 with the penalty; power 0.59 at a
+true pair probability of 0.7, 0.94 at 0.8). Full profile: 35 cells, 1800
+chains, 49,980 verdicts, about 12.6 million observation nodes (was 3000,
+83,300 and 21.1 million). Cells, geometry, seeds, drift kinds and levels,
+detectors, the analysis configuration (config digest unchanged),
+hypotheses, tests, the export to EXP-D and the pinned releases are
+unchanged.
+
+Sizes, measured rather than estimated: the C1 smoke stores are 11.2 to
+11.3 MB of SQLite per replication (about 1.6 KB per observation node) and
+zip at 4.2 to 4.4 to one, so a C1 cell at 60 replications is about 0.7 GB
+uncompressed and 0.16 GB zipped and the full profile about 20 GB
+uncompressed and 4.6 GB zipped; the per-cell summaries are about 170 MB
+uncompressed. Projection at the r4 counts, by the runner's rule over the
+smoke timings: 8.5 h wall-clock, 63.0 CPU-hours, longest cell 2.3 h at 8
+workers (16.5 h at 4 workers), and at most about 8.5 GB on disk at once at
+8 workers (finished zips plus up to eight live stores). The 2026-11-08
+result entry's figure of about 50 GB was the r1 to r3 estimate of the
+uncompressed total; with cell-by-cell compression the 16 GB free on the
+smoke machine is enough for the full profile at the r4 counts.
+
+Validation: the four checks pass on the branch (Linux, Python 3.13.18,
+epicormic 0.2.0 and pollard 1.6.0, coverage 100 percent; CI on Ubuntu and
+Windows with 3.10 and 3.12 confirms before the merge); the test suite pins
+the r4 digest and the 1800-chain workload, keeps the r3, r2 and r1
+digests, checks that r4 differs from r3 only in the full replication
+counts, and runs the synthetic summary grid at the r4 counts. Frozen when
+the merge commit of this change is tagged `exp-c-prereg-r4`. The
+runner code is unchanged since `d009c53`, so the same merge commit carries
+the `exp-c-frozen` tag of section 10, and the full run starts from a clean
+tree at that commit with `--profile full`, a new run id and the r4 digest,
+only when Muntaser says so.

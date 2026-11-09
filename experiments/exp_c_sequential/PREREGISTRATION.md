@@ -3,12 +3,12 @@
 | Field | Value |
 | --- | --- |
 | Experiment | EXP-C (section 16 of the epicormic `docs/PLAN.md`) |
-| Protocol | `protocol.json`, version 2026-11-05-r3, mock arm |
-| Protocol digest | `ed87bebb3c1bc9aa200c5196a231ed03c7dd34e9fe79739efac3b73d90725ea5` |
+| Protocol | `protocol.json`, version 2026-11-09-r4, mock arm |
+| Protocol digest | `aeb4cc1e53ea0cd543ea049d70dbb890fbe537aa148410f94e99511dee8027c0` |
 | Software under study | epicormic 0.2.0 on pollard 1.6.0, pinned in `src/epicormic_lab/pins.py` |
 | Panel | `canary-24-v1` `8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75` |
 | Pilot | `pilot/pilot-seed7.json` (seed 7, 200 permutations, sizing only, section 3.7) |
-| Status | Revised before freeze; r2 frozen at tag `exp-c-prereg`, r3 frozen at tag `exp-c-prereg-r3` after review and checks |
+| Status | Revised before the full run; r2 frozen at tag `exp-c-prereg`, r3 frozen at tag `exp-c-prereg-r3` and run in the smoke profile only (`exp-c-smoke-001`, an instrumentation check), r4 frozen at tag `exp-c-prereg-r4` by the sizing rule of section 4 |
 
 The protocol digest is SHA-256 over the canonical JSON of the protocol file:
 keys sorted, separators `,` and `:` with no whitespace, `ensure_ascii`
@@ -53,6 +53,39 @@ rounding check to S-C5, and stores the per-cell summaries compressed
 is frozen at tag `exp-c-prereg`, unrun. Cells, seeds, replication counts,
 detectors, H-C2 and the pinned releases are unchanged, and no confirmatory
 observations exist.
+
+### 0.2 Revision r4 (2026-11-09), after the smoke run and before the full run
+
+Version 2026-11-09-r4 applies the sizing rule of section 4, item 2, which
+r1 to r3 pre-registered for exactly this case. The registered smoke run
+`exp-c-smoke-001` (protocol 2026-11-05-r3, commit `d009c53`, 2026-11-08,
+Apple M1 Pro, 8 cores, `--workers 8`) completed every cell at two
+replications and the runner projected the full profile at 100, 50 and 50
+replications at 14.2 hours wall-clock, 105.1 CPU-hours and a longest cell
+of 3.8 hours, above the 12-hour bound (the 35 timing lines are in the
+`EXP-B and EXP-C` issue and the logbook result entry). r4 therefore lowers
+C1 to 60 and C2 and C3 to 30 replications, the counts the rule names, and
+restates for those counts the planned n, critical counts and power of
+H-C1 (section 2), the cells and denominators of section 3.5, the C3 sample
+taken from the C1 cells, R in section 5.1, and the size figures, which now
+carry the store sizes the smoke run measured. The same projection at the
+r4 counts is 8.5 hours wall-clock, 63.0 CPU-hours and a longest cell of
+2.3 hours at 8 workers. The superseded r3 is retained verbatim as
+`protocol.2026-11-05-r3.json`, digest
+`ed87bebb3c1bc9aa200c5196a231ed03c7dd34e9fe79739efac3b73d90725ea5`, frozen
+at tag `exp-c-prereg-r3` and run in the smoke profile only; the smoke
+profile itself (two replications per cell) is unchanged in r4, so that run
+remains the instrumentation check for the full run. Cells, geometry,
+seeds, detectors, the analysis configuration, the hypotheses and their
+tests, and the pinned releases are unchanged. The smoke run is not
+evidence, and no confirmatory observations exist. The cost of the rule is
+power: at n = 60 the first-step test of H-C1 has power 0.31 against a true
+rate of 0.80 and 0.67 against 0.75, where n = 100 had 0.54 and 0.90, and
+reaches 0.90 only against 0.70; the pilot (section 3.7) saw every chain at
+level 0.2 and above reach `drift` in the first drifted window, so the test
+is a floor on a quantity expected to sit far above it, and the estimates
+with their intervals, which widen from about plus or minus 0.06 to about
+plus or minus 0.08 at 0.90, remain what the paper reports.
 
 ## 1. Question
 
@@ -109,17 +142,19 @@ Primary, confirmatory:
   state machine reports `drift` within 2 windows of the change in at least
   90 percent of the eligible chains. Per cell, the count of eligible chains
   with a state delay of at most 2, out of the n eligible chains of the cell
-  (planned 100; n reported with the ineligible replication ids), is tested
+  (planned 60; n reported with the ineligible replication ids), is tested
   against p0 = 0.90 by the exact one-sided binomial test (alternative:
   below); the fifteen p-values are Holm-adjusted at family level 0.05. A
   cell whose adjusted p-value is at or below 0.05 falsifies H-C1 for that
-  cell; with n = 100 that is 80 or fewer detections at the first Holm step.
-  The unadjusted flag (unadjusted p at or below 0.05; 84 or fewer of 100)
+  cell; with n = 60 that is 46 or fewer detections at the first Holm step.
+  The unadjusted flag (unadjusted p at or below 0.05; 49 or fewer of 60)
   is reported as descriptive, and so is the unconditional count within 2
   windows out of all chains of the cell, with the ineligible chains counted
-  as not detected. With n = 100 the power of the first-step test is 0.54
-  against a true rate of 0.80 and 0.90 against 0.75; the critical count and
-  the power at the realised n are reported with the result. The claim is a
+  as not detected. With n = 60 the power of the first-step test is 0.31
+  against a true rate of 0.80, 0.67 against 0.75 and 0.90 against 0.70
+  (with the 100 replications of versions r1 to r3 it was 0.54 against 0.80
+  and 0.90 against 0.75; section 0.2); the critical count and the power at
+  the realised n are reported with the result. The claim is a
   floor of 0.90 conditional on the monitor carrying no sticky alarm into
   the change, and the estimates with their intervals are what the paper
   reports; the sticky pre-change rate of S-C3 says how often that condition
@@ -182,7 +217,7 @@ Secondary, reported with intervals and not tested:
   observations: CUSUM over k in {0.05, 0.1, 0.15, 0.2} by h in {0.2, 0.3,
   0.4, 0.6, 0.8, 1.0}, Page-Hinkley over delta in {0.025, 0.05, 0.1} by
   lambda in {0.25, 0.5, 0.75, 1.0}. For each pair: the false alarm rate over
-  28 null windows on the EXP-A A2 chains (200) and the C3 quiet chains (50),
+  28 null windows on the EXP-A A2 chains (200) and the C3 quiet chains (30),
   and the mean delay per kind at level 0.2 on the C1 chains, with the
   chains that never alarm within the horizon reported as a miss count
   beside the mean over the alarms. Per detector,
@@ -324,49 +359,63 @@ parameters appear, offline and labelled exploratory.
 
 | Part | Panel | N | Quiet windows | Post-change windows | Kinds | Levels | Cells | Replications (full) | Replications (smoke) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| C1 | 24 | 10 | 14 | 14 | all five | 0.05, 0.1, 0.2, 0.3, 0.5 | 25 | 100 | 2 |
-| C2 | 24 | 5, 20 | 14 | 14 | match | 0.1, 0.2 | 4 | 50 | 2 |
-| C3 | 24 | 10 | 0, 7, 28 | 14 | match | 0.3, 0.5 | 6 | 50 | 2 |
+| C1 | 24 | 10 | 14 | 14 | all five | 0.05, 0.1, 0.2, 0.3, 0.5 | 25 | 60 (100 in r1 to r3) | 2 |
+| C2 | 24 | 5, 20 | 14 | 14 | match | 0.1, 0.2 | 4 | 30 (50 in r1 to r3) | 2 |
+| C3 | 24 | 10 | 0, 7, 28 | 14 | match | 0.3, 0.5 | 6 | 30 (50 in r1 to r3) | 2 |
 
 Cell names: `<part>-p<panel>-n<N>-<kind>-l<level in thousandths>-q<quiet
 windows>`, for example `C1-p24-n10-match-l200-q14`. The C3 point at 14
-quiet windows is the C1 cell of the same kind and level, whose first 50
+quiet windows is the C1 cell of the same kind and level, whose first 30
 replications are the C3 sample at that length; a separate cell would
-reproduce the same chains observation for observation. Full profile: 2500
-C1 chains of 29 windows, 200 C2 chains of 29, 300 C3 chains of 15, 22 and
-43 windows: 83,300 verdicts and about 21.1 million observation nodes.
+reproduce the same chains observation for observation. Full profile: 1500
+C1 chains of 29 windows, 120 C2 chains of 29, 180 C3 chains of 15, 22 and
+43 windows: 49,980 verdicts and about 12.6 million observation nodes (r1
+to r3: 3000 chains, 83,300 verdicts, about 21.1 million nodes).
 
-Why these numbers. The headline quantities are detection fractions within
-d windows per cell; 100 chains put a two-sided 95 percent Clopper-Pearson
-interval of [0.82, 0.95] around an observed 0.90 and of [0.96, 1] around
-100 of 100, and the per-cell test of H-C1 has the power stated in section
-2. Fifty chains per C2 and C3 cell estimate a median delay and a detection
-fraction with an interval of about plus or minus 0.13 at 0.9; these parts
-are comparisons of shapes, not floors. The post-change horizon of 14
+Why these numbers. The replication counts are the ones the sizing rule of
+section 4 prescribed for a smoke projection above 12 hours, and that
+projection came in at 14.2 hours (section 0.2). The headline quantities
+are detection fractions within d windows per cell; 60 chains put a
+two-sided 95 percent Clopper-Pearson interval of [0.80, 0.96] around an
+observed 0.90 and of [0.94, 1] around 60 of 60 (100 chains gave [0.82,
+0.95] and [0.96, 1]), and the per-cell test of H-C1 has the power stated
+in section 2. Thirty chains per C2 and C3 cell estimate a median delay
+and a detection fraction with an interval of [0.73, 0.98] around 27 of 30;
+these parts are comparisons of shapes, not floors. For H-C2 at 30 pairs
+per level the first Holm step (alpha 0.025) rejects at 21 or more of 30
+pairs with the penalty, and the power of that step is 0.59 when the true
+pair probability is 0.7 and 0.94 when it is 0.8 (50 pairs: 33 or more,
+power 0.78 and 0.99). The post-change horizon of 14
 windows is EXP-D's: a detector that has not alarmed 14 days after the
 declared switch has missed it for EXP-D's purpose, and delays are censored
 there. The quiet lengths 0, 7, 14, 28 span EXP-D's geometry and twice it.
 N = 5 and N = 20 bracket EXP-D's N = 10 within the EXP-A calibration grid.
 
-Distinct quiet chains, the denominators of S-C3: 100 chains of 14 quiet
-windows at panel 24 by N 10, shared by the 25 C1 cells; 50 chains of 28
+Distinct quiet chains, the denominators of S-C3: 60 chains of 14 quiet
+windows at panel 24 by N 10, shared by the 25 C1 cells; 30 chains of 28
 quiet windows (the C3 cells at that length, whose first 14 windows coincide
 with the C1 chains at the same replication index and whose next 14 are new
-null windows); 50 chains of 14 at N 5 and 50 at N 20 (C2). The C3 cells
+null windows); 30 chains of 14 at N 5 and 30 at N 20 (C2). The C3 cells
 with 7 quiet windows repeat the first 7 windows of the C1 chains and add
 no null information; the cells with 0 quiet windows have no pre-change
 window and contribute nothing to S-C3.
 
-Disk: a C1 cell is about 700,000 observation nodes, about 1.3 GB of SQLite
-at the EXP-A development rate of about 1.9 KB per node, and the full
-profile about 40 GB uncompressed. The runner therefore compresses each
-cell's store into a zip after the recompute check and removes the
-uncompressed store, so that at most a few cells' worth of stores exist at
-once; the zip's SHA-256 is in the cell summary and the registry. The
-per-cell summaries, which carry the per-window verdict records of every
-chain as EXP-A writes them (about 3.4 KB per verdict, about 280 MB for the
-full profile), are written gzip-compressed as `cells/<cell>.json.gz` and
-are committed with the run directory; the analysis reads them directly.
+Disk, as measured in the registered smoke run (the C1 stores of
+`exp-c-smoke-001` are 11.2 to 11.3 MB per replication, about 1.6 KB of
+SQLite per observation node, and every store zips at 4.2 to 4.4 to one;
+r1 to r3 estimated 1.9 KB per node from the EXP-A development run): a C1
+cell at 60 replications is about 418,000 observation nodes, about 0.7 GB
+of SQLite and about 0.16 GB zipped, and the full profile about 20 GB
+uncompressed and 4.6 GB zipped. The runner compresses each cell's store
+into a zip after the recompute check and removes the uncompressed store,
+so that at most the worker count of uncompressed stores exist at once
+beside the finished zips; at 8 workers the projection over the execution
+order peaks at about 8.5 GB on disk. The zip's SHA-256 is in the cell
+summary and the registry. The per-cell summaries, which carry the
+per-window verdict records of every chain as EXP-A writes them (about 3.4
+KB per verdict, about 170 MB for the full profile's 49,980 verdicts), are
+written gzip-compressed as `cells/<cell>.json.gz` and are committed with
+the run directory; the analysis reads them directly.
 
 ### 3.6 Seeds
 
@@ -493,7 +542,11 @@ What the pilot settled.
    smoke run. For orientation, one verdict at panel 24 by N 10 with 2000
    permutations and the recompute check took about 3.9 s on a slow
    two-core machine in the EXP-A development smoke run, which projects
-   about 90 CPU-hours for the full profile there.
+   about 90 CPU-hours for the full profile there. Applied: the registered
+   smoke run `exp-c-smoke-001` measured 3.6 to 6.0 s per verdict (about
+   4.1 s in the C1 cells) and the runner projected 14.2 hours at 8 workers
+   for the r3 counts, so version 2026-11-09-r4 lowers the counts as this
+   rule says (section 0.2); r3 stays in place with its smoke run.
 3. The full profile runs every cell from a clean tree at the commit the
    registry records. Each cell writes one SQLite pollard store under
    `runs/<run_id>/stores/<cell>.sqlite`; each replication is one monitor
@@ -558,7 +611,7 @@ left out of the grid.
 The analysis is implemented in `epicormic_lab.exp_c_analysis.summarize_h_c2`.
 For each level, join the 0-quiet and 28-quiet cells by replication id,
 never by row order. Require exactly the planned ids 0..R-1 in both cells
-(R = 50 in the full protocol) and a complete 14-window post-change record
+(R = 30 in the full protocol from r4; 50 in r1 to r3) and a complete 14-window post-change record
 for each chain. Missing partners, duplicates or truncated runs are data
 errors that stop analysis; they are not right censoring and are not
 silently dropped. Every summary records `replication`, `kind`, `level`,

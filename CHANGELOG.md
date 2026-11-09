@@ -57,6 +57,17 @@ Changelog format. Experiment runs are recorded in `LOGBOOK.md` and
 
 ### Changed
 
+- EXP-C protocol 2026-11-09-r4 applies the pre-registered sizing rule
+  after the registered smoke run `exp-c-smoke-001` projected the full
+  profile at 14.2 hours wall-clock at 8 workers: full replications become
+  60 (C1), 30 (C2) and 30 (C3), with the planned n, critical counts and
+  power of H-C1, the S-C3 denominators, the C3 sample taken from the C1
+  cells, R of section 5.1 and the size figures restated for those counts
+  and the store sizes recorded as measured (about 1.6 KB per node, 4.2 to
+  4.4 to one zipped). r3 is retained as `protocol.2026-11-05-r3.json`,
+  run in the smoke profile only; the logbook has a dated addendum; the
+  tests pin the r4 digest and the 1800-chain workload. `HANDOFF.md` 7.5
+  records the smoke run and gives the full-run command.
 - Environment snapshots record physical memory, every installed distribution
   and whether the pins are satisfied; `scripts/snapshot_environment.py
   --require-pins` exits 1 otherwise; a run refuses a protocol whose software

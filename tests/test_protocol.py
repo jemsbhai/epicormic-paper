@@ -22,7 +22,8 @@ from .conftest import EXP_C_PROTOCOL, FIRST_PROTOCOL, REAL_PROTOCOL, REPO
 
 FROZEN_DIGEST = "5934acb50e9d4f9403bb64cd038cf492bcd167d7464eef8a1fdd24da2e555de4"
 FIRST_DIGEST = "dd7e4356a60b18a9b122a5def9617b761be313f9d7dfa97481e7601a0115210d"
-EXP_C_DIGEST = "ed87bebb3c1bc9aa200c5196a231ed03c7dd34e9fe79739efac3b73d90725ea5"
+EXP_C_DIGEST = "aeb4cc1e53ea0cd543ea049d70dbb890fbe537aa148410f94e99511dee8027c0"
+EXP_C_R3_DIGEST = "ed87bebb3c1bc9aa200c5196a231ed03c7dd34e9fe79739efac3b73d90725ea5"
 EXP_C_R2_DIGEST = "d176f31ebc77cc9f28e5dcbefcca77e88f31fbea16c300cb9ebd2c1aac2eda4f"
 EXP_C_FIRST_DIGEST = "ef5062ae6a7da040e1b4194e79482de6d3d36e61923b12dcda0af7acd5f1124e"
 
@@ -42,17 +43,32 @@ def test_frozen_protocol_digest_is_unchanged() -> None:
 def test_exp_c_protocol_revision_is_consistent() -> None:
     protocol = load_protocol(EXP_C_PROTOCOL)
     assert protocol.digest == EXP_C_DIGEST
-    assert protocol.experiment == "EXP-C" and protocol.version == "2026-11-05-r3"
+    assert protocol.experiment == "EXP-C" and protocol.version == "2026-11-09-r4"
     software = protocol.document["software"]
     assert software == {"epicormic": EPICORMIC.version, "pollard": POLLARD.version}
     # the superseded versions stay in place verbatim, each with its digest
+    r3 = load_protocol(EXP_C_PROTOCOL.with_name("protocol.2026-11-05-r3.json"))
+    assert r3.digest == EXP_C_R3_DIGEST and r3.version == "2026-11-05-r3"
     r2 = load_protocol(EXP_C_PROTOCOL.with_name("protocol.2026-10-30-r2.json"))
     assert r2.digest == EXP_C_R2_DIGEST and r2.version == "2026-10-30-r2"
-    assert protocol.document["supersedes"]["digest"] == EXP_C_R2_DIGEST
+    assert protocol.document["supersedes"]["digest"] == EXP_C_R3_DIGEST
+    assert r3.document["supersedes"]["digest"] == EXP_C_R2_DIGEST
     assert r2.document["supersedes"]["digest"] == EXP_C_FIRST_DIGEST
-    assert protocol.document["supersedes"]["earlier"][0]["digest"] == EXP_C_FIRST_DIGEST
-    for key in ("provider", "analysis", "parts", "panels", "software", "drifts"):
-        assert r2.document[key] == protocol.document[key]
+    earlier = [entry["digest"] for entry in protocol.document["supersedes"]["earlier"]]
+    assert earlier == [EXP_C_R2_DIGEST, EXP_C_FIRST_DIGEST]
+    # r4 applies the sizing rule: only the full replication counts (and the C3
+    # note that quotes them) differ from r3 in the design keys
+    for key in ("provider", "analysis", "panels", "software", "drifts"):
+        assert r3.document[key] == protocol.document[key] == r2.document[key]
+    for part, spec in protocol.document["parts"].items():
+        before = r3.document["parts"][part]
+        assert spec["replications"]["smoke"] == before["replications"]["smoke"] == 2
+        assert before["replications"]["full"] == {"C1": 100, "C2": 50, "C3": 50}[part]
+        assert spec["replications"]["full"] == {"C1": 60, "C2": 30, "C3": 30}[part]
+        unchanged = {k: v for k, v in spec.items() if k not in ("replications", "note")}
+        assert unchanged == {k: v for k, v in before.items() if k not in ("replications", "note")}
+    assert "first 30 replications" in protocol.document["parts"]["C3"]["note"]
+    assert "applied in version 2026-11-09-r4" in protocol.document["run"]["sizing"]
     definitions = protocol.document["outcomes"]["definitions"]
     assert "eligible" in definitions["state_delay"]
     assert "sticky" in definitions["state_eligibility"]
@@ -76,7 +92,7 @@ def test_exp_c_protocol_revision_is_consistent() -> None:
         * part["replications"]["full"]
         for part in parts.values()
     )
-    assert chains == 3000
+    assert chains == 1800
     verdicts = sum(
         len(part["kinds"])
         * len(part["levels"])
@@ -86,7 +102,7 @@ def test_exp_c_protocol_revision_is_consistent() -> None:
         for part in parts.values()
         for quiet in part["pre_change_windows"]
     )
-    assert verdicts == 83_300
+    assert verdicts == 49_980
 
 
 def test_protocol_software_matches_the_pins() -> None:

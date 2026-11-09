@@ -342,7 +342,8 @@ def synthetic_run(tmp_path_factory: pytest.TempPathFactory) -> Path:
     cells = chain_cells(protocol, "full")
     names = []
     for cell in cells:
-        # keep the synthetic grid small: 100 chains where H-C1 counts them, 50 elsewhere
+        # the synthetic grid follows the protocol's full counts (r4): 60 chains where
+        # H-C1 counts them, 30 elsewhere; the summary refuses any other count
         small = ChainCell(**{**cell.__dict__, "replications": cell.replications})
         e_delay = E_DELAY[cell.level]
         if cell.pre_change_windows == 28 and e_delay is not None:
@@ -406,62 +407,62 @@ def test_synthetic_grid_h_c1_h_c2_s_c3_s_c4_and_export(synthetic_run: Path, tmp_
     # S-C3: the distinct quiet chains at the EXP-D geometry carry the shared false alarms
     q14 = summary["s_c3"]["p24-n10-q14"]
     assert q14["cell"] == "C1-p24-n10-match-l050-q14" and q14["note"] is not None
-    assert q14["state"]["sticky_before_change"]["count"] == 4  # replications 7, 32, 57, 82
-    assert q14["state"]["drift_before_change"]["count"] == 14  # 10 transient + 4 sticky
-    assert q14["detectors"]["eprocess"]["union"]["count"] == 4
-    assert q14["detectors"]["pooled"]["per_scorer"]["normalized_match"]["count"] == 10
+    assert q14["state"]["sticky_before_change"]["count"] == 3  # replications 7, 32, 57
+    assert q14["state"]["drift_before_change"]["count"] == 9  # 6 transient + 3 sticky
+    assert q14["detectors"]["eprocess"]["union"]["count"] == 3
+    assert q14["detectors"]["pooled"]["per_scorer"]["normalized_match"]["count"] == 6
     assert summary["s_c3"]["p24-n10-q28"]["note"] is None
-    assert summary["s_c3"]["p24-n05-q14"]["state"]["sticky_before_change"]["total"] == 50
-    # H-C1: 15 cells over the 96 eligible chains, one cell falsified
+    assert summary["s_c3"]["p24-n05-q14"]["state"]["sticky_before_change"]["total"] == 30
+    # H-C1: 15 cells over the 57 eligible chains, one cell falsified
     h = summary["h_c1"]
     assert h["family_size"] == 15 and h["not_estimable"] == []
     rows = {row["cell"]: row for row in h["cells"]}
     good = rows["C1-p24-n10-match-l200-q14"]
-    assert good["eligible"] == 96 and good["within_2"]["count"] == 96
-    assert good["unconditional_within_2"]["count"] == 96
-    assert good["unconditional_within_2"]["total"] == 100
+    assert good["eligible"] == 57 and good["within_2"]["count"] == 57
+    assert good["unconditional_within_2"]["count"] == 57
+    assert good["unconditional_within_2"]["total"] == 60
     assert good["raw_p"] == 1.0 and good["falsified_after_holm"] is False
-    first_step = max(k for k in range(97) if binomial_cdf(k, 96, 0.9) <= 0.05 / 15)
-    unadjusted = max(k for k in range(97) if binomial_cdf(k, 96, 0.9) <= 0.05)
-    assert good["critical_count_first_step"] == first_step == 77
-    assert good["critical_count_unadjusted"] == unadjusted == 80
-    assert good["power_first_step"]["0.8"] == pytest.approx(binomial_cdf(77, 96, 0.8))
+    first_step = max(k for k in range(58) if binomial_cdf(k, 57, 0.9) <= 0.05 / 15)
+    unadjusted = max(k for k in range(58) if binomial_cdf(k, 57, 0.9) <= 0.05)
+    assert good["critical_count_first_step"] == first_step == 43
+    assert good["critical_count_unadjusted"] == unadjusted == 46
+    assert good["power_first_step"]["0.8"] == pytest.approx(binomial_cdf(43, 57, 0.8))
     bad = rows["C1-p24-n10-refusal-l200-q14"]
     assert bad["within_2"]["count"] == 0 and bad["falsified_after_holm"] is True
     assert bad["unadjusted_flag"] is True
     assert h["falsified_after_holm"] == ["C1-p24-n10-refusal-l200-q14"]
-    assert good["ineligible_replications"] == [7, 32, 57, 82]
+    assert good["ineligible_replications"] == [7, 32, 57]
     # H-C2: every eligible pair has the three-window penalty
     h2 = summary["h_c2"]
     assert h2["computed"] is True and h2["criterion_met_both_levels"] is True
     level = h2["levels"][0]
-    assert level["eligible_pairs"] == 48 and level["excluded_pre_change_replications"] == [7, 32]
-    assert level["pairs_at_least_3"] == 48
+    assert level["eligible_pairs"] == 29 and level["excluded_pre_change_replications"] == [7]
+    assert level["pairs_at_least_3"] == 29
     table = h2["by_quiet_length"]["0.3"]["quiet_lengths"]
     assert table["0"]["median"] == 6 and table["28"]["median"] == 9
-    assert table["14"]["cell"] == "C1-p24-n10-match-l300-q14" and table["14"]["chains"] == 50
+    assert table["14"]["cell"] == "C1-p24-n10-match-l300-q14" and table["14"]["chains"] == 30
     # the sticky alarm sits at quiet window 9: absent at 7, present at 14 and 28
-    assert table["7"]["pre_change_alarms"] == 0 and table["14"]["pre_change_alarms"] == 2
-    assert table["28"]["pre_change_alarms"] == 2 and table["28"]["censored"] == 0
+    assert table["7"]["pre_change_alarms"] == 0 and table["14"]["pre_change_alarms"] == 1
+    assert table["28"]["pre_change_alarms"] == 1 and table["28"]["censored"] == 0
     assert h2["by_quiet_length"]["0.3"]["median_slope_per_quiet_window"] == pytest.approx(
         3 / 28, abs=0.05
     )
     # S-C4 compares N 5, 10 and 20 for the match kind
     assert sorted(summary["s_c4"]["0.2"]) == ["10", "20", "5"]
     assert summary["s_c4"]["0.2"]["5"]["cell"] == "C2-p24-n05-match-l200-q14"
-    assert summary["s_c4"]["0.1"]["10"]["state"]["within"]["1"]["count"] == 96
+    assert summary["s_c4"]["0.1"]["10"]["state"]["within"]["1"]["count"] == 57
     # S-C5: the defaults reproduce the records, the grid is filled, a pair is recommended
     s5 = summary["s_c5"]
     assert s5["default_check"]["mismatch_count"] == 0
-    assert s5["null_chains"] == {"cell": "C3-p24-n10-match-l300-q28", "chains": 50}
+    assert s5["null_chains"] == {"cell": "C3-p24-n10-match-l300-q28", "chains": 30}
     assert s5["exp_a"]["run_id"] == "exp-a-full-001"
     assert len(s5["cusum"]["grid"]) == 24 and len(s5["page_hinkley"]["grid"]) == 12
     row = next(r for r in s5["cusum"]["grid"] if r["params"] == [0.1, 0.4])
-    assert row["a2_false_alarm"]["total"] == 60 and row["c3_false_alarm"]["total"] == 50
+    assert row["a2_false_alarm"]["total"] == 60 and row["c3_false_alarm"]["total"] == 30
     assert set(row["delay_level_0.2"]) == set(PRIMARY)
     assert row["delay_level_0.2"]["match"]["alarms"] + row["delay_level_0.2"]["match"][
         "misses"
-    ] + row["delay_level_0.2"]["match"]["pre_change"] == 100
+    ] + row["delay_level_0.2"]["match"]["pre_change"] == 60
     assert s5["cusum"]["recommended"] is not None
     assert s5["page_hinkley"]["recommended"] is not None
     # export: the D90 over eligible chains per kind, the failing kind named
@@ -469,7 +470,7 @@ def test_synthetic_grid_h_c1_h_c2_s_c3_s_c4_and_export(synthetic_run: Path, tmp_
     assert ex["d90_level_0.2_by_kind"]["match"]["d90"] == 1
     assert ex["d90_level_0.2_by_kind"]["refusal"]["excluded"] is True
     assert ex["kinds_excluded"] == ["refusal"] and ex["bound_days"] == 1
-    assert ex["sticky_pre_change_rate_q14"]["count"] == 4
+    assert ex["sticky_pre_change_rate_q14"]["count"] == 3
     json.dumps(summary, allow_nan=False)
 
 
@@ -485,7 +486,7 @@ def test_synthetic_grid_without_exp_a_or_with_a_smoke_exp_a(
     without = s_c5(summaries, None)
     assert without["cusum"]["recommended"] is None and without["exp_a"] is None
     row = without["cusum"]["grid"][0]
-    assert row["a2_false_alarm"] is None and row["c3_false_alarm"]["total"] == 50
+    assert row["a2_false_alarm"] is None and row["c3_false_alarm"]["total"] == 30
     smoke = s_c5(summaries, _exp_a_run(tmp_path, profile="smoke"))
     assert smoke["exp_a"]["profile"] == "smoke" and smoke["cusum"]["recommended"] is None
     assert smoke["cusum"]["recommendation_withheld"] == "no EXP-A full run supplied"
@@ -502,7 +503,7 @@ def test_default_check_reports_a_chain_whose_record_disagrees(synthetic_run: Pat
     chain = cell["chains"][0]
     chain["verdicts"][20]["sequential"]["output_chars"]["cusum_alarm"] = True
     result = default_check([cell])
-    assert result["chains_passed"] == 99 and result["mismatch_count"] == 1
+    assert result["chains_passed"] == 59 and result["mismatch_count"] == 1
     assert result["mismatches"][0]["detector"] == "cusum"
     assert (name, 0) not in result["passed"]
     chain["verdicts"][3]["pooled"]["refusal"]["T"] = None
@@ -561,18 +562,18 @@ def test_summarize_cell_counts_states_and_rules(synthetic_run: Path) -> None:
     cell = read_cell_summary(summary_path(synthetic_run, "C1-p24-n10-refusal-l200-q14"))
     block = summarize_cell(cell)
     state = block["state"]
-    assert state["ineligible"]["count"] == 4 and state["pre_change_drift"]["count"] == 14
+    assert state["ineligible"]["count"] == 3 and state["pre_change_drift"]["count"] == 9
     assert state["pre_change_first_rule"] == {
-        "e-process alarm for normalized_match": 4,
-        "pooled test rejected for normalized_match": 10,
+        "e-process alarm for normalized_match": 3,
+        "pooled test rejected for normalized_match": 6,
     }
-    assert state["first_drift_rule"] == {"pooled test rejected for refusal": 96}
+    assert state["first_drift_rule"] == {"pooled test rejected for refusal": 57}
     assert state["drift"]["median"] == 3 and state["drift"]["within"]["2"]["count"] == 0
-    assert block["e_before_change"]["normalized_match"]["n"] == 100
+    assert block["e_before_change"]["normalized_match"]["n"] == 60
     pooled = block["detectors"]["refusal"]["pooled"]
-    assert pooled["pre_change"]["count"] == 0 and pooled["all_chains"]["total"] == 100
+    assert pooled["pre_change"]["count"] == 0 and pooled["all_chains"]["total"] == 60
     warning = block["detectors"]["normalized_match"]["eprocess_warning"]
-    assert warning["pre_change"]["count"] == 4
+    assert warning["pre_change"]["count"] == 3
     assert shared_window_check([cell])["p24-n10"]["chains_compared"] == 0
 
 
@@ -592,7 +593,7 @@ def test_h_c2_table_marks_absent_quiet_lengths(synthetic_run: Path) -> None:
     altered = [dict(summary) for summary in summaries]
     for summary in altered:
         if summary["cell"] == "C3-p24-n10-match-l300-q00":
-            summary["replications"] = 49
+            summary["replications"] = 29
     assert h_c2(altered)["computed"] is False
     assert "different replication counts" in h_c2(altered)["reason"]
 
@@ -620,5 +621,5 @@ def test_s_c5_skips_excluded_chains_and_counts_pre_change_alarms(synthetic_run: 
     assert result["default_check"]["mismatch_count"] == 1
     row = next(r for r in result["cusum"]["grid"] if r["params"] == [0.1, 0.4])
     match = row["delay_level_0.2"]["match"]
-    assert match["pre_change"] == 1 and match["alarms"] == 98
-    assert match["alarms"] + match["misses"] + match["pre_change"] == 99
+    assert match["pre_change"] == 1 and match["alarms"] == 58
+    assert match["alarms"] + match["misses"] + match["pre_change"] == 59
