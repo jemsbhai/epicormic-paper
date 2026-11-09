@@ -1,0 +1,111 @@
+{
+  "analysis_seed": 0,
+  "cells": {
+    "A1-p08-n05": {
+      "first_salt": 0,
+      "last_salt": 201000,
+      "replications": 3,
+      "seeds_per_window": 5,
+      "windows_per_replication": 2
+    },
+    "A1-p08-n10": {
+      "first_salt": 0,
+      "last_salt": 201000,
+      "replications": 3,
+      "seeds_per_window": 10,
+      "windows_per_replication": 2
+    },
+    "A1-p08-n20": {
+      "first_salt": 0,
+      "last_salt": 201000,
+      "replications": 3,
+      "seeds_per_window": 20,
+      "windows_per_replication": 2
+    },
+    "A1-p08-n40": {
+      "first_salt": 0,
+      "last_salt": 201000,
+      "replications": 3,
+      "seeds_per_window": 40,
+      "windows_per_replication": 2
+    },
+    "A1-p24-n05": {
+      "first_salt": 0,
+      "last_salt": 201000,
+      "replications": 3,
+      "seeds_per_window": 5,
+      "windows_per_replication": 2
+    },
+    "A1-p24-n10": {
+      "first_salt": 0,
+      "last_salt": 201000,
+      "replications": 3,
+      "seeds_per_window": 10,
+      "windows_per_replication": 2
+    },
+    "A1-p24-n20": {
+      "first_salt": 0,
+      "last_salt": 201000,
+      "replications": 3,
+      "seeds_per_window": 20,
+      "windows_per_replication": 2
+    },
+    "A1-p24-n40": {
+      "first_salt": 0,
+      "last_salt": 201000,
+      "replications": 3,
+      "seeds_per_window": 40,
+      "windows_per_replication": 2
+    },
+    "A1-p64-n05": {
+      "first_salt": 0,
+      "last_salt": 201000,
+      "replications": 3,
+      "seeds_per_window": 5,
+      "windows_per_replication": 2
+    },
+    "A1-p64-n10": {
+      "first_salt": 0,
+      "last_salt": 201000,
+      "replications": 3,
+      "seeds_per_window": 10,
+      "windows_per_replication": 2
+    },
+    "A1-p64-n20": {
+      "first_salt": 0,
+      "last_salt": 201000,
+      "replications": 3,
+      "seeds_per_window": 20,
+      "windows_per_replication": 2
+    },
+    "A1-p64-n40": {
+      "first_salt": 0,
+      "last_salt": 201000,
+      "replications": 3,
+      "seeds_per_window": 40,
+      "windows_per_replication": 2
+    },
+    "A2-p24-n10": {
+      "first_salt": 0,
+      "last_salt": 128000,
+      "replications": 2,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "A3-p24-n03": {
+      "first_salt": 0,
+      "last_salt": 101000,
+      "replications": 2,
+      "seeds_per_window": 3,
+      "windows_per_replication": 2
+    }
+  },
+  "panel_seed_base": 0,
+  "provider_seed": 20261028,
+  "window_salt": {
+    "formula": "request_seed + REPLICATION_STRIDE * replication + WINDOW_STRIDE * window_index",
+    "replication_stride": 100000,
+    "window_index_0": "baseline window",
+    "window_stride": 1000
+  }
+}
