@@ -1,0 +1,10 @@
+# Byte-stable checkouts on every platform. data/checksums.sha256 pins the
+# bytes of the panel files and tests/test_panels.py verifies them, so text
+# files are LF everywhere (Git for Windows defaults to CRLF on checkout) and
+# binary files are left untouched.
+* text=auto eol=lf
+*.gz binary
+*.zip binary
+*.sqlite binary
+*.png binary
+*.pdf binary
