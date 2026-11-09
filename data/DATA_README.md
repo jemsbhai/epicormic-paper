@@ -75,7 +75,11 @@ switch on the current cheap tiers. Anthropic's Messages API reference marks
 `temperature` deprecated and states that models released after Claude Opus
 4.6 (February 5, 2026) reject any value other than 1.0 with a 400 error,
 and the Claude Haiku 5.5 migration guide says to omit `temperature`,
-`top_p` and `top_k`; Claude Haiku 4.5 (October 15, 2025) still accepts it.
+`top_p` and `top_k`; by the documented rule Claude Haiku 4.5 (October 15,
+2025) still accepts it, but a probe on 2026-11-09 through anthropic 2.6.0
+got a 400 ("temperature: Extra inputs are not permitted", a server
+request id attached) for `claude-haiku-4-5-20251001` as well, so with the
+current SDK the parameter is rejected on both ends of the Anthropic pair.
 On the OpenAI side, a probe on 2026-11-09 found that
 `gpt-5-nano-2025-08-07` rejects `temperature` ("Unsupported parameter")
 while `gpt-5.4-nano-2026-03-17` accepts it. A switch whose two snapshots
