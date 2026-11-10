@@ -1,0 +1,263 @@
+{
+  "allow_dirty": false,
+  "arm": "mock",
+  "cells": [
+    {
+      "cell": "A1-p08-n05",
+      "store": "stores/A1-p08-n05.sqlite",
+      "summary": "cells/A1-p08-n05.json",
+      "timing": {
+        "observations": 240,
+        "seconds_analyze": 0.5625486979261041,
+        "seconds_observe": 0.29507114575244486,
+        "seconds_per_observation": 0.0012294631073018537,
+        "seconds_per_verdict": 0.18751623264203468,
+        "seconds_recompute": 0.5419857061933726,
+        "seconds_total": 1.452957273926586,
+        "verdicts": 3
+      }
+    },
+    {
+      "cell": "A1-p08-n10",
+      "store": "stores/A1-p08-n10.sqlite",
+      "summary": "cells/A1-p08-n10.json",
+      "timing": {
+        "observations": 480,
+        "seconds_analyze": 0.9999155190307647,
+        "seconds_observe": 0.43992994353175163,
+        "seconds_per_observation": 0.0009165207156911492,
+        "seconds_per_verdict": 0.3333051730102549,
+        "seconds_recompute": 1.031193499919027,
+        "seconds_total": 2.5403864348772913,
+        "verdicts": 3
+      }
+    },
+    {
+      "cell": "A1-p08-n20",
+      "store": "stores/A1-p08-n20.sqlite",
+      "summary": "cells/A1-p08-n20.json",
+      "timing": {
+        "observations": 960,
+        "seconds_analyze": 1.7648234218358994,
+        "seconds_observe": 0.8782090586610138,
+        "seconds_per_observation": 0.0009148011027718894,
+        "seconds_per_verdict": 0.5882744739452997,
+        "seconds_recompute": 1.7731686579063535,
+        "seconds_total": 4.500483612995595,
+        "verdicts": 3
+      }
+    },
+    {
+      "cell": "A1-p08-n40",
+      "store": "stores/A1-p08-n40.sqlite",
+      "summary": "cells/A1-p08-n40.json",
+      "timing": {
+        "observations": 1920,
+        "seconds_analyze": 3.378436541184783,
+        "seconds_observe": 1.5798107930459082,
+        "seconds_per_observation": 0.0008228181213780772,
+        "seconds_per_verdict": 1.126145513728261,
+        "seconds_recompute": 3.3331535721663386,
+        "seconds_total": 8.361139881890267,
+        "verdicts": 3
+      }
+    },
+    {
+      "cell": "A1-p24-n05",
+      "store": "stores/A1-p24-n05.sqlite",
+      "summary": "cells/A1-p24-n05.json",
+      "timing": {
+        "observations": 720,
+        "seconds_analyze": 1.6324765929020941,
+        "seconds_observe": 0.7695899696554989,
+        "seconds_per_observation": 0.0010688749578548595,
+        "seconds_per_verdict": 0.544158864300698,
+        "seconds_recompute": 1.5826837602071464,
+        "seconds_total": 4.057906434871256,
+        "verdicts": 3
+      }
+    },
+    {
+      "cell": "A1-p24-n10",
+      "store": "stores/A1-p24-n10.sqlite",
+      "summary": "cells/A1-p24-n10.json",
+      "timing": {
+        "observations": 1440,
+        "seconds_analyze": 2.8759406940080225,
+        "seconds_observe": 1.2554011447355151,
+        "seconds_per_observation": 0.0008718063505107744,
+        "seconds_per_verdict": 0.9586468980026742,
+        "seconds_recompute": 2.8406349897850305,
+        "seconds_total": 7.040404005907476,
+        "verdicts": 3
+      }
+    },
+    {
+      "cell": "A1-p24-n20",
+      "store": "stores/A1-p24-n20.sqlite",
+      "summary": "cells/A1-p24-n20.json",
+      "timing": {
+        "observations": 2880,
+        "seconds_analyze": 5.166721164016053,
+        "seconds_observe": 2.427636134903878,
+        "seconds_per_observation": 0.000842929213508291,
+        "seconds_per_verdict": 1.722240388005351,
+        "seconds_recompute": 5.104441721225157,
+        "seconds_total": 12.765116062946618,
+        "verdicts": 3
+      }
+    },
+    {
+      "cell": "A1-p24-n40",
+      "store": "stores/A1-p24-n40.sqlite",
+      "summary": "cells/A1-p24-n40.json",
+      "timing": {
+        "observations": 5760,
+        "seconds_analyze": 9.736394208855927,
+        "seconds_observe": 4.594396690372378,
+        "seconds_per_observation": 0.00079763831430076,
+        "seconds_per_verdict": 3.245464736285309,
+        "seconds_recompute": 9.591260297922418,
+        "seconds_total": 23.993995463009924,
+        "verdicts": 3
+      }
+    },
+    {
+      "cell": "A1-p64-n05",
+      "store": "stores/A1-p64-n05.sqlite",
+      "summary": "cells/A1-p64-n05.json",
+      "timing": {
+        "observations": 1920,
+        "seconds_analyze": 4.179607834899798,
+        "seconds_observe": 1.6872249045409262,
+        "seconds_per_observation": 0.0008787629711150657,
+        "seconds_per_verdict": 1.393202611633266,
+        "seconds_recompute": 4.080688601126894,
+        "seconds_total": 10.010128665016964,
+        "verdicts": 3
+      }
+    },
+    {
+      "cell": "A1-p64-n10",
+      "store": "stores/A1-p64-n10.sqlite",
+      "summary": "cells/A1-p64-n10.json",
+      "timing": {
+        "observations": 3840,
+        "seconds_analyze": 7.328219281043857,
+        "seconds_observe": 3.2367575922980905,
+        "seconds_per_observation": 0.0008429056229942944,
+        "seconds_per_verdict": 2.4427397603479526,
+        "seconds_recompute": 7.184784950921312,
+        "seconds_total": 17.816755692940205,
+        "verdicts": 3
+      }
+    },
+    {
+      "cell": "A1-p64-n20",
+      "store": "stores/A1-p64-n20.sqlite",
+      "summary": "cells/A1-p64-n20.json",
+      "timing": {
+        "observations": 7680,
+        "seconds_analyze": 13.462149132974446,
+        "seconds_observe": 6.200844070874155,
+        "seconds_per_observation": 0.0008074015717284055,
+        "seconds_per_verdict": 4.487383044324815,
+        "seconds_recompute": 13.10108070471324,
+        "seconds_total": 32.83561315201223,
+        "verdicts": 3
+      }
+    },
+    {
+      "cell": "A1-p64-n40",
+      "store": "stores/A1-p64-n40.sqlite",
+      "summary": "cells/A1-p64-n40.json",
+      "timing": {
+        "observations": 15360,
+        "seconds_analyze": 25.260415247874334,
+        "seconds_observe": 12.054785379674286,
+        "seconds_per_observation": 0.0007848167564892113,
+        "seconds_per_verdict": 8.420138415958112,
+        "seconds_recompute": 25.289627282181755,
+        "seconds_total": 62.70437648892403,
+        "verdicts": 3
+      }
+    },
+    {
+      "cell": "A2-p24-n10",
+      "store": "stores/A2-p24-n10.sqlite",
+      "summary": "cells/A2-p24-n10.json",
+      "timing": {
+        "observations": 13920,
+        "seconds_analyze": 74.49146464862861,
+        "seconds_observe": 11.981573916040361,
+        "seconds_per_observation": 0.0008607452525891064,
+        "seconds_per_verdict": 1.330204725868368,
+        "seconds_recompute": 71.45688968105242,
+        "seconds_total": 157.9967860111501,
+        "verdicts": 56
+      }
+    },
+    {
+      "cell": "A3-p24-n03",
+      "store": "stores/A3-p24-n03.sqlite",
+      "summary": "cells/A3-p24-n03.json",
+      "timing": {
+        "observations": 288,
+        "seconds_analyze": 0.09141943301074207,
+        "seconds_observe": 0.367316224379465,
+        "seconds_per_observation": 0.0012754035568731423,
+        "seconds_per_verdict": 0.045709716505371034,
+        "seconds_recompute": 0.06316962791606784,
+        "seconds_total": 0.5828397409059107,
+        "verdicts": 2
+      }
+    }
+  ],
+  "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+  "epicormic_lab": "0.0.1",
+  "experiment": "EXP-A",
+  "finished": "2026-11-08T22:36:16.364789+00:00",
+  "format": "epicormic-lab/manifest/v1",
+  "front_end": "script",
+  "git": {
+    "commit": "b3e175ef659f0fe847950ebb9269c925c0f344ef",
+    "dirty": false
+  },
+  "only_cells": [],
+  "panels": {
+    "data/panels/canary-24-v1.json": "8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75",
+    "data/panels/mock-08-v1.json": "fe9b9078262c469e0f936a21876309ed38a34d5c7f6466c08db5e32660a2c43c",
+    "data/panels/mock-64-v1.json": "c9a567a90e381c57dd0502fa132c11af396d9ccf8ffb0ca696af8905da9946ab"
+  },
+  "pins": {
+    "epicormic": "0.2.0",
+    "pollard": "1.6.0"
+  },
+  "profile": "smoke",
+  "protocol": {
+    "digest": "5934acb50e9d4f9403bb64cd038cf492bcd167d7464eef8a1fdd24da2e555de4",
+    "path": "experiments/exp_a_calibration/protocol.2026-10-28-r2.json",
+    "version": "2026-10-28-r2"
+  },
+  "resume": false,
+  "run_id": "exp-a-smoke-001",
+  "started": "2026-11-08T22:33:38.219372+00:00",
+  "status": "completed",
+  "store_digests": {
+    "A1-p08-n05": "866e3b703bd313290c8b0777544b401b0124e54d3af4a8ee5dd5d8e91c5cabe6",
+    "A1-p08-n10": "872218767f5d7ac22b6ea4d11461d6b6a053a4076ff80fdec13ef0201989f740",
+    "A1-p08-n20": "cf50fd701036818385dfbcf13beb47f383ef5ceb9409ce7bed56f2c8f0f269c0",
+    "A1-p08-n40": "06d1bca3fd9681f7d4dff745d2269d546716b464bb8729881c0e1ec7e528af5c",
+    "A1-p24-n05": "0cff5813df05e7ba43789f94a03920dfef6e3f446aab74c1d0122b6426eff687",
+    "A1-p24-n10": "733e7552ec456e703281a1c63a40da8c7510c9e379e74b06058bc0c98989e9d1",
+    "A1-p24-n20": "a1f343b69ea39fea037b7599ff37ba2b36c2bb45b570c8f062cd80eae7fc47c4",
+    "A1-p24-n40": "8027606f98229051f4f7dbe742e0ab417c9d5ea05487af97103b0b931ada6b7e",
+    "A1-p64-n05": "41d12e7348cddd04425bdd6b13fb5d08b342cfce33f652add14cc5f721a94969",
+    "A1-p64-n10": "4e8db745ee899098cd1ed88fbbf4177bed52ca4474b123669b72455790962fc2",
+    "A1-p64-n20": "11bb1f46ccd74625a5b81bc82e0ed5ed78ab1b6ebad885591da542491fcea9f7",
+    "A1-p64-n40": "87335221881bc3be1d4f087c035a48e82b679b7b79cbb992969fe089eab60dbe",
+    "A2-p24-n10": "ecb476f8b3de4b7d0eddc36fd36657823432bccd7d3f9fb80dd2192fbea825f3",
+    "A3-p24-n03": "e56f4af4754b7bdb0f2255b27b2445ec4cb9bc10b4964baced5e8c3bad8db683"
+  },
+  "workers": 16
+}

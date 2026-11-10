@@ -433,3 +433,30 @@ runner code is unchanged since `d009c53`, so the same merge commit carries
 the `exp-c-frozen` tag of section 10, and the full run starts from a clean
 tree at that commit with `--profile full`, a new run id and the r4 digest,
 only when Muntaser says so.
+
+## 2026-11-08 EXP-A smoke run exp-a-smoke-001 completed
+
+Researcher: Michael Friedberg. Type: computational. Status: completed;
+smoke profile of the mock arm, an instrumentation check and not evidence.
+
+Run: `exp-a-smoke-001` at commit `b3e175e` (main, clean tree), protocol
+version 2026-10-28-r2 (digest `5934acb5...5de4`), epicormic 0.2.0 and
+pollard 1.6.0, started 2026-11-08T22:33Z and finished 22:36Z. The commit
+is later than the tag `exp-a-prereg-r2` (`4773b26`); between the two, the
+only change to the EXP-A runner is the protocol software check added to
+`run_experiment`, and the other changes add EXP-C and extend the
+environment snapshot. Machine: AMD Ryzen 9 5950X, 16 cores and 32
+threads, 60 GB RAM, Ubuntu 26.04.1, Python 3.14.4, `--workers 16`.
+
+Result: all 14 cells completed (12 A1 cells at three replications, A2 and
+A3), 57,408 observations and 94 verdicts, each verdict recomputed once,
+in 2 min 38 s wall-clock. The longest cell is A2-p24-n10 at 158.0 s for
+13,920 observations and 56 verdicts. The analysis wrote
+`analysis/generated/exp_a_exp-a-smoke-001.json`: pooled A1 drift 0 of 36
+(95 percent upper bound 0.097), no A1 cell falsified after Holm,
+and every A3 verdict `unknown`. The 14 timing lines are posted in the
+`EXP-A and the control` issue.
+
+Stores: 14 SQLite stores, 82 MB, with SHA-256 digests recorded by the
+runner in `store_digests`; kept outside git, and the zip with its digest
+goes to Muntaser separately.

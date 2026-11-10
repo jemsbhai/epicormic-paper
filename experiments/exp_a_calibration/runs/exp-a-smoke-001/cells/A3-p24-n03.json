@@ -1,0 +1,463 @@
+{
+ "alpha": 0.05,
+ "baseline_windows": 1,
+ "cell": "A3-p24-n03",
+ "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+ "current_windows": 1,
+ "experiment": "EXP-A",
+ "format": "epicormic-lab/cell-summary/v1",
+ "panel_digest": "8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75",
+ "panel_size": 24,
+ "part": "A3",
+ "profile": "smoke",
+ "protocol_digest": "5934acb50e9d4f9403bb64cd038cf492bcd167d7464eef8a1fdd24da2e555de4",
+ "replications": 2,
+ "replications_detail": [
+  {
+   "monitor_id": "A3-r000",
+   "replication": 0,
+   "salts": [
+    0,
+    1000
+   ],
+   "verdicts": [
+    {
+     "node_id": "a6bf86ae0775dfc98c52250bd709211dbb9ff23dff3fa892ff84fe57f2af2cdb",
+     "pooled": {
+      "exact_match": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      },
+      "normalized_match": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      },
+      "output_chars": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      },
+      "output_tokens": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      },
+      "refusal": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      },
+      "tool_call_set_jaccard": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      },
+      "truncated": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      }
+     },
+     "rule_fired": "too many probes below n_min",
+     "sample_counts": {
+      "baseline": 72,
+      "current": 72,
+      "current_refused": 0,
+      "probes_below_n_min": [
+       "arith-01",
+       "arith-02",
+       "arith-03",
+       "arith-04",
+       "code-01",
+       "code-02",
+       "code-03",
+       "code-04",
+       "json-01",
+       "json-02",
+       "json-03",
+       "json-04",
+       "instr-01",
+       "instr-02",
+       "instr-03",
+       "instr-04",
+       "fact-01",
+       "fact-02",
+       "fact-03",
+       "fact-04",
+       "bound-01",
+       "bound-02",
+       "bound-03",
+       "bound-04"
+      ]
+     },
+     "sequence_index": 1,
+     "sequential": {
+      "exact_match": {
+       "baseline_observations": 72,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": 0.072584,
+       "e_alarm": false,
+       "e_alarm_index": null,
+       "e_lower": 0.8511,
+       "e_max": 1.03584,
+       "e_threshold": 40.0,
+       "e_upper": 0.987592,
+       "mu0": 0.944444,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      },
+      "normalized_match": {
+       "baseline_observations": 72,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": 0.072584,
+       "e_alarm": false,
+       "e_alarm_index": null,
+       "e_lower": 0.8511,
+       "e_max": 1.03584,
+       "e_threshold": 40.0,
+       "e_upper": 0.987592,
+       "mu0": 0.944444,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      },
+      "output_chars": {
+       "baseline_observations": 72,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": 0.550746,
+       "e_alarm": false,
+       "e_alarm_index": null,
+       "e_lower": 0.33437,
+       "e_max": 1.0,
+       "e_threshold": 40.0,
+       "e_upper": 1.0,
+       "mu0": 1.0,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      },
+      "output_tokens": {
+       "baseline_observations": 72,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": 0.550746,
+       "e_alarm": false,
+       "e_alarm_index": null,
+       "e_lower": 0.33437,
+       "e_max": 1.0,
+       "e_threshold": 40.0,
+       "e_upper": 1.0,
+       "mu0": 1.0,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      },
+      "refusal": {
+       "baseline_observations": 72,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": 0.500063,
+       "e_alarm": false,
+       "e_alarm_index": null,
+       "e_lower": 0.0,
+       "e_max": 1.0,
+       "e_threshold": 40.0,
+       "e_upper": 0.0590464,
+       "mu0": 0.0,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      },
+      "tool_call_set_jaccard": {
+       "baseline_observations": null,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": null,
+       "e_alarm": null,
+       "e_alarm_index": null,
+       "e_lower": null,
+       "e_max": null,
+       "e_threshold": null,
+       "e_upper": null,
+       "mu0": null,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      },
+      "truncated": {
+       "baseline_observations": 72,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": 0.500063,
+       "e_alarm": false,
+       "e_alarm_index": null,
+       "e_lower": 0.0,
+       "e_max": 1.0,
+       "e_threshold": 40.0,
+       "e_upper": 0.0590464,
+       "mu0": 0.0,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      }
+     },
+     "state": "unknown",
+     "window_id": "A3-r000-w01",
+     "window_index": 1
+    }
+   ],
+   "window_ids": [
+    "A3-r000-w00",
+    "A3-r000-w01"
+   ]
+  },
+  {
+   "monitor_id": "A3-r001",
+   "replication": 1,
+   "salts": [
+    100000,
+    101000
+   ],
+   "verdicts": [
+    {
+     "node_id": "d0bcf09de6680bcb6648eb67c3ae0b144d40bd95de95f45f64d9d7be2dbebec1",
+     "pooled": {
+      "exact_match": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      },
+      "normalized_match": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      },
+      "output_chars": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      },
+      "output_tokens": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      },
+      "refusal": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      },
+      "tool_call_set_jaccard": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      },
+      "truncated": {
+       "T": null,
+       "p": null,
+       "p_holm": null,
+       "probes": 0,
+       "rejected": false
+      }
+     },
+     "rule_fired": "too many probes below n_min",
+     "sample_counts": {
+      "baseline": 72,
+      "current": 72,
+      "current_refused": 0,
+      "probes_below_n_min": [
+       "arith-01",
+       "arith-02",
+       "arith-03",
+       "arith-04",
+       "code-01",
+       "code-02",
+       "code-03",
+       "code-04",
+       "json-01",
+       "json-02",
+       "json-03",
+       "json-04",
+       "instr-01",
+       "instr-02",
+       "instr-03",
+       "instr-04",
+       "fact-01",
+       "fact-02",
+       "fact-03",
+       "fact-04",
+       "bound-01",
+       "bound-02",
+       "bound-03",
+       "bound-04"
+      ]
+     },
+     "sequence_index": 1,
+     "sequential": {
+      "exact_match": {
+       "baseline_observations": 72,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": 0.0576354,
+       "e_alarm": false,
+       "e_alarm_index": null,
+       "e_lower": 0.761122,
+       "e_max": 1.0,
+       "e_threshold": 40.0,
+       "e_upper": 0.947797,
+       "mu0": 0.875,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      },
+      "normalized_match": {
+       "baseline_observations": 72,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": 0.0576354,
+       "e_alarm": false,
+       "e_alarm_index": null,
+       "e_lower": 0.761122,
+       "e_max": 1.0,
+       "e_threshold": 40.0,
+       "e_upper": 0.947797,
+       "mu0": 0.875,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      },
+      "output_chars": {
+       "baseline_observations": 72,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": 0.222358,
+       "e_alarm": false,
+       "e_alarm_index": null,
+       "e_lower": 0.470118,
+       "e_max": 1.0,
+       "e_threshold": 40.0,
+       "e_upper": 0.998603,
+       "mu0": 0.888889,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      },
+      "output_tokens": {
+       "baseline_observations": 72,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": 0.219479,
+       "e_alarm": false,
+       "e_alarm_index": null,
+       "e_lower": 0.42455,
+       "e_max": 1.0,
+       "e_threshold": 40.0,
+       "e_upper": 0.998429,
+       "mu0": 0.875,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      },
+      "refusal": {
+       "baseline_observations": 72,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": 0.500063,
+       "e_alarm": false,
+       "e_alarm_index": null,
+       "e_lower": 0.0,
+       "e_max": 1.0,
+       "e_threshold": 40.0,
+       "e_upper": 0.0590464,
+       "mu0": 0.0,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      },
+      "tool_call_set_jaccard": {
+       "baseline_observations": null,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": null,
+       "e_alarm": null,
+       "e_alarm_index": null,
+       "e_lower": null,
+       "e_max": null,
+       "e_threshold": null,
+       "e_upper": null,
+       "mu0": null,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      },
+      "truncated": {
+       "baseline_observations": 72,
+       "cusum_alarm": false,
+       "cusum_max": 0.0,
+       "e": 0.500063,
+       "e_alarm": false,
+       "e_alarm_index": null,
+       "e_lower": 0.0,
+       "e_max": 1.0,
+       "e_threshold": 40.0,
+       "e_upper": 0.0590464,
+       "mu0": 0.0,
+       "ph_alarm": false,
+       "ph_excursion": 0.0
+      }
+     },
+     "state": "unknown",
+     "window_id": "A3-r001-w01",
+     "window_index": 1
+    }
+   ],
+   "window_ids": [
+    "A3-r001-w00",
+    "A3-r001-w01"
+   ]
+  }
+ ],
+ "run_id": "exp-a-smoke-001",
+ "samples": 3,
+ "scorers": [
+  "normalized_match",
+  "exact_match",
+  "tool_call_set_jaccard",
+  "refusal",
+  "truncated",
+  "output_chars",
+  "output_tokens"
+ ],
+ "store": "stores/A3-p24-n03.sqlite",
+ "store_sha256": "e56f4af4754b7bdb0f2255b27b2445ec4cb9bc10b4964baced5e8c3bad8db683",
+ "store_sidecars": [],
+ "timing": {
+  "observations": 288,
+  "seconds_analyze": 0.09141943301074207,
+  "seconds_observe": 0.367316224379465,
+  "seconds_per_observation": 0.0012754035568731423,
+  "seconds_per_verdict": 0.045709716505371034,
+  "seconds_recompute": 0.06316962791606784,
+  "seconds_total": 0.5828397409059107,
+  "verdicts": 2
+ }
+}

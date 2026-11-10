@@ -1,0 +1,185 @@
+{
+  "format": "epicormic-lab/protocol/v1",
+  "experiment": "EXP-A",
+  "title": "Calibration of the epicormic 0.1.0 verdict under the null of no provider change",
+  "version": "2026-10-28-r2",
+  "arm": "mock",
+  "software": {
+    "epicormic": "0.2.0",
+    "pollard": "1.6.0"
+  },
+  "panels": {
+    "8": {
+      "path": "data/panels/mock-08-v1.json",
+      "digest": "fe9b9078262c469e0f936a21876309ed38a34d5c7f6466c08db5e32660a2c43c"
+    },
+    "24": {
+      "path": "data/panels/canary-24-v1.json",
+      "digest": "8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75"
+    },
+    "64": {
+      "path": "data/panels/mock-64-v1.json",
+      "digest": "c9a567a90e381c57dd0502fa132c11af396d9ccf8ffb0ca696af8905da9946ab"
+    }
+  },
+  "provider": {
+    "kind": "epicormic.mock.MockProvider",
+    "seed": 20261028,
+    "match_rate": "0.9",
+    "drift": null,
+    "window_salt": "request['seed'] + 100000 * replication + 1000 * window_index, applied inside the step callable; window_index 0 is the baseline window, 1..K are the current windows"
+  },
+  "analysis": {
+    "format": "epicormic/config/v1",
+    "scorers": [
+      "normalized_match",
+      "exact_match",
+      "tool_call_set_jaccard",
+      "refusal",
+      "truncated",
+      "output_chars",
+      "output_tokens"
+    ],
+    "alpha": "0.05",
+    "q": "0.05",
+    "permutations": 2000,
+    "seed": 0,
+    "n_min": 5,
+    "effect_min": "0.2",
+    "unknown_fraction": "0.5",
+    "top_k": 50,
+    "sequential": {
+      "cusum": {
+        "k": "0.1",
+        "h": "0.4"
+      },
+      "page_hinkley": {
+        "delta": "0.05",
+        "lambda": "0.5"
+      },
+      "eprocess": {
+        "alpha": "0.05",
+        "grid": [
+          "0.1",
+          "0.25",
+          "0.5",
+          "0.75"
+        ]
+      }
+    }
+  },
+  "parts": {
+    "A1": {
+      "question": "false alarm rate of the window verdict, one baseline window against one current window",
+      "panel_sizes": [
+        8,
+        24,
+        64
+      ],
+      "samples_per_probe": [
+        5,
+        10,
+        20,
+        40
+      ],
+      "baseline_windows": 1,
+      "current_windows": 1,
+      "replications": {
+        "smoke": 3,
+        "full": 200
+      }
+    },
+    "A2": {
+      "question": "false alarm rate of the sequential detectors over an EXP-D length horizon",
+      "panel_sizes": [
+        24
+      ],
+      "samples_per_probe": [
+        10
+      ],
+      "baseline_windows": 1,
+      "current_windows": 28,
+      "replications": {
+        "smoke": 2,
+        "full": 200
+      }
+    },
+    "A3": {
+      "question": "the unknown rule fires when every probe is below n_min",
+      "panel_sizes": [
+        24
+      ],
+      "samples_per_probe": [
+        3
+      ],
+      "baseline_windows": 1,
+      "current_windows": 1,
+      "replications": {
+        "smoke": 2,
+        "full": 20
+      }
+    }
+  },
+  "run": {
+    "store": "one SQLite pollard store per cell under runs/<run_id>/stores/<part>-p<panel>-n<N>.sqlite; one window per replication and window index, window_id '<part>-r<replication>-w<window_index>'",
+    "monitor": "one monitor per replication, monitor_id '<part>-r<replication>', baseline window index 0, current windows analysed in index order",
+    "recompute": "every verdict is recomputed with analyze over the stored observations before the summary is written; a mismatch fails the run",
+    "cell_order": "A3, A1 in increasing panel size then increasing N, A2; cells are independent and may run in parallel processes"
+  },
+  "outcomes": {
+    "primary": [
+      {
+        "id": "H-A1",
+        "statement": "The probability that a null window pair receives the state drift is at most alpha = 0.05 in every A1 cell",
+        "test": "per cell, the exact one-sided binomial p-value of the drift count of 200 against p0 = 0.05; Holm across the 12 A1 cells at family level 0.05; a cell whose Holm-adjusted p-value is at most 0.05 falsifies the claim for that cell (at the first Holm step this is 20 or more drift verdicts of 200)",
+        "report": "drift count, warning count, unknown count, rate with two-sided 95 percent Clopper-Pearson interval, raw and Holm-adjusted one-sided p-value, rule_fired breakdown, per cell; the unadjusted per-cell flag of 16 or more drift verdicts of 200 is reported as descriptive; the pooled rate over all 2400 A1 replications with its Clopper-Pearson interval"
+      },
+      {
+        "id": "H-A2",
+        "statement": "In the A2 cell the number of replications in which the e-process reaches its threshold (2/alpha = 40 at alpha 0.05) at any observation within 28 current windows is at most 15 of 200, for each scorer separately and for any scorer",
+        "test": "exact one-sided binomial test of p <= 0.05 at level 0.05 on the any-scorer count",
+        "report": "count and rate with Clopper-Pearson interval per scorer and overall; first alarm window distribution; the baseline sample count and the interval [lower, upper] behind the null"
+      }
+    ],
+    "secondary": [
+      {
+        "id": "S-A1",
+        "statement": "Raw pooled p-values are uniform under the null",
+        "report": "per scorer and cell, the empirical fraction of raw pooled p-values at or below 0.01, 0.05, 0.10, 0.50 with Clopper-Pearson intervals, and the Kolmogorov-Smirnov distance to the uniform distribution; discreteness at N 5 noted"
+      },
+      {
+        "id": "S-A2",
+        "statement": "CUSUM and Page-Hinkley false alarm rates at the default thresholds over 28 windows are reported, not tested",
+        "report": "per scorer, the fraction of replications with an alarm within 28 windows, the first alarm window distribution, and the state-level rate of any drift verdict within 28 windows with the rule_fired breakdown"
+      },
+      {
+        "id": "S-A3",
+        "statement": "Every A3 verdict has state unknown with rule 1 fired",
+        "report": "count of unknown verdicts of 20; any other state is a defect"
+      },
+      {
+        "id": "S-A4",
+        "statement": "Warning rate under the null",
+        "report": "fraction of A1 replications with state warning, with the per-probe BH path and the sequential half-threshold path separated"
+      }
+    ]
+  },
+  "falsification": {
+    "H-A1": "a Holm-adjusted one-sided p-value at or below 0.05 in any A1 cell: the pooled test is anti-conservative at that panel size and N; reported as a defect of epicormic 0.1.0 against the cell, and the paper restricts its calibration claim to the cells that pass",
+    "H-A2": "16 or more replications of 200 with an e-process alarm within 28 null windows: the interval null of D27 does not hold the stated bound at a baseline of 10 samples per probe; reported as the operating characteristic, the paper states the baseline size needed, and the anytime-valid claim is restricted accordingly",
+    "S-A3": "any A3 verdict that is not unknown is a defect in the state rules"
+  },
+  "artifacts": {
+    "manifest": "runs/<run_id>/manifest.json",
+    "environment": "runs/<run_id>/environment.json",
+    "seeds": "runs/<run_id>/seed.json",
+    "frozen_protocol": "runs/<run_id>/protocol.frozen.json",
+    "per_cell_summary": "runs/<run_id>/cells/<part>-p<panel>-n<N>.json",
+    "summary": "analysis/generated/exp_a_<run_id>.json"
+  },
+  "supersedes": {
+    "version": "2026-10-28",
+    "digest": "dd7e4356a60b18a9b122a5def9617b761be313f9d7dfa97481e7601a0115210d",
+    "reason": "epicormic 0.2.0 replaces 0.1.0 before any registered run: the e-process null is the baseline's exact binomial interval (D27), the alarm threshold is 2/alpha, and the eprocess payload block gains lower, upper and interval_confidence; no other field of the protocol changes"
+  }
+}

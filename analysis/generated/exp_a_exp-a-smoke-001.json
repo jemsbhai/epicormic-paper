@@ -1,0 +1,2432 @@
+{
+ "a1_cells_falsified_after_holm": [],
+ "a1_pooled_drift": {
+  "ci95": [
+   0.0,
+   0.09739375591449193
+  ],
+  "count": 0,
+  "rate": 0.0,
+  "total": 36
+ },
+ "a3_all_unknown": true,
+ "cells": [
+  {
+   "alpha": 0.05,
+   "cell": "A1-p08-n05",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 1,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "falsified_after_holm": false,
+     "holm_p_across_a1": 1.0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "raw_p": 1.0,
+     "total": 3,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "no rule fired": 3
+    },
+    "states": {
+     "drift": 0,
+     "stable": 3,
+     "unknown": 0,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.6666666666666667,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.6666666666666667,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.5222386666666667,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.6666666666666667,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    }
+   },
+   "panel_digest": "fe9b9078262c469e0f936a21876309ed38a34d5c7f6466c08db5e32660a2c43c",
+   "panel_size": 8,
+   "part": "A1",
+   "replications": 3,
+   "samples": 5,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "866e3b703bd313290c8b0777544b401b0124e54d3af4a8ee5dd5d8e91c5cabe6",
+   "timing": {
+    "observations": 240,
+    "seconds_analyze": 0.5625486979261041,
+    "seconds_observe": 0.29507114575244486,
+    "seconds_per_observation": 0.0012294631073018537,
+    "seconds_per_verdict": 0.18751623264203468,
+    "seconds_recompute": 0.5419857061933726,
+    "seconds_total": 1.452957273926586,
+    "verdicts": 3
+   }
+  },
+  {
+   "alpha": 0.05,
+   "cell": "A1-p08-n10",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 1,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "falsified_after_holm": false,
+     "holm_p_across_a1": 1.0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "raw_p": 1.0,
+     "total": 3,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "no rule fired": 3
+    },
+    "states": {
+     "drift": 0,
+     "stable": 3,
+     "unknown": 0,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.33333333333333337,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.33333333333333337,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.198901,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.33333333333333337,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    }
+   },
+   "panel_digest": "fe9b9078262c469e0f936a21876309ed38a34d5c7f6466c08db5e32660a2c43c",
+   "panel_size": 8,
+   "part": "A1",
+   "replications": 3,
+   "samples": 10,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "872218767f5d7ac22b6ea4d11461d6b6a053a4076ff80fdec13ef0201989f740",
+   "timing": {
+    "observations": 480,
+    "seconds_analyze": 0.9999155190307647,
+    "seconds_observe": 0.43992994353175163,
+    "seconds_per_observation": 0.0009165207156911492,
+    "seconds_per_verdict": 0.3333051730102549,
+    "seconds_recompute": 1.031193499919027,
+    "seconds_total": 2.5403864348772913,
+    "verdicts": 3
+   }
+  },
+  {
+   "alpha": 0.05,
+   "cell": "A1-p08-n20",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 1,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "falsified_after_holm": false,
+     "holm_p_across_a1": 1.0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "raw_p": 1.0,
+     "total": 3,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "no rule fired": 3
+    },
+    "states": {
+     "drift": 0,
+     "stable": 3,
+     "unknown": 0,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.5157416666666668,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.5157416666666668,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.3803096666666667,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.5157416666666668,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    }
+   },
+   "panel_digest": "fe9b9078262c469e0f936a21876309ed38a34d5c7f6466c08db5e32660a2c43c",
+   "panel_size": 8,
+   "part": "A1",
+   "replications": 3,
+   "samples": 20,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "cf50fd701036818385dfbcf13beb47f383ef5ceb9409ce7bed56f2c8f0f269c0",
+   "timing": {
+    "observations": 960,
+    "seconds_analyze": 1.7648234218358994,
+    "seconds_observe": 0.8782090586610138,
+    "seconds_per_observation": 0.0009148011027718894,
+    "seconds_per_verdict": 0.5882744739452997,
+    "seconds_recompute": 1.7731686579063535,
+    "seconds_total": 4.500483612995595,
+    "verdicts": 3
+   }
+  },
+  {
+   "alpha": 0.05,
+   "cell": "A1-p08-n40",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 1,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "falsified_after_holm": false,
+     "holm_p_across_a1": 1.0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "raw_p": 1.0,
+     "total": 3,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "no rule fired": 3
+    },
+    "states": {
+     "drift": 0,
+     "stable": 3,
+     "unknown": 0,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 1.0
+      },
+      "ks_distance": 0.6706650000000001,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 1.0
+      },
+      "ks_distance": 0.6706650000000001,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 1.0
+      },
+      "ks_distance": 0.733133,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 1.0
+      },
+      "ks_distance": 0.6706650000000001,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    }
+   },
+   "panel_digest": "fe9b9078262c469e0f936a21876309ed38a34d5c7f6466c08db5e32660a2c43c",
+   "panel_size": 8,
+   "part": "A1",
+   "replications": 3,
+   "samples": 40,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "06d1bca3fd9681f7d4dff745d2269d546716b464bb8729881c0e1ec7e528af5c",
+   "timing": {
+    "observations": 1920,
+    "seconds_analyze": 3.378436541184783,
+    "seconds_observe": 1.5798107930459082,
+    "seconds_per_observation": 0.0008228181213780772,
+    "seconds_per_verdict": 1.126145513728261,
+    "seconds_recompute": 3.3331535721663386,
+    "seconds_total": 8.361139881890267,
+    "verdicts": 3
+   }
+  },
+  {
+   "alpha": 0.05,
+   "cell": "A1-p24-n05",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 1,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "falsified_after_holm": false,
+     "holm_p_across_a1": 1.0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "raw_p": 1.0,
+     "total": 3,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "no rule fired": 3
+    },
+    "states": {
+     "drift": 0,
+     "stable": 3,
+     "unknown": 0,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.37681166666666666,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.37681166666666666,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.3333333333333333,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.4237876666666666,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.37681166666666666,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    }
+   },
+   "panel_digest": "8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75",
+   "panel_size": 24,
+   "part": "A1",
+   "replications": 3,
+   "samples": 5,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "0cff5813df05e7ba43789f94a03920dfef6e3f446aab74c1d0122b6426eff687",
+   "timing": {
+    "observations": 720,
+    "seconds_analyze": 1.6324765929020941,
+    "seconds_observe": 0.7695899696554989,
+    "seconds_per_observation": 0.0010688749578548595,
+    "seconds_per_verdict": 0.544158864300698,
+    "seconds_recompute": 1.5826837602071464,
+    "seconds_total": 4.057906434871256,
+    "verdicts": 3
+   }
+  },
+  {
+   "alpha": 0.05,
+   "cell": "A1-p24-n10",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 1,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "falsified_after_holm": false,
+     "holm_p_across_a1": 1.0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "raw_p": 1.0,
+     "total": 3,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "no rule fired": 3
+    },
+    "states": {
+     "drift": 0,
+     "stable": 3,
+     "unknown": 0,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.33683166666666664,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.33683166666666664,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.3333333333333333,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.4172916666666666,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.33683166666666664,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    }
+   },
+   "panel_digest": "8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75",
+   "panel_size": 24,
+   "part": "A1",
+   "replications": 3,
+   "samples": 10,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "733e7552ec456e703281a1c63a40da8c7510c9e379e74b06058bc0c98989e9d1",
+   "timing": {
+    "observations": 1440,
+    "seconds_analyze": 2.8759406940080225,
+    "seconds_observe": 1.2554011447355151,
+    "seconds_per_observation": 0.0008718063505107744,
+    "seconds_per_verdict": 0.9586468980026742,
+    "seconds_recompute": 2.8406349897850305,
+    "seconds_total": 7.040404005907476,
+    "verdicts": 3
+   }
+  },
+  {
+   "alpha": 0.05,
+   "cell": "A1-p24-n20",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 1,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "falsified_after_holm": false,
+     "holm_p_across_a1": 1.0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "raw_p": 1.0,
+     "total": 3,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "no rule fired": 3
+    },
+    "states": {
+     "drift": 0,
+     "stable": 3,
+     "unknown": 0,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.48875599999999997,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.48875599999999997,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.3333333333333333,
+       "0.5": 1.0
+      },
+      "ks_distance": 0.525737,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.48875599999999997,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    }
+   },
+   "panel_digest": "8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75",
+   "panel_size": 24,
+   "part": "A1",
+   "replications": 3,
+   "samples": 20,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "a1f343b69ea39fea037b7599ff37ba2b36c2bb45b570c8f062cd80eae7fc47c4",
+   "timing": {
+    "observations": 2880,
+    "seconds_analyze": 5.166721164016053,
+    "seconds_observe": 2.427636134903878,
+    "seconds_per_observation": 0.000842929213508291,
+    "seconds_per_verdict": 1.722240388005351,
+    "seconds_recompute": 5.104441721225157,
+    "seconds_total": 12.765116062946618,
+    "verdicts": 3
+   }
+  },
+  {
+   "alpha": 0.05,
+   "cell": "A1-p24-n40",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 1,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "falsified_after_holm": false,
+     "holm_p_across_a1": 1.0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "raw_p": 1.0,
+     "total": 3,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "no rule fired": 3
+    },
+    "states": {
+     "drift": 0,
+     "stable": 3,
+     "unknown": 0,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.338331,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.338331,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.303348,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.338331,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    }
+   },
+   "panel_digest": "8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75",
+   "panel_size": 24,
+   "part": "A1",
+   "replications": 3,
+   "samples": 40,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "8027606f98229051f4f7dbe742e0ab417c9d5ea05487af97103b0b931ada6b7e",
+   "timing": {
+    "observations": 5760,
+    "seconds_analyze": 9.736394208855927,
+    "seconds_observe": 4.594396690372378,
+    "seconds_per_observation": 0.00079763831430076,
+    "seconds_per_verdict": 3.245464736285309,
+    "seconds_recompute": 9.591260297922418,
+    "seconds_total": 23.993995463009924,
+    "verdicts": 3
+   }
+  },
+  {
+   "alpha": 0.05,
+   "cell": "A1-p64-n05",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 1,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "falsified_after_holm": false,
+     "holm_p_across_a1": 1.0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "raw_p": 1.0,
+     "total": 3,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "no rule fired": 3
+    },
+    "states": {
+     "drift": 0,
+     "stable": 3,
+     "unknown": 0,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.5677156666666667,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.5677156666666667,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.5337326666666666,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.5677156666666667,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    }
+   },
+   "panel_digest": "c9a567a90e381c57dd0502fa132c11af396d9ccf8ffb0ca696af8905da9946ab",
+   "panel_size": 64,
+   "part": "A1",
+   "replications": 3,
+   "samples": 5,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "41d12e7348cddd04425bdd6b13fb5d08b342cfce33f652add14cc5f721a94969",
+   "timing": {
+    "observations": 1920,
+    "seconds_analyze": 4.179607834899798,
+    "seconds_observe": 1.6872249045409262,
+    "seconds_per_observation": 0.0008787629711150657,
+    "seconds_per_verdict": 1.393202611633266,
+    "seconds_recompute": 4.080688601126894,
+    "seconds_total": 10.010128665016964,
+    "verdicts": 3
+   }
+  },
+  {
+   "alpha": 0.05,
+   "cell": "A1-p64-n10",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 1,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "falsified_after_holm": false,
+     "holm_p_across_a1": 1.0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "raw_p": 1.0,
+     "total": 3,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "no rule fired": 3
+    },
+    "states": {
+     "drift": 0,
+     "stable": 3,
+     "unknown": 0,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.3333333333333333,
+       "0.1": 0.3333333333333333,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.33333333333333337,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.3333333333333333,
+       "0.1": 0.3333333333333333,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.33333333333333337,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.3333333333333333,
+       "0.1": 0.3333333333333333,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.3223383333333334,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.3333333333333333,
+       "0.1": 0.3333333333333333,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.33333333333333337,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    }
+   },
+   "panel_digest": "c9a567a90e381c57dd0502fa132c11af396d9ccf8ffb0ca696af8905da9946ab",
+   "panel_size": 64,
+   "part": "A1",
+   "replications": 3,
+   "samples": 10,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "4e8db745ee899098cd1ed88fbbf4177bed52ca4474b123669b72455790962fc2",
+   "timing": {
+    "observations": 3840,
+    "seconds_analyze": 7.328219281043857,
+    "seconds_observe": 3.2367575922980905,
+    "seconds_per_observation": 0.0008429056229942944,
+    "seconds_per_verdict": 2.4427397603479526,
+    "seconds_recompute": 7.184784950921312,
+    "seconds_total": 17.816755692940205,
+    "verdicts": 3
+   }
+  },
+  {
+   "alpha": 0.05,
+   "cell": "A1-p64-n20",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 1,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "falsified_after_holm": false,
+     "holm_p_across_a1": 1.0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "raw_p": 1.0,
+     "total": 3,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "no rule fired": 3
+    },
+    "states": {
+     "drift": 0,
+     "stable": 3,
+     "unknown": 0,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.34082999999999997,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.34082999999999997,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.40129899999999996,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.34082999999999997,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    }
+   },
+   "panel_digest": "c9a567a90e381c57dd0502fa132c11af396d9ccf8ffb0ca696af8905da9946ab",
+   "panel_size": 64,
+   "part": "A1",
+   "replications": 3,
+   "samples": 20,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "11bb1f46ccd74625a5b81bc82e0ed5ed78ab1b6ebad885591da542491fcea9f7",
+   "timing": {
+    "observations": 7680,
+    "seconds_analyze": 13.462149132974446,
+    "seconds_observe": 6.200844070874155,
+    "seconds_per_observation": 0.0008074015717284055,
+    "seconds_per_verdict": 4.487383044324815,
+    "seconds_recompute": 13.10108070471324,
+    "seconds_total": 32.83561315201223,
+    "verdicts": 3
+   }
+  },
+  {
+   "alpha": 0.05,
+   "cell": "A1-p64-n40",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 1,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "falsified_after_holm": false,
+     "holm_p_across_a1": 1.0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "raw_p": 1.0,
+     "total": 3,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "no rule fired": 3
+    },
+    "states": {
+     "drift": 0,
+     "stable": 3,
+     "unknown": 0,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.451774,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.451774,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.6666666666666666
+      },
+      "ks_distance": 0.42029,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.3333333333333333
+      },
+      "ks_distance": 0.451774,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 3,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.7075982261787133
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 3
+    }
+   },
+   "panel_digest": "c9a567a90e381c57dd0502fa132c11af396d9ccf8ffb0ca696af8905da9946ab",
+   "panel_size": 64,
+   "part": "A1",
+   "replications": 3,
+   "samples": 40,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "87335221881bc3be1d4f087c035a48e82b679b7b79cbb992969fe089eab60dbe",
+   "timing": {
+    "observations": 15360,
+    "seconds_analyze": 25.260415247874334,
+    "seconds_observe": 12.054785379674286,
+    "seconds_per_observation": 0.0007848167564892113,
+    "seconds_per_verdict": 8.420138415958112,
+    "seconds_recompute": 25.289627282181755,
+    "seconds_total": 62.70437648892403,
+    "verdicts": 3
+   }
+  },
+  {
+   "alpha": 0.05,
+   "cell": "A2-p24-n10",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 28,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.841886116991581
+     ],
+     "count": 0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "total": 2,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "no rule fired": 2
+    },
+    "states": {
+     "drift": 0,
+     "stable": 2,
+     "unknown": 0,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 1.0
+      },
+      "ks_distance": 0.670165,
+      "n": 2,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 1.0
+      },
+      "ks_distance": 0.670165,
+      "n": 2,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.5,
+       "0.5": 1.0
+      },
+      "ks_distance": 0.750625,
+      "n": 2,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 1.0
+      },
+      "ks_distance": 0.670165,
+      "n": 2,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 2,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 2,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": 0.0,
+       "0.05": 0.0,
+       "0.1": 0.0,
+       "0.5": 0.0
+      },
+      "ks_distance": 1.0,
+      "n": 2,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.0,
+      0.841886116991581
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 2
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.841886116991581
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 2
+    }
+   },
+   "horizon": {
+    "any_drift": {
+     "ci95": [
+      0.012579117093425064,
+      0.9874208829065749
+     ],
+     "count": 1,
+     "first_drift_window_counts": {
+      "2": 1
+     },
+     "first_rule_fired": {
+      "pooled test rejected for output_chars": 1
+     },
+     "rate": 0.5,
+     "total": 2
+    },
+    "cusum": {
+     "per_scorer": {
+      "exact_match": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "normalized_match": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "output_chars": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "output_tokens": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "refusal": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "tool_call_set_jaccard": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "truncated": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      }
+     },
+     "union": {
+      "ci95": [
+       0.0,
+       0.841886116991581
+      ],
+      "count": 0,
+      "first_alarm_window_counts": {},
+      "one_sided_p_vs_alpha": 1.0,
+      "rate": 0.0,
+      "total": 2
+     }
+    },
+    "eprocess": {
+     "per_scorer": {
+      "exact_match": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "normalized_match": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "output_chars": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "output_tokens": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "refusal": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "tool_call_set_jaccard": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "truncated": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      }
+     },
+     "union": {
+      "ci95": [
+       0.0,
+       0.841886116991581
+      ],
+      "count": 0,
+      "first_alarm_window_counts": {},
+      "one_sided_p_vs_alpha": 1.0,
+      "rate": 0.0,
+      "total": 2
+     }
+    },
+    "horizon_windows": 28,
+    "page_hinkley": {
+     "per_scorer": {
+      "exact_match": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "normalized_match": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "output_chars": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "output_tokens": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "refusal": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "tool_call_set_jaccard": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      },
+      "truncated": {
+       "ci95": [
+        0.0,
+        0.841886116991581
+       ],
+       "count": 0,
+       "first_alarm_window_counts": {},
+       "rate": 0.0,
+       "total": 2
+      }
+     },
+     "union": {
+      "ci95": [
+       0.0,
+       0.841886116991581
+      ],
+      "count": 0,
+      "first_alarm_window_counts": {},
+      "one_sided_p_vs_alpha": 1.0,
+      "rate": 0.0,
+      "total": 2
+     }
+    }
+   },
+   "panel_digest": "8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75",
+   "panel_size": 24,
+   "part": "A2",
+   "replications": 2,
+   "samples": 10,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "ecb476f8b3de4b7d0eddc36fd36657823432bccd7d3f9fb80dd2192fbea825f3",
+   "timing": {
+    "observations": 13920,
+    "seconds_analyze": 74.49146464862861,
+    "seconds_observe": 11.981573916040361,
+    "seconds_per_observation": 0.0008607452525891064,
+    "seconds_per_verdict": 1.330204725868368,
+    "seconds_recompute": 71.45688968105242,
+    "seconds_total": 157.9967860111501,
+    "verdicts": 56
+   }
+  },
+  {
+   "alpha": 0.05,
+   "cell": "A3-p24-n03",
+   "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+   "current_windows": 1,
+   "first_window": {
+    "drift": {
+     "ci95": [
+      0.0,
+      0.841886116991581
+     ],
+     "count": 0,
+     "one_sided_p_vs_alpha": 1.0,
+     "rate": 0.0,
+     "total": 2,
+     "unadjusted_flag": false
+    },
+    "rule_fired": {
+     "too many probes below n_min": 2
+    },
+    "states": {
+     "drift": 0,
+     "stable": 0,
+     "unknown": 2,
+     "warning": 0
+    },
+    "uniformity": {
+     "exact_match": {
+      "ecdf": {
+       "0.01": NaN,
+       "0.05": NaN,
+       "0.1": NaN,
+       "0.5": NaN
+      },
+      "ks_distance": NaN,
+      "n": 0,
+      "rejected_after_holm": 0
+     },
+     "normalized_match": {
+      "ecdf": {
+       "0.01": NaN,
+       "0.05": NaN,
+       "0.1": NaN,
+       "0.5": NaN
+      },
+      "ks_distance": NaN,
+      "n": 0,
+      "rejected_after_holm": 0
+     },
+     "output_chars": {
+      "ecdf": {
+       "0.01": NaN,
+       "0.05": NaN,
+       "0.1": NaN,
+       "0.5": NaN
+      },
+      "ks_distance": NaN,
+      "n": 0,
+      "rejected_after_holm": 0
+     },
+     "output_tokens": {
+      "ecdf": {
+       "0.01": NaN,
+       "0.05": NaN,
+       "0.1": NaN,
+       "0.5": NaN
+      },
+      "ks_distance": NaN,
+      "n": 0,
+      "rejected_after_holm": 0
+     },
+     "refusal": {
+      "ecdf": {
+       "0.01": NaN,
+       "0.05": NaN,
+       "0.1": NaN,
+       "0.5": NaN
+      },
+      "ks_distance": NaN,
+      "n": 0,
+      "rejected_after_holm": 0
+     },
+     "tool_call_set_jaccard": {
+      "ecdf": {
+       "0.01": NaN,
+       "0.05": NaN,
+       "0.1": NaN,
+       "0.5": NaN
+      },
+      "ks_distance": NaN,
+      "n": 0,
+      "rejected_after_holm": 0
+     },
+     "truncated": {
+      "ecdf": {
+       "0.01": NaN,
+       "0.05": NaN,
+       "0.1": NaN,
+       "0.5": NaN
+      },
+      "ks_distance": NaN,
+      "n": 0,
+      "rejected_after_holm": 0
+     }
+    },
+    "unknown": {
+     "ci95": [
+      0.15811388300841905,
+      1.0
+     ],
+     "count": 2,
+     "rate": 1.0,
+     "total": 2
+    },
+    "warning": {
+     "ci95": [
+      0.0,
+      0.841886116991581
+     ],
+     "count": 0,
+     "rate": 0.0,
+     "total": 2
+    }
+   },
+   "panel_digest": "8f7883e3ce8f937212a9cd396b1ce318a88e13fa1b8a7369b673a05f10cb3a75",
+   "panel_size": 24,
+   "part": "A3",
+   "replications": 2,
+   "samples": 3,
+   "scorers": [
+    "normalized_match",
+    "exact_match",
+    "tool_call_set_jaccard",
+    "refusal",
+    "truncated",
+    "output_chars",
+    "output_tokens"
+   ],
+   "store_sha256": "e56f4af4754b7bdb0f2255b27b2445ec4cb9bc10b4964baced5e8c3bad8db683",
+   "timing": {
+    "observations": 288,
+    "seconds_analyze": 0.09141943301074207,
+    "seconds_observe": 0.367316224379465,
+    "seconds_per_observation": 0.0012754035568731423,
+    "seconds_per_verdict": 0.045709716505371034,
+    "seconds_recompute": 0.06316962791606784,
+    "seconds_total": 0.5828397409059107,
+    "verdicts": 2
+   }
+  }
+ ],
+ "config_digest": "df7c62e0732486e5ade8d54cf4709b0d1e7e840d9ea1085050bd9e9cbee40d37",
+ "experiment": "EXP-A",
+ "format": "epicormic-lab/exp-a-summary/v1",
+ "profile": "smoke",
+ "protocol_digest": "5934acb50e9d4f9403bb64cd038cf492bcd167d7464eef8a1fdd24da2e555de4",
+ "run_ids": [
+  "exp-a-smoke-001"
+ ]
+}
