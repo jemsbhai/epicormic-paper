@@ -433,3 +433,30 @@ runner code is unchanged since `d009c53`, so the same merge commit carries
 the `exp-c-frozen` tag of section 10, and the full run starts from a clean
 tree at that commit with `--profile full`, a new run id and the r4 digest,
 only when Muntaser says so.
+
+## 2026-11-12 EXP-C full run exp-c-full-001 completed
+
+Researcher: Katherine Burge. Type: computational. Status: completed; full
+profile under protocol r4.
+
+Run: `exp-c-full-001` at commit `1baedcf` (tags `exp-c-prereg-r4` and
+`exp-c-frozen`), protocol digest `aeb4cc1e...27c0`, epicormic 0.2.0 and
+pollard 1.6.0, started 2026-11-11T17:47Z and finished 2026-11-12T04:59Z.
+Machine: Apple M1 Pro, 8 cores, 16 GB RAM, Python 3.14.7, `--workers 8`,
+under `caffeinate -i`.
+
+Result: all 35 cells completed at replications 60/30/30. Wall-clock was
+about 11.2 h against the 8.5 h projected from the smoke timings. The 35
+timing lines are posted in the `EXP-B and EXP-C` issue.
+
+Stores: 35 zip archives, about 3 GB in total, with SHA-256 digests recorded
+by the runner in `store_digests`; kept outside git and uploaded to the
+Drive folder.
+
+Analysis note: the repository sits in an iCloud-synced folder, and macOS
+offloaded several files after the run (most of `src/epicormic_lab/` and
+`environment.json`), so the editable install could not import
+`epicormic_lab`. After the files were downloaded back, the analysis was run
+as `PYTHONPATH=src python scripts/analyze_exp_c.py ...` on the same commit.
+No run output was affected; the run itself had finished before the files
+were offloaded.
