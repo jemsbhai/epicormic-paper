@@ -1,0 +1,369 @@
+{
+  "analysis_seed": 0,
+  "cells": {
+    "C1-p24-n10-length-l050-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "length",
+      "last_salt": 5928000,
+      "level": "0.05",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-length-l100-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "length",
+      "last_salt": 5928000,
+      "level": "0.1",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-length-l200-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "length",
+      "last_salt": 5928000,
+      "level": "0.2",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-length-l300-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "length",
+      "last_salt": 5928000,
+      "level": "0.3",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-length-l500-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "length",
+      "last_salt": 5928000,
+      "level": "0.5",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-match-l050-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 5928000,
+      "level": "0.05",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-match-l100-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 5928000,
+      "level": "0.1",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-match-l200-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 5928000,
+      "level": "0.2",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-match-l300-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 5928000,
+      "level": "0.3",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-match-l500-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 5928000,
+      "level": "0.5",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-refusal-l050-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "refusal",
+      "last_salt": 5928000,
+      "level": "0.05",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-refusal-l100-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "refusal",
+      "last_salt": 5928000,
+      "level": "0.1",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-refusal-l200-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "refusal",
+      "last_salt": 5928000,
+      "level": "0.2",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-refusal-l300-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "refusal",
+      "last_salt": 5928000,
+      "level": "0.3",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-refusal-l500-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "refusal",
+      "last_salt": 5928000,
+      "level": "0.5",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-tool_swap-l050-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "tool_swap",
+      "last_salt": 5928000,
+      "level": "0.05",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-tool_swap-l100-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "tool_swap",
+      "last_salt": 5928000,
+      "level": "0.1",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-tool_swap-l200-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "tool_swap",
+      "last_salt": 5928000,
+      "level": "0.2",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-tool_swap-l300-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "tool_swap",
+      "last_salt": 5928000,
+      "level": "0.3",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-tool_swap-l500-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "tool_swap",
+      "last_salt": 5928000,
+      "level": "0.5",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-truncation-l050-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "truncation",
+      "last_salt": 5928000,
+      "level": "0.05",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-truncation-l100-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "truncation",
+      "last_salt": 5928000,
+      "level": "0.1",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-truncation-l200-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "truncation",
+      "last_salt": 5928000,
+      "level": "0.2",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-truncation-l300-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "truncation",
+      "last_salt": 5928000,
+      "level": "0.3",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C1-p24-n10-truncation-l500-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "truncation",
+      "last_salt": 5928000,
+      "level": "0.5",
+      "replications": 60,
+      "seeds_per_window": 10,
+      "windows_per_replication": 29
+    },
+    "C2-p24-n05-match-l100-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 2928000,
+      "level": "0.1",
+      "replications": 30,
+      "seeds_per_window": 5,
+      "windows_per_replication": 29
+    },
+    "C2-p24-n05-match-l200-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 2928000,
+      "level": "0.2",
+      "replications": 30,
+      "seeds_per_window": 5,
+      "windows_per_replication": 29
+    },
+    "C2-p24-n20-match-l100-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 2928000,
+      "level": "0.1",
+      "replications": 30,
+      "seeds_per_window": 20,
+      "windows_per_replication": 29
+    },
+    "C2-p24-n20-match-l200-q14": {
+      "change_window": 15,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 2928000,
+      "level": "0.2",
+      "replications": 30,
+      "seeds_per_window": 20,
+      "windows_per_replication": 29
+    },
+    "C3-p24-n10-match-l300-q00": {
+      "change_window": 1,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 2914000,
+      "level": "0.3",
+      "replications": 30,
+      "seeds_per_window": 10,
+      "windows_per_replication": 15
+    },
+    "C3-p24-n10-match-l300-q07": {
+      "change_window": 8,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 2921000,
+      "level": "0.3",
+      "replications": 30,
+      "seeds_per_window": 10,
+      "windows_per_replication": 22
+    },
+    "C3-p24-n10-match-l300-q28": {
+      "change_window": 29,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 2942000,
+      "level": "0.3",
+      "replications": 30,
+      "seeds_per_window": 10,
+      "windows_per_replication": 43
+    },
+    "C3-p24-n10-match-l500-q00": {
+      "change_window": 1,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 2914000,
+      "level": "0.5",
+      "replications": 30,
+      "seeds_per_window": 10,
+      "windows_per_replication": 15
+    },
+    "C3-p24-n10-match-l500-q07": {
+      "change_window": 8,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 2921000,
+      "level": "0.5",
+      "replications": 30,
+      "seeds_per_window": 10,
+      "windows_per_replication": 22
+    },
+    "C3-p24-n10-match-l500-q28": {
+      "change_window": 29,
+      "first_salt": 0,
+      "kind": "match",
+      "last_salt": 2942000,
+      "level": "0.5",
+      "replications": 30,
+      "seeds_per_window": 10,
+      "windows_per_replication": 43
+    }
+  },
+  "drifted_provider_seed": 20261029,
+  "mixture": {
+    "routing": "first 8 bytes of SHA-256(tag + canonical JSON of the salted request) as a unit fraction, compared with the level; no seed",
+    "tag": "epicormic-lab/mixture/v1:"
+  },
+  "panel_seed_base": 0,
+  "provider_seed": 20261029,
+  "window_salt": {
+    "change": "the drifted provider answers window indices >= baseline_windows + pre_change_windows; the change window is pre_change_windows + 1 over the current windows",
+    "formula": "request_seed + REPLICATION_STRIDE * replication + WINDOW_STRIDE * window_index",
+    "replication_stride": 100000,
+    "window_index_0": "baseline window",
+    "window_stride": 1000
+  }
+}
